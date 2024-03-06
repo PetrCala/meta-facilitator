@@ -4,7 +4,7 @@
     </h1>
 </div>
 
-Streamline data preprocessing for meta-aanlysis exploration
+Streamline data preprocessing for meta-analysis exploration
 
 ### Table of Contents
 
