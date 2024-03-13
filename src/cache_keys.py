@@ -7,7 +7,8 @@ class CacheKeys(NamedTuple):
     """
 
     BASE_DIR: str = "./cache"
-    TEST_DATA: str = "test-data"
+    TEST_DATA: str = "test_data"
+    CHRIS_DATA: str = "chris_data"
 
 
 CACHE_KEYS = CacheKeys()
