@@ -6,7 +6,8 @@ from src.cache import get_or_load_data
 
 
 def main():
-    test_data_path = os.path.join(PATHS.DATA_DIR, "test-data.csv")
+    data_path = os.path.join(PATHS.DATA_DIR, "test-data.csv")
+    # df = get_or_load_data(CONST.CACHE_KEYS.TEST_DATA, data_path)
     df = get_or_load_data(CONST.CACHE_KEYS.TEST_DATA)
 
 

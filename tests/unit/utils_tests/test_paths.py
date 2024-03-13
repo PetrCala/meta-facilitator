@@ -8,5 +8,4 @@ class TestPaths:
 
     def test_project_root(self):
         """Test project root path."""
-        breakpoint()
         assert CONST.PROJECT_NAME in PATHS.PROJECT_ROOT
