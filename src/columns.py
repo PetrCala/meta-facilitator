@@ -4,15 +4,21 @@ CleanColumns = NamedTuple(
     "CleanColumns",
     [
         ("STUDY", str),
+        ("EFFECT_TYPE", str),
         ("EFFECT", str),
         ("SE", str),
+        ("SAMPLE_SIZE", str),
+        ("DF", str),
     ],
 )
 
 CLEAN_COLUMNS = CleanColumns(
     STUDY="study",
+    EFFECT_TYPE="effect_type",
     EFFECT="effect",
     SE="se",
+    SAMPLE_SIZE="sample_size",
+    DF="df",
 )
 """A set of columns that are required for the analysis."""
 
@@ -31,6 +37,7 @@ AnalysedColumns = NamedTuple(
         ("MSE_UWLS", str),
         ("PSS", str),
         ("E_SIG", str),
+        ("PCC_VAR", str),
     ],
 )
 
@@ -46,5 +53,6 @@ ANALYSED_COLUMNS = AnalysedColumns(
     MSE_UWLS="mse_uwls",
     PSS="pss",
     E_SIG="e_sig",
+    PCC_VAR="pcc_var",
 )
 """A set of columns in the analysed data frame."""

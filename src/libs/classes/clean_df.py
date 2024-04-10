@@ -28,6 +28,16 @@ class CleanDf:
             expected_cols=list(CONST.CLEAN_COLUMNS._asdict().values()),
         )
 
+    def replace_non_cols_with_nan(self) -> None:
+        """
+        If a column is defined in the metadata as null (missing),
+        add it to the data with NaN.
+        """
+        for clean_name, expected_name in self.source_cols.items():
+            if not expected_name:
+                self.df[clean_name] = pd.NA
+                self.source_cols[clean_name] = clean_name  # Update the source_cols dict
+
     def check_source_cols_existence(self) -> None:
         """Check that all columns defined in metadata exist in the raw data frame."""
         missing_cols = set(self.source_cols.values()) - set(self.df.columns)
@@ -74,6 +84,7 @@ class CleanDf:
 
     def preprocess(self):
         """Run all preprocessing steps."""
+        self.replace_non_cols_with_nan()
         self.check_source_cols_existence()
         self.rename_columns()
         self.subset_to_relevant_columns()

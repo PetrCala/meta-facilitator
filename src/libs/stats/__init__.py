@@ -1,1 +1,1 @@
-from .average_stats import get_average_effect_stats
+from .effect_stats import get_effect_stats

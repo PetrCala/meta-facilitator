@@ -23,4 +23,4 @@ class Results(NamedTuple):
     """A named tuple representing the results of an analysis."""
 
     metadata: ResultsMetadata
-    df: pd.DataFrame
+    dfs: dict[str, pd.DataFrame]

@@ -11,9 +11,12 @@ class GetResults:
     Take a clean data frame, analyse it, and return the results.
     """
 
-    def __init__(self, df: pd.DataFrame, analysis_name: AnalysisName):
+    def __init__(
+        self, df: pd.DataFrame, analysis_name: AnalysisName, get_dfs_fun: callable
+    ):
         self.df = df
         self.analysis_name = analysis_name
+        self.get_dfs_fun = get_dfs_fun
         self.start_time = pd.Timestamp.now()
         self.metadata = read_metadata()
         self.results: Results = self.get_results()
@@ -35,9 +38,13 @@ class GetResults:
             n_studies=get_n_studies(self.df),
         )
 
+    def get_results_dfs(self) -> dict[str, pd.DataFrame]:
+        """Get the data frames of the analysis results."""
+        return self.get_dfs_fun(df=self.df)
+
     def get_results(self) -> Results:
         """Get the results of the analysis."""
         return Results(
             metadata=self.get_results_metadata(),
-            df=self.df,
+            dfs=self.get_results_dfs(),
         )

@@ -12,12 +12,19 @@ from src.types import AnalysisName, DfName, Results
 class Analysis:
     """A base class representing any analysis."""
 
-    def __init__(self, analysis_name: AnalysisName, df_name: DfName, cache_key: str):
+    def __init__(
+        self,
+        analysis_name: AnalysisName,
+        df_name: DfName,
+        cache_key: str,
+        get_dfs_fun: callable,
+    ):
         """A constructor for the Analysis class."""
         self.analysis_name = analysis_name
         self.df_name = df_name
         self.data_path = os.path.join(PATHS.DATA_DIR, df_name)  # full path to data
         self.data_cache_key = cache_key
+        self.get_dfs_fun = get_dfs_fun  # Function to get the results data frames
 
     def load_data(self, use_cache: bool = True) -> pd.DataFrame:
         """Load the raw source data for this analysis and return it as a pd.DataFrame."""
@@ -35,7 +42,9 @@ class Analysis:
         """Get the results of the analysis using the clean data frame."""
         if not isinstance(clean_df, pd.DataFrame):
             clean_df = self.clean_data()  # Automatically loads the data too
-        return GetResults(df=clean_df, analysis_name=self.analysis_name).results
+        return GetResults(
+            df=clean_df, analysis_name=self.analysis_name, get_dfs_fun=self.get_dfs_fun
+        ).results
 
     def save_results(self, results: Results) -> None:
         """Save the results of the analysis in the output folder."""
@@ -56,6 +65,9 @@ class Analysis:
             print("Saving results...")
             self.save_results(results)
         if verbose:
-            print("The analysis for", self.analysis_name, "is complete.")
-            print("Find the results in", "...")
+            print(
+                f"The analysis for '{self.analysis_name}' is complete.\n"
+                f"Results: {results.metadata._asdict()}\n"
+                f"Find all the results in: {PATHS.OUTPUT_DIR}"
+            )
         return results

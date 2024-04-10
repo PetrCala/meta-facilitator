@@ -14,8 +14,10 @@ def save_analysis_results(results: Results, analysis_name: AnalysisName) -> None
     results_dir_path = os.path.join(PATHS.OUTPUT_DIR, results_dir_name)
     os.mkdir(results_dir_path)
     # Save the objects only if they exist. If they do not, they will be None.
-    if isinstance(results.df, pd.DataFrame):
-        results.df.to_excel(os.path.join(results_dir_path, PATHS.RESULTS_DATA_FILENAME))
+    if isinstance(results.dfs, dict):
+        for name, df in results.dfs.items():
+            print(f"Saving {name}...")
+            df.to_excel(os.path.join(results_dir_path, f"{name}.xlsx"))
     if isinstance(results.metadata, ResultsMetadata):
         json_path = os.path.join(results_dir_path, PATHS.RESULTS_JSON_FILENAME)
         save_dict_as_json(obj=results.metadata._asdict(), path=json_path)

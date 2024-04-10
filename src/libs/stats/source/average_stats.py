@@ -1,5 +1,6 @@
 import pandas as pd
 from src.libs.validation import validate_column
+from src.columns import ANALYSED_COLUMNS
 
 
 @validate_column
@@ -52,18 +53,3 @@ def get_ak(df: pd.DataFrame, col: str) -> dict:
     # q3 = df[col].quantile(0.75)
     # iqr = q3 - q1
     # return {"upper": q3 + 1.5 * iqr, "lower": q1 - 1.5 * iqr}
-
-
-def get_average_effect_stats(df: pd.DataFrame, col: str) -> dict:
-    """Get the average effect stats of a column in a DataFrame.
-
-    These include: mean, median, UWLS, WAAP_UWSL, PET_PEESE, and AK.
-    """
-    return {
-        "mean": get_mean(df, col),
-        "median": get_median(df, col),
-        "uwls": get_uwls(df, col),
-        "waap_uwsl": get_waap_uwsl(df, col),
-        "pet_peese": get_pet_peese(df, col),
-        "ak": get_ak(df, col),
-    }
