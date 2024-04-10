@@ -11,7 +11,7 @@ class Paths(NamedTuple):
     SRC_DIR = os.path.dirname(__file__)
     PROJECT_ROOT = os.path.dirname(SRC_DIR)
     OUTPUT_DIR = os.path.join(PROJECT_ROOT, "output")
-    METADATA = os.path.join(SRC_DIR, "metadata.json")
+    METADATA = os.path.join(PROJECT_ROOT, "metadata.json")
     DATA_DIR = os.path.join(PROJECT_ROOT, "data")
     DATA_FRAMES = DataFrames()
 

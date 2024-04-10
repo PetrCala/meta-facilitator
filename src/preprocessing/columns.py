@@ -18,17 +18,17 @@ CLEAN_COLUMNS = CleanColumns(
 AnalysedColumns = NamedTuple(
     "AnalysedColumns",
     [
-        ("n_est", str),
-        ("mean", str),
-        ("median", str),
-        ("uwls", str),
-        ("waap_uwls", str),
-        ("pet_peese", str),
-        ("ak", str),
-        ("re_dl_tau_2", str),
-        ("mse_uwls", str),
-        ("pss", str),
-        ("e_sig", str),
+        ("N_EST", str),
+        ("MEAN", str),
+        ("MEDIAN", str),
+        ("UWLS", str),
+        ("WAAP_UWLS", str),
+        ("PET_PEESE", str),
+        ("AK", str),
+        ("RE_DL_TAU_2", str),
+        ("MSE_UWLS", str),
+        ("PSS", str),
+        ("E_SIG", str),
     ],
 )
 

@@ -21,17 +21,17 @@ class Analysis:
     @property
     def clean_df_cols(self) -> list[str]:
         """A property representing the columns of the clean data frame."""
-        return self._get_metadata_cols(
+        return get_metadata_cols(
             key=CONST.METADATA_KEYS.CLEAN_DF_COLS,
-            expected_cols=list(CONST.CLEAN_COLUMNS._fields),
+            expected_cols=list(CONST.CLEAN_COLUMNS._asdict().values()),
         )
 
     @property
     def analysed_df_cols(self) -> list[str]:
         """A property representing the columns of an analysed data frame."""
-        return self._get_metadata_cols(
+        return get_metadata_cols(
             key=CONST.METADATA_KEYS.ANALYSED_DF_COLS,
-            expected_cols=list(CONST.ANALYSED_COLUMNS._fields),
+            expected_cols=list(CONST.ANALYSED_COLUMNS._asdict().values()),
         )
 
     def load_data(self, use_cache: bool = True) -> pd.DataFrame:

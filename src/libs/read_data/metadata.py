@@ -4,7 +4,8 @@ from src.paths import PATHS
 
 def read_metadata() -> dict:
     """Read the metadata.json file and return it as a dictionary."""
-    return json.load(PATHS.METADATA)
+    with open(PATHS.METADATA, "r") as f:
+        return json.load(f)
 
 
 def get_metadata_cols(key: str, expected_cols: list[str]) -> list[str]:
