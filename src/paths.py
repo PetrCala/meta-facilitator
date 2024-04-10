@@ -1,11 +1,17 @@
 import os
 from typing import NamedTuple
+from src.types import AnalysisName, DfName
+
+
+class DataFrames(NamedTuple):
+    CHRIS: DfName = "chris_data.xlsx"
 
 
 class Paths(NamedTuple):
     SRC_DIR = os.path.dirname(__file__)
     PROJECT_ROOT = os.path.dirname(SRC_DIR)
     DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+    DATA_FRAMES = DataFrames()
 
 
 PATHS = Paths()
