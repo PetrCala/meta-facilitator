@@ -1,8 +1,13 @@
 from typing import NamedTuple, Literal
 from src.cache_keys import CACHE_KEYS
 from src.libs.extensions import ALLOWED_DATA_EXTENSIONS
-from src.preprocessing.columns import ANALYSIS_COLUMNS
+from src.preprocessing.columns import CLEAN_COLUMNS, ANALYSED_COLUMNS
 from src.types import AnalysisName
+
+
+class MetadataKeys(NamedTuple):
+    CLEAN_DF_COLS: str = "clean_df_cols"
+    ANALYSED_DF_COLS: str = "analysed_df_cols"
 
 
 class AnalysisNames(NamedTuple):
@@ -23,8 +28,10 @@ class Const(NamedTuple):
     DATE_FORMAT: str = "%Y-%m-%d"
     ALLOWED_DATA_EXTENSIONS = ALLOWED_DATA_EXTENSIONS
     CACHE_KEYS = CACHE_KEYS
-    ANALYSIS_COLUMNS = ANALYSIS_COLUMNS
+    ANALYSED_COLUMNS = ANALYSED_COLUMNS
+    CLEAN_COLUMNS = CLEAN_COLUMNS
     ANALYSIS_NAMES = AnalysisNames()
+    METADATA_KEYS = MetadataKeys()
 
 
 CONST = Const()

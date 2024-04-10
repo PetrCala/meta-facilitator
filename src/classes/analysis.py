@@ -4,7 +4,8 @@ from src.const import CONST
 from src.paths import PATHS
 from src.types import AnalysisName, DfName
 from src.cache import get_or_load_data
-from src.libs.read_data import load_data_from_source
+from src.libs.read_data import load_data_from_source, get_metadata_cols
+from .clean_df import CleanDf
 
 
 class Analysis:
@@ -17,6 +18,22 @@ class Analysis:
         self.data_path = os.path.join(PATHS.DATA_DIR, df_name)  # full path to data
         self.data_cache_key = cache_key
 
+    @property
+    def clean_df_cols(self) -> list[str]:
+        """A property representing the columns of the clean data frame."""
+        return self._get_metadata_cols(
+            key=CONST.METADATA_KEYS.CLEAN_DF_COLS,
+            expected_cols=list(CONST.CLEAN_COLUMNS._fields),
+        )
+
+    @property
+    def analysed_df_cols(self) -> list[str]:
+        """A property representing the columns of an analysed data frame."""
+        return self._get_metadata_cols(
+            key=CONST.METADATA_KEYS.ANALYSED_DF_COLS,
+            expected_cols=list(CONST.ANALYSED_COLUMNS._fields),
+        )
+
     def load_data(self, use_cache: bool = True) -> pd.DataFrame:
         """Load the raw source data for this analysis and return it as a pd.DataFrame."""
         if use_cache:
@@ -24,17 +41,23 @@ class Analysis:
         return load_data_from_source(self.data_path)
 
     def clean_data(self, df: pd.DataFrame = None) -> pd.DataFrame:
+        """Clean the raw data frame so that it can be analysed."""
         if not isinstance(df, pd.DataFrame):
             df = self.load_data(use_cache=True)
-        pass
+        return CleanDf(df=df).df
 
     def get_results(self, clean_df: pd.DataFrame = None) -> any:
         """Get the results of the analysis using the clean data frame."""
         if not isinstance(clean_df, pd.DataFrame):
             clean_df = self.clean_data()  # Automatically loads the data too
-        return clean_df  # TODO this should return results
+        # TODO this should return results
+        return clean_df
 
     def save_results(self, results: any) -> None:
+        """Save the results of the analysis in the output folder."""
+        if not os.path.exists(PATHS.OUTPUT_DIR):
+            os.mkdir(PATHS.OUTPUT_DIR)
+        # TODO
         pass
 
     def run_analysis(self, save_results: bool = True, verbose: bool = True) -> any:

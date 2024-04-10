@@ -2,6 +2,7 @@ data/
 !data/README.md
 resources/
 cache/
+metadata.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -10,20 +10,14 @@ Streamline data preprocessing for meta-analysis exploration
 
 # How to run
 
-Select an analysis you want to run and call
+1. Select an analysis you want to run. The list of currently available analyses is:
+
+- `Chris`
+
+2. In a terminal window, execute the command
 
 ```bash
 python main.py run-analysis <analysis-name>
 ```
 
-For example, call
-
-```bash
-python main.py run-analysis Chris
-```
-
-to run the Chris analysis.
-
-Here is list of currently available analyses:
-
-- `Chris`
+3. Find the results in ...
