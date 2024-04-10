@@ -1,5 +1,5 @@
 from src.analyses import ANALYSES
-from src.classes import Analysis
+from src.libs.classes import Analysis
 from src.types import AnalysisName
 
 

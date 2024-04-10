@@ -3,6 +3,7 @@ data/
 resources/
 cache/
 metadata.json
+output/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

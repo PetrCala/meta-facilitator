@@ -1,8 +1,7 @@
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from src.const import CONST
 from src.libs.clean_data import get_source_col_dict
-from src.libs.read_data import read_metadata
+from src.libs.read_data import read_metadata, get_metadata_cols
 from src.types import AnalysisName
 
 
@@ -20,6 +19,14 @@ class CleanDf:
         )
         self.preprocess()
         self.validate()
+
+    @property
+    def clean_df_cols(self) -> list[str]:
+        """A property representing the columns of the clean data frame."""
+        return get_metadata_cols(
+            key=CONST.METADATA_KEYS.CLEAN_DF_COLS,
+            expected_cols=list(CONST.CLEAN_COLUMNS._asdict().values()),
+        )
 
     def check_source_cols_existence(self) -> None:
         """Check that all columns defined in metadata exist in the raw data frame."""
@@ -58,7 +65,7 @@ class CleanDf:
 
         This method should be called at the end of the preprocessing pipeline.
         """
-        required_cols = CONST.CLEAN_COLUMNS
+        required_cols = self.clean_df_cols
         missing_cols = set(required_cols) - set(self.df.columns)
         if missing_cols:
             raise ValueError(

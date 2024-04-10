@@ -3,12 +3,14 @@ from typing import NamedTuple
 CleanColumns = NamedTuple(
     "CleanColumns",
     [
+        ("STUDY", str),
         ("EFFECT", str),
         ("SE", str),
     ],
 )
 
 CLEAN_COLUMNS = CleanColumns(
+    STUDY="study",
     EFFECT="effect",
     SE="se",
 )

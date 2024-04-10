@@ -1,7 +1,7 @@
 from typing import NamedTuple, Literal
 from src.cache_keys import CACHE_KEYS
 from src.libs.extensions import ALLOWED_DATA_EXTENSIONS
-from src.preprocessing.columns import CLEAN_COLUMNS, ANALYSED_COLUMNS
+from src.columns import CLEAN_COLUMNS, ANALYSED_COLUMNS
 from src.types import AnalysisName
 
 
@@ -28,6 +28,8 @@ class Const(NamedTuple):
     PROJECT_NAME: str = "meta-facilitator"
     PROJECT_NAME_VERBOSE: str = "Meta Facilitator"
     DATE_FORMAT: str = "%Y-%m-%d"
+    TIME_FORMAT: str = "%H:%M:%S"
+    DATE_TIME_FORMAT: str = f"{DATE_FORMAT} {TIME_FORMAT}"
     ALLOWED_DATA_EXTENSIONS = ALLOWED_DATA_EXTENSIONS
     CACHE_KEYS = CACHE_KEYS
     ANALYSED_COLUMNS = ANALYSED_COLUMNS

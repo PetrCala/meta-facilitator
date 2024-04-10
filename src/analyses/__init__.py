@@ -1,7 +1,7 @@
 from typing import Any, List
 from src.const import CONST
 from src.analyses.chris.chris import Chris
-from src.classes import Analysis
+from src.libs.classes import Analysis
 from src.types import AnalysisName
 
 

@@ -1,6 +1,6 @@
 from src.const import CONST
 from src.paths import PATHS
-from src.classes import Analysis
+from src.libs.classes import Analysis
 
 
 class Chris(Analysis):
