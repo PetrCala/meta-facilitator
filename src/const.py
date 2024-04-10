@@ -8,6 +8,8 @@ from src.types import AnalysisName
 class MetadataKeys(NamedTuple):
     CLEAN_DF_COLS: str = "clean_df_cols"
     ANALYSED_DF_COLS: str = "analysed_df_cols"
+    ANALYSES: str = "analyses"
+    ANALYSES_SOURCE_COLS: str = "source_cols"
 
 
 class AnalysisNames(NamedTuple):

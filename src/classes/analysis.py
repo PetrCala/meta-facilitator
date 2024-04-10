@@ -11,9 +11,9 @@ from .clean_df import CleanDf
 class Analysis:
     """A base class representing any analysis."""
 
-    def __init__(self, name: AnalysisName, df_name: DfName, cache_key: str):
+    def __init__(self, analysis_name: AnalysisName, df_name: DfName, cache_key: str):
         """A constructor for the Analysis class."""
-        self.name = name
+        self.analysis_name = analysis_name
         self.df_name = df_name
         self.data_path = os.path.join(PATHS.DATA_DIR, df_name)  # full path to data
         self.data_cache_key = cache_key
@@ -44,7 +44,7 @@ class Analysis:
         """Clean the raw data frame so that it can be analysed."""
         if not isinstance(df, pd.DataFrame):
             df = self.load_data(use_cache=True)
-        return CleanDf(df=df).df
+        return CleanDf(df=df, analysis_name=self.analysis_name).df
 
     def get_results(self, clean_df: pd.DataFrame = None) -> any:
         """Get the results of the analysis using the clean data frame."""
@@ -73,6 +73,6 @@ class Analysis:
         if save_results:
             self.save_results(results)
         if verbose:
-            print("The analysis for", self.name, "is complete.")
+            print("The analysis for", self.analysis_name, "is complete.")
             print("Find the results in", "...")
         return results

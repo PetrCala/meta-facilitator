@@ -11,7 +11,7 @@ class Chris(Analysis):
     def __init__(self):
         """A constructor for the Chris class."""
         super().__init__(
-            name=CONST.ANALYSIS_NAMES.CHRIS,
+            analysis_name=CONST.ANALYSIS_NAMES.CHRIS,
             df_name=PATHS.DATA_FRAMES.CHRIS,
             cache_key=CONST.CACHE_KEYS.CHRIS,
         )
