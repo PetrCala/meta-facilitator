@@ -15,6 +15,7 @@ class Paths(NamedTuple):
     R_DIR_IN = os.path.join(R_DIR, "input")
     R_DIR_OUT = os.path.join(R_DIR, "output")
     R_SCRIPTS_PATH = os.path.join(SRC_DIR, "r")
+    R_ENTRYPOINT = "entrypoint.R"
     RESULTS_JSON_FILENAME = "results.json"
     METADATA = os.path.join(PROJECT_ROOT, "metadata.json")
     DATA_DIR = os.path.join(PROJECT_ROOT, "data")

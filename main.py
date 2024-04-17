@@ -1,8 +1,9 @@
 import sys
-from src.actions import run_analysis
+from src.actions import run_analysis, explore
 
 MAIN_ACTIONS = {
     "run-analysis": run_analysis,
+    "explore": explore,
 }
 
 

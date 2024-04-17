@@ -13,7 +13,8 @@ def ensure_r_folders_exist():
         os.makedirs(PATHS.R_DIR_OUT)
 
 
-def run_r_script(script_name: str, df_in: pd.DataFrame = None, file_name: str = None):
+# def run_r_script(script_name: str, df_in: pd.DataFrame = None, file_name: str = None):
+def run_r_script(*args, **kwargs):
     """Run an R script to process data. Use an existing input file,
     and write the output to a new file. Use only relative paths,
     including the suffix. The function automatically routes
@@ -33,15 +34,24 @@ def run_r_script(script_name: str, df_in: pd.DataFrame = None, file_name: str = 
     """
     # Handle paths
     ensure_r_folders_exist()
-    full_path_in = f"{PATHS.R_DIR_IN}/{file_name}"
-    full_path_out = f"{PATHS.R_DIR_OUT}/{file_name}"
-    full_script_path = f"{PATHS.R_SCRIPTS_PATH}/{script_name}"
+    entrypoint_path = f"{PATHS.R_SCRIPTS_PATH}/{PATHS.R_ENTRYPOINT}"
+    # full_path_in = f"{PATHS.R_DIR_IN}/{file_name}"
+    # full_path_out = f"{PATHS.R_DIR_OUT}/{file_name}"
+    # full_script_path =
+    additional_args = {
+        # "path_in": full_path_in,
+        # "path_out": full_path_out,
+    }
 
     # Save the input file
-    df_in.to_csv(full_path_in, index=False)
+    # df_in.to_csv(full_path_in, index=False)
 
     # Command to execute the R script
-    command = ["Rscript", full_script_path, full_path_in, full_path_out]
+    command = ["Rscript", entrypoint_path]
+    # Add flags dynamically
+    for key, value in additional_args.items():
+        command.append(f"--{key}={value}")
+    breakpoint()
 
     # Execute the command
     result = subprocess.run(command, capture_output=True, text=True)
@@ -52,10 +62,10 @@ def run_r_script(script_name: str, df_in: pd.DataFrame = None, file_name: str = 
     else:
         print("R script output:", result.stdout)
 
-    if not df_in.empty:
-        if not os.path.exists(full_path_out):
-            print(f"Output file not found: {full_path_out}")
-            sys.exit(1)
-        return pd.read_csv(full_path_out)
+    # if not df_in.empty:
+    #     if not os.path.exists(full_path_out):
+    #         print(f"Output file not found: {full_path_out}")
+    #         sys.exit(1)
+    #     return pd.read_csv(full_path_out)
 
     return None
