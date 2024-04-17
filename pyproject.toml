@@ -1,11 +1,12 @@
 [tool.poetry]
 name = "meta-facilitator"
-version = "0.1.0"
+version = "0.1.1"
 description = "Streamline data preprocessing for meta-analysis exploration"
 authors = ["PetrCala <cala.p@seznam.cz>"]
 license = "MIT"
 readme = "README.md"
 package-mode = false
+repository  = "https://github.com/PetrCala/meta-facilitator"
 
 [tool.poetry.dependencies]
 python = "^3.11"
