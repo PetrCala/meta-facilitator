@@ -1,7 +1,7 @@
 source("src/r/CONST.R")
 
 source(CONST$FILES$ENV)
-message("Setting up the environment.")
+cat("Setting up the environment.")
 tryCatch(
     {
         setupEnv()
@@ -11,4 +11,4 @@ tryCatch(
         message(e)
     }
 )
-message("Environment setup complete.")
+cat("Environment setup complete.")

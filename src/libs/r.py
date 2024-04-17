@@ -13,54 +13,44 @@ def ensure_r_folders_exist():
         os.makedirs(PATHS.R_DIR_OUT)
 
 
-# def run_r_script(script_name: str, df_in: pd.DataFrame = None, file_name: str = None):
-def run_r_script(*args, **kwargs):
-    """Run an R script to process data. Use an existing input file,
-    and write the output to a new file. Use only relative paths,
-    including the suffix. The function automatically routes
-    to the R I/O folders.
+def run_r_script(action: str, *args):
+    """Run an R script to process data. Specify an action to execute with optional args and kwargs.
+    The function does not accept kwargs. All arguments are passed to the R script as
+    positional arguments in the sequence they are defined.
 
-    Note:
-    - Assume all scripts are placed in the src/r folder.
 
     Args:
-    - script_name: The name of the R script to run.
-    - df_in: The input DataFrame to save to a file.
-    - file_name: The name of the file to save the input data to.
+    - action (str): The action to perform in the R script.
+    - args: The arguments to pass to the R script.
 
 
     Example:
-    >>> run_r_script("preprocess_data.R", "data.csv", "output.csv")
+    >>> run_r_script("add", 3, 5)  # For adding two numbers
+    >>> run_r_script("greet", Alice")  # For greeting a user
     """
     # Handle paths
     ensure_r_folders_exist()
     entrypoint_path = f"{PATHS.R_SCRIPTS_PATH}/{PATHS.R_ENTRYPOINT}"
-    # full_path_in = f"{PATHS.R_DIR_IN}/{file_name}"
-    # full_path_out = f"{PATHS.R_DIR_OUT}/{file_name}"
-    # full_script_path =
-    additional_args = {
-        # "path_in": full_path_in,
-        # "path_out": full_path_out,
-    }
 
-    # Save the input file
-    # df_in.to_csv(full_path_in, index=False)
+    # Construct the command to execute the R script
+    command = ["Rscript", entrypoint_path, action]
 
-    # Command to execute the R script
-    command = ["Rscript", entrypoint_path]
-    # Add flags dynamically
-    for key, value in additional_args.items():
-        command.append(f"--{key}={value}")
-    breakpoint()
+    # Add positional arguments dynamically
+    for arg in args:
+        try:
+            arg = str(arg)
+        except ValueError:
+            raise ValueError("Arguments must be convertible to strings.")
+        command.append(arg)
 
     # Execute the command
     result = subprocess.run(command, capture_output=True, text=True)
 
     # Check for errors
     if result.returncode != 0:
-        print("Error running R script:", result.stderr)
+        print("Error running R script:\n", result.stderr)
     else:
-        print("R script output:", result.stdout)
+        print("R script output:\n", result.stdout)
 
     # if not df_in.empty:
     #     if not os.path.exists(full_path_out):

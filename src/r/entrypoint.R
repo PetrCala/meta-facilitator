@@ -1,29 +1,28 @@
 #!/usr/bin/env Rscript
 
-print("Done.")
+library("optparse")
 
-# # Option parser setup
-# option_list <- list(
-#   make_option(c("-i", "--input"), type = "character", default = "input_data.csv", help = "Input file path"),
-#   make_option(c("-o", "--output"), type = "character", default = "output_results.csv", help = "Output file path"),
-#   make_option("--max_iter", type = "integer", default = 1000, help = "Maximum number of iterations"),
-#   make_option("--threshold", type = "numeric", default = 0.01, help = "Convergence threshold"),
-#   make_option("--method", type = "character", default = "BFGS", help = "Optimization method")
-# )
+source("src/r/CONST.R")
+source(CONST$FILES$ACTIONS)
 
-# # Parse options
-# opt <- parse_args(OptionParser(option_list = option_list))
+args <- commandArgs(trailingOnly = TRUE)
+action <- args[1]
+rest <- args[-1]
 
-# # Print options to verify (you would typically use these options in your analysis)
-# print(paste("Input:", opt$input))
-# print(paste("Output:", opt$output))
-# print(paste("Max iterations:", opt$max_iter))
-# print(paste("Threshold:", opt$threshold))
-# print(paste("Method:", opt$method))
+if (is.null(action)) {
+    stop("Please specify an action to execute. Use --help for more information.")
+}
 
-# # Here you would add your data processing and analysis code
-# # For example:
-# cat("Analysis done with method", opt$method, "with max iterations", opt$max_iter, "\n")
+# Check if the action is valid
+if (!(action %in% names(ACTIONS))) {
+    stop_msg <- paste(
+        "Unknown action:", action,
+        "\nPlease choose from the following actions:", paste(names(ACTIONS), collapse = ", ")
+    )
+    stop(stop_msg)
+}
 
-# # Placeholder for analysis logic and saving the output
-# # write.csv(result_dataframe, opt$output)
+# Convert the rest of the arguments to a list to be passable into the do.call
+arg_list <- as.list(rest)
+
+do.call(ACTIONS[[action]], arg_list)
