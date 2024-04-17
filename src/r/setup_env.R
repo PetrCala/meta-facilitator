@@ -1,6 +1,5 @@
-source("src/r/CONST.R")
+source("src/r/src/env.R")
 
-source(CONST$FILES$ENV)
 cat("Setting up the environment.")
 tryCatch(
     {

@@ -1,7 +1,6 @@
 #!/usr/bin/env Rscript
 
-source("src/r/CONST.R")
-source(CONST$FILES$ACTIONS)
+source("src/r/actions.R")
 
 args <- commandArgs(trailingOnly = TRUE)
 action <- args[1]
