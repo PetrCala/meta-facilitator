@@ -1,6 +1,35 @@
 run:
   action: "analyse"
-  params:
-    - "path/to/file"
-    - "path/to/another/file"
-    - "path/to/another/file"
+  run_args:
+    - "chris"
+
+analyses:
+  chris:
+    study: "Filename"
+    effect_type: "Effect type"
+    effect: "Effect size"
+    se: "Standard error"
+    sample_size: "Sample size"
+    df: null
+
+clean_df_cols:
+  study: "Study name/ID"
+  effect_type: "Effect type (i.e., correlation, d, etc.)"
+  effect: "Effect"
+  se: "Standard Error"
+  sample_size: "Sample size"
+  df: "Degrees of freedom"
+
+analysed_df_cols:
+  n_est: "The number of estimates (k)"
+  mean: "The simple mean (or average)"
+  median: "The median"
+  uwls: "UWLS"
+  waap_uwls: "WAAP-UWLS"
+  pet_peese: "PET-PEESE"
+  ak: "AK"
+  re_dl_tau_2: "RE DL's tau^2"
+  mse_uwls: "The MSE from UWLS"
+  pss: "PSS"
+  e_sig: "Excess significance"
+  pcc_var: "Partial correlation corefficient variance"

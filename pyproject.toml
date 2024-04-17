@@ -9,9 +9,8 @@ package-mode = false
 packages = [
     { include = "meta_facilitator", from = "." },
     { include = "r", from = "." },
-    { include = "python", from "." },
 ]
-repository  = "https://github.com/PetrCala/meta-facilitator"
+repository = "https://github.com/PetrCala/meta-facilitator"
 
 [tool.poetry.dependencies]
 python = "^3.11"
