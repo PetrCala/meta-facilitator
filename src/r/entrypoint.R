@@ -1,7 +1,5 @@
 #!/usr/bin/env Rscript
 
-library("optparse")
-
 source("src/r/CONST.R")
 source(CONST$FILES$ACTIONS)
 
