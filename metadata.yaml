@@ -1,16 +1,21 @@
 run:
   action: "analyse"
-  run_args:
-    - "chris"
+
+run_args:
+  analyse:
+    analysis_name: "chris"
 
 analyses:
   chris:
-    study: "Filename"
-    effect_type: "Effect type"
-    effect: "Effect size"
-    se: "Standard error"
-    sample_size: "Sample size"
-    df: null
+    analysis_name: "chris"
+    source_df: "chris_data.xlsx"
+    cols:
+      study: "Filename"
+      effect_type: "Effect type"
+      effect: "Effect size"
+      se: "Standard error"
+      sample_size: "Sample size"
+      df: null
 
 clean_df_cols:
   study: "Study name/ID"

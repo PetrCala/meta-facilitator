@@ -16,7 +16,6 @@ source("r/libs/read_data/metadata.R")
 metadata <- readMetadata()
 
 action <- metadata$run$action
-run_args <- metadata$run$run_args
 
 if (interactive()) {
     # Change the working directory in interactive sessions
@@ -47,6 +46,6 @@ if (!(action %in% names(ACTIONS))) {
 }
 
 # Convert the rest of the arguments to a list to be passable into the do.call
-arg_list <- as.list(run_args)
+# arg_list <- as.list(run_args)
 
-do.call(ACTIONS[[action]], arg_list)
+do.call(ACTIONS[[action]], list())
