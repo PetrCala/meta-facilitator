@@ -6,6 +6,11 @@ authors = ["PetrCala <cala.p@seznam.cz>"]
 license = "MIT"
 readme = "README.md"
 package-mode = false
+packages = [
+    { include = "meta_facilitator", from = "." },
+    { include = "r", from = "." },
+    { include = "python", from "." },
+]
 repository  = "https://github.com/PetrCala/meta-facilitator"
 
 [tool.poetry.dependencies]

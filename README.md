@@ -48,13 +48,13 @@ chmod +x ./scripts/setup.sh
 4. Choose an action to run out of the [Available Actions section](#available-actions). Run it using:
 
 ```bash
-python main.py <action-name> [--args]
+Rscript entrypoint.R <action> [--args]
 ```
 
 For example, to run the Chris analysis, do
 
 ```bash
-python main.py analyse Chris
+Rscript entrypoint.R analyse Chris
 ```
 
 5. Find the results in ...

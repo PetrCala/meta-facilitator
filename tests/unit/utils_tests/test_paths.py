@@ -1,6 +1,6 @@
 import pytest
-from src.paths import PATHS
-from src.const import CONST
+from python.paths import PATHS
+from python.const import CONST
 
 
 class TestPaths:
