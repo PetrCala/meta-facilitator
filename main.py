@@ -1,8 +1,10 @@
 import sys
 from src.actions import run_analysis, explore
+from src.libs.r import run_r_script
 
 MAIN_ACTIONS = {
-    "run-analysis": run_analysis,
+    "analyse": run_analysis,
+    "r": run_r_script,
     "explore": explore,
 }
 

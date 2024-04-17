@@ -6,7 +6,7 @@
 
 Streamline data preprocessing for meta-analysis exploration
 
-### Table of Contents
+<!-- ### Table of Contents -->
 
 # Prerequisites
 
@@ -26,27 +26,55 @@ All of these should print out the version of the relevant executable. If not, re
 
 # How to run
 
-1. Navigate to the project root
+1. Clone the repository using
+
+```bash
+git clone https://github.com/PetrCala/meta-facilitator.git
+```
+
+2. Navigate to the project root
 
 ```bash
 cd meta-facilitator
 ```
 
-2. Run the following commands to setup your local environment:
+3. Run the following commands to setup your local environment:
 
 ```bash
 chmod +x ./scripts/setup.sh
 ./scripts/setup.sh
 ```
 
-3. Select an analysis you want to run. The list of currently available analyses is:
-
-- `Chris`
-
-4. In a terminal window, execute the command
+4. Choose an action to run out of the [Available Actions section](#available-actions). Run it using:
 
 ```bash
-python main.py run-analysis <analysis-name>
+python main.py <action-name> [--args]
+```
+
+For example, to run the Chris analysis, do
+
+```bash
+python main.py analyse Chris
 ```
 
 5. Find the results in ...
+
+# Available actions
+
+Here is a list of all the currently supported actions:
+
+- **`analyse`**: Run a full analysis of a dataset.
+  - _Args_:
+    - Analysis name - e.g., `Chris`,...
+  - _Example_:
+    - `python main.py analyse Chris`
+- **`r`**: Call an R script:
+  - _Args_:
+    - R action name - e.g., `add`, `subtract`,...
+    - Arguments passed to the R action
+  - _Example_:
+    - `python main.py r add 1 2`
+
+Here is a list of all currently available analyses is:
+
+- `Chris`

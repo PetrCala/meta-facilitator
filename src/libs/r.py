@@ -52,10 +52,4 @@ def run_r_script(action: str, *args):
     else:
         print("R script output:\n", result.stdout)
 
-    # if not df_in.empty:
-    #     if not os.path.exists(full_path_out):
-    #         print(f"Output file not found: {full_path_out}")
-    #         sys.exit(1)
-    #     return pd.read_csv(full_path_out)
-
     return None
