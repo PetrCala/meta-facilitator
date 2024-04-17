@@ -1,0 +1,6 @@
+run:
+  action: "analyse"
+  params:
+    - "path/to/file"
+    - "path/to/another/file"
+    - "path/to/another/file"

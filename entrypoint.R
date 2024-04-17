@@ -9,8 +9,9 @@
 #' - Specify the desired action in metadata.json and run the script inside an R session.
 
 source("r/actions.R")
+source("r/libs/read_data/metadata.R")
 
-
+metadata <- readMetadata()
 
 if (interactive()) {
     # Change the working directory in interactive sessions
