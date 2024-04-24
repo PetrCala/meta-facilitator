@@ -1,3 +1,4 @@
+library("readr")
 source("libs/read_data/utils.R")
 source("METADATA.R")
 source("PATHS.R")
@@ -57,18 +58,13 @@ readDataCustom <- function(source_path, separators = NA) {
     if (!file.exists(source_path)) {
         stop(paste("The", source_path, "file not found."))
     }
-    if (all(is.na(separators))) {
-        separators <- identifyCsvSeparators(source_path)
-    }
-    decimal_mark <- separators$decimal_mark
-    grouping_mark <- separators$grouping_mark
     # Read data
     data_out <- read_delim(
         source_path,
         locale = locale(
-            decimal_mark = decimal_mark,
-            grouping_mark = grouping_mark,
-            tz = "UTC"
+            decimal_mark = METADATA$locale$decimal_mark,
+            grouping_mark = METADATA$locale$grouping_mark,
+            tz = METADATA$locale$tz
         ),
         show_col_types = FALSE # Quiet warnings
     )
@@ -76,7 +72,7 @@ readDataCustom <- function(source_path, separators = NA) {
     if (is.data.frame(data_out) && length(dim(data_out)) == 2) {
         print(paste("Data loaded successfully from the following source:", source_path))
     } else {
-        stop("Error in reading data.")
+        stop("Error in reading data. Try modifying your locale settings in the metadata.yaml file.")
     }
     # Return the data
     invisible(data_out)

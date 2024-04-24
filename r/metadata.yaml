@@ -38,3 +38,9 @@ analysed_df_cols:
   pss: "PSS"
   e_sig: "Excess significance"
   pcc_var: "Partial correlation corefficient variance"
+
+locale:
+  csv_separators: ","
+  decimal_mark: ","
+  grouping_mark: ";"
+  tz: "UTC" # Timezone

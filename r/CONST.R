@@ -6,6 +6,7 @@ CONST <- list(
         "pbapply"
     ),
     PACKAGES = list(
+        "readr" = "2.1.5",
         "yaml" = "2.3.8"
     )
 )

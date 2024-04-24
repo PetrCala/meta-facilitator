@@ -6,6 +6,7 @@ chris_analyse <- function(...) {
     message("Running the chris analysis")
     analysis <- METADATA$analyses$chris
     analysis_name <- analysis$analysis_name
+
     df <- readAnalysisData(analysis_name = analysis_name)
     print(head(df))
 }

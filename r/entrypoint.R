@@ -18,7 +18,8 @@ wd <- getwd()
 # Ensure the correct working directory regardless of invocation type
 if (interactive()) {
     message("Running in interactive mode")
-    setwd(dirname(getActiveDocumentContext()$path)) # Change WD to this document directory
+    current_document_path <- suppressWarnings(getActiveDocumentContext()$path)
+    setwd(dirname(current_document_path))
 } else {
     message("Running in non-interactive mode")
     args <- commandArgs(trailingOnly = FALSE)
