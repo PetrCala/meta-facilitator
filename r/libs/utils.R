@@ -35,3 +35,31 @@ isFunctionCall <- function(obj) {
     }
     return(TRUE)
 }
+
+
+#' Check whether an object is empty.
+isEmpty <- function(obj) {
+    type_obj <- typeof(obj)
+
+    result <- switch(type_obj,
+        logical = all(!obj),
+        integer = length(obj) == 0 || all(is.na(obj)),
+        double = length(obj) == 0 || all(is.na(obj)), # Treat numeric as double
+        character = length(obj) == 0 || any(obj == ""),
+        list = length(obj) == 0,
+        NULL = TRUE,
+        data.frame = is.data.frame(obj) && nrow(obj) == 0,
+        factor = length(obj) == 0 || all(is.na(obj)),
+        # Default case if none of the above types match
+        {
+            if (is.na(obj)) {
+                TRUE # Single NA values are considered empty
+            } else {
+                FALSE # If it's a different type and not NA, it's not empty
+            }
+        }
+    )
+
+    # Return the result
+    return(result)
+}

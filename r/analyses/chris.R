@@ -1,4 +1,5 @@
 source("libs/read_data/index.R")
+source("libs/clean_data/index.R")
 source("analyses/utils.R")
 source("METADATA.R")
 
@@ -7,5 +8,6 @@ chris_analyse <- function(...) {
     analysis <- METADATA$analyses$chris
     analysis_name <- analysis$analysis_name
     df <- readAnalysisData(analysis_name = analysis_name)
+    df <- cleanData(df = df, analysis_name = analysis_name)
     print(head(df))
 }

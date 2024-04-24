@@ -10,6 +10,7 @@ CONST <- list(
         "memoise" = "2.0.1",
         "readr" = "2.1.5",
         "readxl" = "0.1.1",
+        "rlang" = "1.1.3",
         "yaml" = "2.3.8"
     )
 )

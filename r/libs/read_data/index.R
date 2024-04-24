@@ -1,5 +1,7 @@
+library("readxl")
 library("readr")
 source("libs/read_data/utils.R")
+source("libs/cache/index.R")
 source("METADATA.R")
 source("PATHS.R")
 
@@ -76,4 +78,29 @@ readDataCustom <- function(source_path, separators = NA) {
     }
     # Return the data
     invisible(data_out)
+}
+
+
+#' readAnalysisData function
+#'
+#' This function reads the data for a given analysis and returns it as a data frame.
+readAnalysisData <- function(
+    analysis_name) {
+    message("Reading the data for the analysis ", analysis_name)
+    df_path <- getDataPath(analysis_name = analysis_name)
+    analysis_metadata <- getAnalysisMetadata(analysis_name)
+    sheet_name <- analysis_metadata$source_sheet
+    df <- runCachedFunction(
+        f = read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
+        verbose_function = function(...) {
+            "Finished reading the data."
+        },
+        df_path,
+        sheet = sheet_name
+    )
+    # Tibble to DF - possibly abstract away in the future
+    df_names <- names(df)
+    df <- as.data.frame(df)
+    colnames(df) <- df_names
+    return(df)
 }
