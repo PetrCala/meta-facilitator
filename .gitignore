@@ -1,6 +1,7 @@
 data/
 !data/README.md
 resources/
+_cache/
 cache/
 metadata.json
 output/*

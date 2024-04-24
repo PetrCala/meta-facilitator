@@ -3,7 +3,7 @@
 set -e
 
 VENV_PATH="venv"
-CACHE_DIR_NAME="cache"
+CACHE_DIR_NAME="_cache"
 SENTINEL_FILE_NAME="last_poetry_install.txt"
 
 SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")

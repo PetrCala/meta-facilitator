@@ -16,3 +16,22 @@ captureOutput <- function(expr) {
     force(expr)
     captured
 }
+
+
+#' Check whether an object is a function call (created using 'call').
+#' Return a boolean to indicate this.
+#'
+#' @param obj [any] The object to evaluate
+#' @return [logical] TRUE if the object is a function call, FALSE otherwise
+isFunctionCall <- function(obj) {
+    if (is.call(obj)) {
+        func_name <- as.character(obj[[1]])
+        is_valid_function_call <- exists(func_name) && is.function(get(func_name))
+        if (!(is_valid_function_call)) {
+            return(FALSE)
+        }
+    } else {
+        return(FALSE)
+    }
+    return(TRUE)
+}

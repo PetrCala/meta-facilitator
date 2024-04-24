@@ -42,6 +42,7 @@ PATHS <- list(
     DIR_R = DIR_R,
     DIR_DATA = file.path(PROJECT_ROOT, "data"),
     DIR_OUTPUT = file.path(PROJECT_ROOT, "output"),
+    DIR_CACHE = file.path(PROJECT_ROOT, "_cache"),
 
     # R files
     R_ENTRYPOINT = file.path(DIR_R, "entrypoint.R"),

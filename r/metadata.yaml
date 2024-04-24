@@ -9,6 +9,7 @@ analyses:
   chris:
     analysis_name: "chris"
     source_df: "chris_data.xlsx"
+    source_sheet: "Main"
     cols:
       study: "Filename"
       effect_type: "Effect type"
@@ -44,3 +45,8 @@ locale:
   decimal_mark: ","
   grouping_mark: ";"
   tz: "UTC" # Timezone
+
+cache_handling:
+  # I recommend you use caches only after you are certain the functions run correctly
+  use_cache: true # Store intermediate output in a cache in the /_cache/ folder.
+  cache_age: 3600 # In seconds - an hour
