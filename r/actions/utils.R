@@ -1,3 +1,4 @@
+library("rlang")
 source("actions/index.R")
 
 #' Validate that an action is specified and is valid
@@ -5,16 +6,18 @@ source("actions/index.R")
 #' @param action [character] The action to validate
 validateAction <- function(action) {
     if (is.null(action)) {
-        stop("Please specify an action to execute. Use --help for more information.")
+        abort("Please specify an action to execute. Use --help for more information.", class = "no_action")
     }
 
     # Check if the action is valid
     if (!(action %in% names(ACTIONS))) {
-        stop_msg <- paste(
-            "Unknown action:", action,
-            "\nPlease choose from the following actions:", paste(names(ACTIONS), collapse = ", ")
+        stop_msg <- abort(
+            paste(
+                "Unknown action:", action,
+                "\nPlease choose from the following actions:", paste(names(ACTIONS), collapse = ", ")
+            ),
+            class = "unknown_action"
         )
-        stop(stop_msg)
     }
 }
 

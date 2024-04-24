@@ -1,3 +1,5 @@
+library("rlang")
+
 #' Create a folder in the working directory if it does not exist yet
 #'
 #' @param folder_name [character] Name of the folder. Specify in the format
@@ -7,7 +9,10 @@
 validateFolderExistence <- function(folder_name, require_existence = FALSE) {
     if (!file.exists(folder_name)) {
         if (require_existence) {
-            stop(paste("The folder", folder_name, "must exist in the working directory."))
+            abort(
+                paste("The folder", folder_name, "must exist in the working directory."),
+                class = "folder_not_found"
+            )
         }
         dir.create(folder_name, recursive = TRUE)
     }
@@ -22,8 +27,14 @@ validateFolderExistence <- function(folder_name, require_existence = FALSE) {
 validateFiles <- function(files) {
     for (file in files) {
         if (!file.exists(file)) {
-            stop(paste0(file, " does not exist or could not be located.
-                  Please make sure to include it in the working directory."))
+            abort(
+                paste(
+                    file,
+                    "does not exist or could not be located.",
+                    "Please make sure to include it in the working directory."
+                ),
+                class = "file_not_found"
+            )
         }
     }
     print("All necessary files located successfully.")

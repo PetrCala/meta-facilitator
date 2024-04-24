@@ -14,7 +14,10 @@ getAnalysisColsList <- function(analysis_name) {
     analysis_metadata <- getAnalysisMetadata(analysis_name)
     cols <- analysis_metadata$cols
     if (isEmpty(cols)) {
-        stop(paste("The analysis metadata does not contain any columns for analysis", analysis_name))
+        abort(
+            paste("The analysis metadata does not contain any columns for analysis", analysis_name),
+            class = "missing_columns_error"
+        )
     }
     return(cols)
 }
@@ -29,7 +32,10 @@ getAnalysisColsList <- function(analysis_name) {
 checkForMissingCols <- function(df, expected_cols) {
     missing_cols <- setdiff(expected_cols, colnames(df))
     if (length(missing_cols) > 0) {
-        stop(paste("The data frame is missing the following columns:", missing_cols))
+        abort(
+            paste("The data frame is missing the following columns:", missing_cols),
+            class = "missing_columns_error"
+        )
     }
 }
 

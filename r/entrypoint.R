@@ -11,8 +11,9 @@
 library("rstudioapi")
 
 # Static
-run_dir <- "meta-facilitator/r"
+run_dir <- "meta-facilitator/R"
 wd <- getwd()
+
 
 
 # Ensure the correct working directory regardless of invocation type

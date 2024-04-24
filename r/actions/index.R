@@ -1,3 +1,4 @@
+library("rlang")
 source("libs/env.R")
 source("analyses/index.R")
 
@@ -27,10 +28,13 @@ run_analysis <- function(analysis_name = NULL, ...) {
     analysis_name <- toupper(analysis_name)
 
     if (!(analysis_name %in% names(ANALYSES))) {
-        stop(paste(
-            "Unknown analysis:", analysis_name,
-            "\nMust be one of the following:", paste(names(ANALYSES), collapse = ", ")
-        ))
+        abort(
+            paste(
+                "Unknown analysis:", analysis_name,
+                "\nMust be one of the following:", paste(names(ANALYSES), collapse = ", ")
+            ),
+            class = "unknown_analysis"
+        )
     }
     do.call(ANALYSES[[analysis_name]], args = list(...))
 
