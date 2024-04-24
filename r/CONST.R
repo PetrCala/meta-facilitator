@@ -1,5 +1,8 @@
 CONST <- list(
     PROJECT_NAME = "meta-facilitator",
+    DATE_FORMAT = "%Y-%m-%d %H:%M:%S",
+    ANALYSIS_INFO_FILE_NAME = "info.txt", # Text file with analysis results
+    ANALYSIS_RESULTS_FILE_NAME = "results.csv", # CSV file with analysis results
     INITIAL_PACKAGES = c(
         "rstudioapi",
         "devtools",

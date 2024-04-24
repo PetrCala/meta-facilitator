@@ -1,4 +1,5 @@
 library("rlang")
+source("libs/utils.R")
 
 #' Create a folder in the working directory if it does not exist yet
 #'
@@ -38,4 +39,17 @@ validateFiles <- function(files) {
         }
     }
     print("All necessary files located successfully.")
+}
+
+
+#' Create a text file in the specified path with the given message list
+#'
+#' @param msg_list [list] A list of messages to write to the file
+#' @param full_path [character] The full path to the file to create
+#' @return [NULL] The function writes the file and does not return anything
+writeTxtFile <- function(msg_list, full_path) {
+    if (isEmpty(msg_list)) {
+        return(NULL) # Nothing to write
+    }
+    writeLines(unlist(msg_list), full_path)
 }

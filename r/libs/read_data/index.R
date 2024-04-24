@@ -1,5 +1,6 @@
 library("readxl")
 library("readr")
+library("rlang")
 source("libs/read_data/utils.R")
 source("libs/cache/index.R")
 source("METADATA.R")
@@ -25,7 +26,7 @@ getDataPath <- function(analysis_name) {
                 path
             )
         )
-        stop("Missing analysis data file.")
+        abort("Missing analysis data file.", class = "missing_data_file")
     }
     return(path)
 }
@@ -58,7 +59,10 @@ getDataPath <- function(analysis_name) {
 readDataCustom <- function(source_path, separators = NA) {
     # Validate the file existence and infer the separators
     if (!file.exists(source_path)) {
-        stop(paste("The", source_path, "file not found."))
+        abort(
+            paste("The", source_path, "file not found."),
+            class = "missing_file"
+        )
     }
     # Read data
     data_out <- read_delim(
@@ -74,7 +78,10 @@ readDataCustom <- function(source_path, separators = NA) {
     if (is.data.frame(data_out) && length(dim(data_out)) == 2) {
         print(paste("Data loaded successfully from the following source:", source_path))
     } else {
-        stop("Error in reading data. Try modifying your locale settings in the metadata.yaml file.")
+        abort(
+            "Error in reading data. Try modifying your locale settings in the metadata.yaml file.",
+            class = "data_read_error"
+        )
     }
     # Return the data
     invisible(data_out)

@@ -17,6 +17,8 @@ analyses:
       se: "Standard error"
       sample_size: "Sample size"
       df: null
+    unique:
+      pcc_identifier: "correlation" # How PCC studies are denoted
 
 clean_df_cols:
   study: "Study name/ID"
