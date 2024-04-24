@@ -44,23 +44,9 @@ if (!grepl(paste0(run_dir, "$"), getwd())) {
 }
 
 # Relative paths are sourced only after the WD is set correctly
-source("actions.R")
-source("METADATA.R")
+source("actions/utils.R")
 
-action <- METADATA$run$action
-
-if (is.null(action)) {
-    stop("Please specify an action to execute. Use --help for more information.")
-}
-
-# Check if the action is valid
-if (!(action %in% names(ACTIONS))) {
-    stop_msg <- paste(
-        "Unknown action:", action,
-        "\nPlease choose from the following actions:", paste(names(ACTIONS), collapse = ", ")
-    )
-    stop(stop_msg)
-}
+action <- getAction() # Get the action name from the metadata
 
 # Convert the rest of the arguments to a list to be passable into the do.call
 # arg_list <- as.list(run_args)
