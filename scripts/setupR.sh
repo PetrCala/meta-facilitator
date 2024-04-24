@@ -19,6 +19,7 @@ R_DIR="$PROJECT_ROOT/$R_DIR_NAME" # r/
 SETUP_ENV_FILE_PATH="$R_DIR/$SETUP_ENV_FILE_NAME"
 
 # Setup the R environment
+cd $R_DIR
 Rscript "$SETUP_ENV_FILE_PATH"
 
 info "Finished setting up the R environment."
