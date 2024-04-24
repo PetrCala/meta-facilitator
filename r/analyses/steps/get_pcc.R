@@ -1,6 +1,8 @@
+library("data.table")
 library("rlang")
 source("libs/utils.R")
 source("libs/df_utils.R")
+source("stats/pcc.R")
 source("analyses/utils.R")
 
 #' Run the PCC analysis step. Used in the Chris analysis.
@@ -21,8 +23,25 @@ getPCC <- function(df, analysis_name) {
             class = "unknown_pcc_identifier"
         )
     }
-    df <- df[df$effect_type == pcc_identifier, ]
+    df <- copy(df[df$effect_type == pcc_identifier, ])
     n_of_studies_pcc <- getNumberOfStudies(df = df)
+    # TODO log this
+
+    pcc_df <- data.frame(matrix(nrow = nrow(df), ncol = 0)) # An empty PCC data frame
+
+    # Calculate the PCC variance
+    pcc_df$pcc_var_1 <- getPCCVariance(
+        pcc = df$effect,
+        sample_size = df$sample_size,
+        dof = df$df,
+        offset = 1
+    )
+    pcc_df$pcc_var_2 <- getPCCVariance(
+        pcc = df$effect,
+        sample_size = df$sample_size,
+        dof = df$df,
+        offset = 2
+    )
     return(NA)
 }
 
