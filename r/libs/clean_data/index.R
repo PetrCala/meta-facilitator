@@ -19,6 +19,20 @@ getAnalysisColsList <- function(analysis_name) {
     return(cols)
 }
 
+#' Check that a data frame contains all the expected columns
+#'
+#' @param df [data.frame] The data frame to check
+#' @param expected_cols [character] The list of expected column names
+#' @example
+#' checkForMissingCols(df, c("Effect", "Standard Error", "Lower CI", "Upper CI"))
+#' # Throws an error if any of the columns are missing
+checkForMissingCols <- function(df, expected_cols) {
+    missing_cols <- setdiff(expected_cols, colnames(df))
+    if (length(missing_cols) > 0) {
+        stop(paste("The data frame is missing the following columns:", missing_cols))
+    }
+}
+
 
 #' Clean a data frame for analysis
 cleanData <- function(df, analysis_name) {
@@ -35,6 +49,7 @@ cleanData <- function(df, analysis_name) {
     # Subset to relevant colnames - use colname if available, column source if not
     getColname <- function(col) source_cols[[col]] %||% col
     relevant_colnames <- unlist(lapply(names(source_cols), getColname))
+    checkForMissingCols(df, relevant_colnames) # Validate cols are present before subsetting
     df <- df[, relevant_colnames]
 
     # Rename the columns
