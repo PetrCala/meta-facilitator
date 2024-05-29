@@ -5,7 +5,7 @@
 #' \dontrun{
 #' dir <- getScriptDirectory()
 #' }
-getScriptDirectory <- function() {
+getScriptDirectory <- function() {;
     # Check all calls in the call stack
     calls <- sys.calls()
     for (i in length(calls):1) {
@@ -26,14 +26,14 @@ getScriptDirectory <- function() {
     return(getwd())
 }
 
-DIR_R <- getScriptDirectory()
+DIR_R <- getwd() # Assume this points to meta-facilitator/R folder
 PROJECT_ROOT <- dirname(DIR_R)
 
 #' A list of paths used in the project
 #'
 #' @example
 #' \dontrun{
-#' source("PATHS.R")
+#' box::use(base/paths[PATHS])
 #' print(PATHS$PROJECT_ROOT)
 #' }
 PATHS <- list(
@@ -53,5 +53,4 @@ PATHS <- list(
     R_ACTIONS = file.path(DIR_R, "actions.R")
 )
 
-# Cleanup
-rm(list = c("DIR_R", "PROJECT_ROOT"))
+box::export(PATHS)

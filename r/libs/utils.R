@@ -1,25 +1,6 @@
-library("rlang")
-source("METADATA.R")
-
-#' Capture the output of an expression:
-#' - The function captures and returns all output (e.g., messages, errors, and print statements)
-#'   that is produced when evaluating the provided expression.
-#' - Used after calling cached functions for printing verbose output that would otherwise
-#'    get silenced.
-#'
-#' @param expr [expression] The expression to evaluate
-#' @return [character] A character vector containing the lines of output produced by the expression
-captureOutput <- function(expr) {
-    con <- textConnection("captured", "w", local = TRUE)
-    sink(con)
-    on.exit({
-        sink()
-        close(con)
-    })
-    force(expr)
-    captured
-}
-
+box::use(
+  base/metadata[METADATA]
+)
 
 #' Check whether an object is a function call (created using 'call').
 #' Return a boolean to indicate this.
@@ -73,11 +54,11 @@ getRunArgs <- function(action) {
   run_args <- METADATA$run_args
 
   if (is.null(action)) {
-    abort("Please specify an action to execute. Use --help for more information.")
+    rlang::abort("Please specify an action to execute. Use --help for more information.")
   }
 
   if (!(action %in% names(run_args))) {
-    abort(
+    rlang::abort(
       paste(
             "Unknown action:", action,
             "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
@@ -120,16 +101,24 @@ validate <- function(...) {
     cond <- conditions[[i]]
     cond_expr <- deparse(conditions_expr[[i]])
     if (!is.logical(cond) || length(cond) != 1) {
-      abort(
+      rlang::abort(
         message = paste("Condition must be a single logical value (TRUE or FALSE):", cond_expr),
         .subclass = "validation_error"
       )
     }
     if (!cond) {
-      abort(
+      rlang::abort(
         message = paste("Condition did not hold:", cond_expr),
         .subclass = "validation_error"
       )
     }
   }
 }
+
+
+box::export(
+  getRunArgs,
+  isEmpty,
+  isFunctionCall,
+  validate
+)

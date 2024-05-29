@@ -1,5 +1,7 @@
-source("PATHS.R")
-source("CONST.R")
+box::use(
+    base/paths[PATHS],
+    base/const[CONST]
+)
 
 getScriptPath <- function() {
     script_path <- commandArgs(trailingOnly = TRUE)[1]
@@ -33,3 +35,10 @@ getFullPath <- function(path) {
     path <- gsub("\\\\", "/", path)
     path
 }
+
+box::export(
+    getScriptPath,
+    pathEndsWith,
+    setWorkingDirectory,
+    getFullPath
+)

@@ -1,4 +1,3 @@
-library("rlang")
 
 #' Assign NA to a column in a data frame
 assignNACol <- function(df, colname) {
@@ -15,7 +14,12 @@ assignNACol <- function(df, colname) {
 #' @return [int] The number of studies.
 getNumberOfStudies <- function(df) {
     if (!"study" %in% colnames(df)) {
-        abort("The data frame does not have a 'study' column.", class = "missing_study_column")
+        rlang::abort("The data frame does not have a 'study' column.", class = "missing_study_column")
     }
     return(length(table(df$study)))
 }
+
+box::export(
+    assignNACol,
+    getNumberOfStudies
+)

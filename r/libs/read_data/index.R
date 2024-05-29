@@ -1,10 +1,9 @@
-library("readxl")
-library("readr")
-library("rlang")
-source("libs/read_data/utils.R")
-source("libs/cache/index.R")
-source("METADATA.R")
-source("PATHS.R")
+box::use(
+    base/metadata[METADATA],
+    base/paths[PATHS],
+    analyses/utils[getAnalysisMetadata],
+    libs/cache/index[runCachedFunction],
+)
 
 
 #' getDataPath function
@@ -26,7 +25,7 @@ getDataPath <- function(analysis_name) {
                 path
             )
         )
-        abort("Missing analysis data file.", class = "missing_data_file")
+        rlang::abort("Missing analysis data file.", class = "missing_data_file")
     }
     return(path)
 }
@@ -59,13 +58,13 @@ getDataPath <- function(analysis_name) {
 readDataCustom <- function(source_path, separators = NA) {
     # Validate the file existence and infer the separators
     if (!file.exists(source_path)) {
-        abort(
+        rlang::abort(
             paste("The", source_path, "file not found."),
             class = "missing_file"
         )
     }
     # Read data
-    data_out <- read_delim(
+    data_out <- readr::read_delim(
         source_path,
         locale = locale(
             decimal_mark = METADATA$locale$decimal_mark,
@@ -78,7 +77,7 @@ readDataCustom <- function(source_path, separators = NA) {
     if (is.data.frame(data_out) && length(dim(data_out)) == 2) {
         print(paste("Data loaded successfully from the following source:", source_path))
     } else {
-        abort(
+        rlang::abort(
             "Error in reading data. Try modifying your locale settings in the metadata.yaml file.",
             class = "data_read_error"
         )
@@ -91,14 +90,13 @@ readDataCustom <- function(source_path, separators = NA) {
 #' readAnalysisData function
 #'
 #' This function reads the data for a given analysis and returns it as a data frame.
-readAnalysisData <- function(
-    analysis_name) {
+readAnalysisData <- function(analysis_name) {
     message("Reading the data for the analysis ", analysis_name)
     df_path <- getDataPath(analysis_name = analysis_name)
     analysis_metadata <- getAnalysisMetadata(analysis_name)
     sheet_name <- analysis_metadata$source_sheet
     df <- runCachedFunction(
-        f = read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
+        f = readxl::read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
         verbose_function = function(...) {
             "Finished reading the data."
         },
@@ -111,3 +109,8 @@ readAnalysisData <- function(
     colnames(df) <- df_names
     return(df)
 }
+
+box::export(
+    readAnalysisData,
+    readDataCustom
+)

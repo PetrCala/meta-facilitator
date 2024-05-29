@@ -1,5 +1,6 @@
-library("rlang")
-source("libs/utils.R")
+box::use(
+    libs/utils[isEmpty]
+)
 
 #' Create a folder in the working directory if it does not exist yet
 #'
@@ -10,7 +11,7 @@ source("libs/utils.R")
 validateFolderExistence <- function(folder_name, require_existence = FALSE) {
     if (!file.exists(folder_name)) {
         if (require_existence) {
-            abort(
+            rlang::abort(
                 paste("The folder", folder_name, "must exist in the working directory."),
                 class = "folder_not_found"
             )
@@ -28,7 +29,7 @@ validateFolderExistence <- function(folder_name, require_existence = FALSE) {
 validateFiles <- function(files) {
     for (file in files) {
         if (!file.exists(file)) {
-            abort(
+            rlang::abort(
                 paste(
                     file,
                     "does not exist or could not be located.",
@@ -53,3 +54,9 @@ writeTxtFile <- function(msg_list, full_path) {
     }
     writeLines(unlist(msg_list), full_path)
 }
+
+box::export(
+    validateFolderExistence,
+    validateFiles,
+    writeTxtFile
+)

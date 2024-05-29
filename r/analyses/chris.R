@@ -1,9 +1,11 @@
-source("libs/read_data/index.R")
-source("libs/clean_data/index.R")
-source("libs/df_utils.R")
-source("analyses/utils.R")
-source("analyses/steps/get_pcc.R")
-source("METADATA.R")
+box::use(
+    base/metadata[METADATA],
+    libs/df_utils[getNumberOfStudies],
+    analyses/steps/get_pcc[getPCC],
+    analyses/utils[getAnalysisMetadata, saveAnalysisResults],
+    libs/clean_data/index[cleanData],
+    libs/read_data/index[readAnalysisData],
+)
 
 #' Given the data of a 
 get_chris_meta_flavours <- function(df) {
@@ -29,16 +31,16 @@ chrisAnalyse <- function(...) {
     df <- getPCC(df = df, analysis_name = analysis_name, messages=msg, ...)
     n_studies <- getNumberOfStudies(df = df)
 
-    analyseSingleChrisStudy <- function(single_study_data) {
+    # analyseSingleChrisStudy <- function(single_study_data) {
 
-            out <- c(1)
-            return(out)
-    }
+    #         out <- c(1)
+    #         return(out)
+    # }
 
     # df_out <- apply(df, 1, analyseSingleChrisStudy)
     df_out <- c("temp")
 
-    results <- data.frame(matrix(ncol=0, nrow=nrow(pcc_df)))
+    # results <- data.frame(matrix(ncol=0, nrow=nrow(pcc_df)))
 
     message("Exporting results...")
     saveAnalysisResults(
@@ -47,3 +49,5 @@ chrisAnalyse <- function(...) {
         analysis_messages = c("hello", "world")
     )
 }
+
+box::export(chrisAnalyse)

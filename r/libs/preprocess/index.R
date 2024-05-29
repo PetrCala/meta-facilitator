@@ -1,5 +1,6 @@
-library("rlang")
-source("libs/utils.R")
+box::use(
+    libs/utils[validate]
+)
 
 #' Preprocess the raw excel data:
 #' - Adjust the source data dimensions
@@ -27,7 +28,7 @@ preprocessData <- function(input_data, input_var_list) {
     if (!all(varnames %in% expected_varnames) || !all(expected_varnames %in% varnames)) {
         missing_from_var_list <- varnames[!varnames %in% expected_varnames]
         missing_from_data <- expected_varnames[!expected_varnames %in% varnames]
-        abort(
+        rlang::abort(
             paste(
                 "Mismatching variable names. \n",
                 "These variables are not a part of the variable list: ",
@@ -40,7 +41,7 @@ preprocessData <- function(input_data, input_var_list) {
     # Check for correct ordering
     if (!identical(varnames, expected_varnames)) {
         problematic_indexes <- which(varnames != expected_varnames)
-        abort(
+        rlang::abort(
             paste(
                 "The order of some columns in the data frame and the expected variable list is different. \n",
                 paste("Problematic indexes and their column names: \n"),
@@ -74,3 +75,7 @@ preprocessData <- function(input_data, input_var_list) {
     message("Preprocessing finished.")
     return(input_data)
 }
+
+box::export(
+    preprocessData
+)

@@ -1,7 +1,7 @@
-library("rlang")
-source("libs/utils.R")
-source("libs/env.R")
-source("analyses/index.R")
+box::use(
+    libs/utils[getRunArgs],
+    analyses/index[ANALYSES],
+)
 
 #' This is a placeholder function to demonstrate the usage of actions, and will be removed fruther on.
 add <- function(x, y) {
@@ -11,12 +11,13 @@ add <- function(x, y) {
             y <- as.numeric(y)
         },
         error = function(e) {
-            abort("Please provide numeric values for x and y")
+            rlang::abort("Please provide numeric values for x and y")
         }
     )
     print(paste("Sum is", x + y))
 }
 
+#' @export
 runAnalysis <- function(analysis_name = NULL, ...) {
     run_args <- getRunArgs("analyse")
 
@@ -30,7 +31,7 @@ runAnalysis <- function(analysis_name = NULL, ...) {
     analysis_name <- toupper(analysis_name)
 
     if (!(analysis_name %in% names(ANALYSES))) {
-        abort(
+        rlang::abort(
             paste(
                 "Unknown analysis:", analysis_name,
                 "\nMust be one of the following:", paste(names(ANALYSES), collapse = ", ")
@@ -43,7 +44,10 @@ runAnalysis <- function(analysis_name = NULL, ...) {
     message("Analysis complete")
 }
 
+#' A list of executable actions for the entrypoint.R
 ACTIONS <- list(
     add = add,
     analyse = runAnalysis
 )
+
+box::export(ACTIONS)

@@ -1,8 +1,5 @@
-source("CONST.R")
-
-
 # Source as few modules as possible to avoid initial setup errors
-
+source("CONST.R") # can not use 'box' here, as it is not loaded yet
 
 #' Set the CRAN mirror
 setMirror <- function(mirror = NULL) {

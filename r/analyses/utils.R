@@ -1,8 +1,9 @@
-library("rlang")
-source("libs/file_utils.R")
-source("CONST.R")
-source("PATHS.R")
-source("METADATA.R")
+box::use(
+    libs/file_utils[validateFolderExistence, writeTxtFile],
+    base/metadata[METADATA],
+    base/paths[PATHS],
+    base/const[CONST],
+)
 
 
 #' Based on an analysis name, get that analysis metadata
@@ -10,7 +11,7 @@ source("METADATA.R")
 #' @return [list] The analysis metadata
 getAnalysisMetadata <- function(analysis_name) {
     if (!analysis_name %in% names(METADATA$analyses)) {
-        abort(
+        rlang::abort(
             paste("The analysis name", analysis_name, "is not in the METADATA."),
             class = "unknown_analysis"
         )
@@ -37,3 +38,8 @@ saveAnalysisResults <- function(df, analysis_name, analysis_messages) {
     # TODO enable this
     # write.csv(df, file.path(results_folder, CONST$ANALYSIS_RESULTS_FILE_NAME), row.names = FALSE)
 }
+
+box::export(
+    getAnalysisMetadata,
+    saveAnalysisResults
+)

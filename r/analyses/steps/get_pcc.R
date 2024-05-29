@@ -1,8 +1,8 @@
-library("data.table")
-library("rlang")
-source("libs/utils.R")
-source("libs/df_utils.R")
-source("analyses/utils.R")
+box::use(
+    libs/utils[isEmpty],
+    libs/df_utils[getNumberOfStudies],
+    analyses/utils[getAnalysisMetadata] 
+)
 
 #' Calculate the PCC variance.
 #'
@@ -31,7 +31,7 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
     # Subset to PCC studies only
     pcc_identifier <- analysis_metadata$unique$pcc_identifier
     if (isEmpty(pcc_identifier)) {
-        abort(
+        rlang::abort(
             paste0(
                 "Unknown PCC identified for analysis ",
                 analysis_name,
@@ -41,7 +41,7 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
         )
     }
     messages <- c(messages, "Subsetting to PCC studies only")
-    df <- copy(df[df$effect_type == pcc_identifier, ])
+    df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
     n_of_studies_pcc <- getNumberOfStudies(df = df)
     messages <- c(messages, "Subsetting to PCC studies only.")
     # TODO log this
@@ -65,3 +65,8 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
 
 
 # a. RE1 & RE2: Calculate random-effects twice (report its both the estimate and t-value for each) using the SEs for equation (1) and (2). I know that R has standard routines for this.  You should probably use the REML (restricted max likelihood) flavor of RE.
+
+box::export(
+    getPCC,
+    getPCCVariance
+)

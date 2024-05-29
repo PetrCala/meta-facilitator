@@ -8,18 +8,17 @@
 #'  or
 #' - Specify the desired action in metadata.json and run the script inside an R session.
 
-library("rstudioapi")
-library("rlang")
-
 # Static
 run_dir <- "meta-facilitator/R"
-wd <- getwd()
-
 
 # Ensure the correct working directory regardless of invocation type
-if (interactive()) {
-    message("Running in interactive mode")
-    current_document_path <- suppressWarnings(getActiveDocumentContext()$path)
+if (exists(".vsc.getSession")) {
+    message("Running in VS Code")
+    session <- .vsc.getSession()
+    setwd(dirname(session$file)) # Set wd to this file - assume local debugging session invocation
+} else if (interactive()) {
+    message("Running in interactive mode") # Assume RStudio
+    current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
     setwd(dirname(current_document_path))
 } else {
     message("Running in non-interactive mode")
@@ -33,7 +32,7 @@ if (interactive()) {
         }
     }
     if (is.null(script_path)) {
-        abort("Could not find the script path in the arguments. Try specifying the script path using --file=<path> argument.")
+        rlang::abort("Could not find the script path in the arguments. Try specifying the script path using --file=<path> argument.")
     }
     setwd(dirname(script_path))
     # action <- args[1]
@@ -42,11 +41,16 @@ if (interactive()) {
 
 # Check that the current WD ends with the expected directory substring
 if (!grepl(paste0(run_dir, "$"), getwd())) {
-    abort("Failed to set the working directory to the correct location. Try running the script again.")
+    rlang::abort("Failed to set the working directory to the correct location. Try running the script again.")
 }
 
+# Set up the path for module imports
+options(box.path = getwd())
+
+
 # Relative paths are sourced only after the WD is set correctly
-source("actions/utils.R")
+box::use(actions/index[ACTIONS])
+box::use(actions/utils[getAction])
 
 action <- getAction() # Get the action name from the metadata
 

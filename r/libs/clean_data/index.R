@@ -1,7 +1,8 @@
-library("rlang")
-source("analyses/utils.R")
-source("libs/df_utils.R")
-source("libs/utils.R")
+box::use(
+    analyses/utils[getAnalysisMetadata],
+    libs/utils[isEmpty],
+    libs/df_utils[getNumberOfStudies, assignNACol],
+)
 
 #' Return the list of column names for a given analysis
 #'
@@ -14,7 +15,7 @@ getAnalysisColsList <- function(analysis_name) {
     analysis_metadata <- getAnalysisMetadata(analysis_name)
     cols <- analysis_metadata$cols
     if (isEmpty(cols)) {
-        abort(
+        rlang::abort(
             paste("The analysis metadata does not contain any columns for analysis", analysis_name),
             class = "missing_columns_error"
         )
@@ -32,7 +33,7 @@ getAnalysisColsList <- function(analysis_name) {
 checkForMissingCols <- function(df, expected_cols) {
     missing_cols <- setdiff(expected_cols, colnames(df))
     if (length(missing_cols) > 0) {
-        abort(
+        rlang::abort(
             paste("The data frame is missing the following columns:", missing_cols),
             class = "missing_columns_error"
         )
@@ -63,3 +64,9 @@ cleanData <- function(df, analysis_name) {
 
     return(df)
 }
+
+box::export(
+    getAnalysisColsList,
+    checkForMissingCols,
+    cleanData
+)
