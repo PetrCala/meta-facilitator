@@ -43,14 +43,14 @@ In this project, we use the `validate` function to ensure that certain condition
 
 ### How to Use the `validate` Function
 
-The `validate` function checks whether each argument passed to it is either a single logical value (TRUE or FALSE) or a list/vector of such values. It validates each condition and aborts with an appropriate error message if any condition does not hold.
+The `validate` function checks whether each argument passed to it is either a single logical value (TRUE or FALSE). It validates each condition and aborts with an appropriate error message if any condition does not hold.
 
 ### Examples
 
 #### Valid Conditions
 
 ```r
-validate(TRUE, list(TRUE, TRUE), c(TRUE, TRUE))
+validate(TRUE, 1 == 1, is.function(print))
 ```
 
 #### Invalid Conditions
@@ -59,6 +59,6 @@ The following examples will abort with an error message:
 
 ```r
 validate(FALSE)
-validate(TRUE, list(TRUE, FALSE), c(TRUE, FALSE))
+validate(TRUE, 1 == 2, FALSE)
 validate("not a condition")
 ```

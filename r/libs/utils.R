@@ -87,34 +87,24 @@ getRunArgs <- function(action) {
   return(METADATA$run_args[[action]])
 }
 
-get_last_error <- function()
-{
-  tr <- .traceback()
-  if(length(tr) == 0)
-  {
-    return(NULL)
-  }
-  tryCatch(eval(parse(text = tr[[1]])), error = identity)
-}
-
 
 #' Validate Conditions
 #'
 #' This function validates input conditions. It checks that each argument is 
-#' either a single logical value (TRUE or FALSE) or a list/vector of such values.
+#' a single logical value (TRUE or FALSE).
 #' If any condition is invalid or does not hold, the function aborts with an 
 #' appropriate error message including the failed condition and a backtrace.
 #'
-#' @param ... Any number of logical conditions or lists/vectors of logical conditions.
+#' @param ... Any number of logical conditions.
 #'
 #' @return NULL. The function is called for its side effects.
 #' @export
 #'
 #' @examples
-#' validate(TRUE, list(TRUE, TRUE), c(TRUE, TRUE))
+#' validate(1 == 1, 2 == 2, is.function(print))
 #' # The following examples will abort with an error and print a backtrace
 #' # validate(FALSE)
-#' # validate(TRUE, list(TRUE, FALSE), c(TRUE, FALSE))
+#' # validate(TRUE, FALSE, FALSE)
 #' # validate("not a condition")
 validate <- function(...) {
   options(

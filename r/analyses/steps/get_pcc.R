@@ -2,8 +2,25 @@ library("data.table")
 library("rlang")
 source("libs/utils.R")
 source("libs/df_utils.R")
-source("stats/pcc.R")
 source("analyses/utils.R")
+
+#' Calculate the PCC variance.
+#'
+#' @param pcc [vector] A vector of PCC values.
+#' @param sample_size [vector] A vector of sample sizes.
+#' @param dof [vector] A vector of degrees of freedom.
+#' @param offset [int] An offset value to subtract from the degrees of freedom
+#'  in case they are missing.
+#' @return [vector] A vector of PCC variances.
+getPCCVariance <- function(pcc, sample_size, dof, offset) {
+    # Calculate the PCC variance.
+    non_null_df <- !is.na(dof)
+
+    numerator <- (1 - pcc^2)^2
+    denominator <- sample_size - 7
+    denominator[non_null_df] <- dof[non_null_df] - offset
+    return(numerator / denominator)
+}
 
 #' Run the PCC analysis step. Used in the Chris analysis.
 getPCC <- function(df, analysis_name = "", messages = c()) {
@@ -42,11 +59,9 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
         dof = df$df,
         offset = 2
     )
-    return(NA)
+    return(pcc_df)
 }
 
 
-# df_out["pcc_var_1"] = get_pcc_var(df_calc, offset=1)
-# df_out["pcc_var_2"] = get_pcc_var(df_calc, offset=2)
 
 # a. RE1 & RE2: Calculate random-effects twice (report its both the estimate and t-value for each) using the SEs for equation (1) and (2). I know that R has standard routines for this.  You should probably use the REML (restricted max likelihood) flavor of RE.
