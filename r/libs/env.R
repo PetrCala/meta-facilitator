@@ -1,8 +1,9 @@
-library("pbapply")
-
-source("METADATA.R")
 source("CONST.R")
 
+# Source as few modules as possible to avoid initial setup errors
+
+
+#' Set the CRAN mirror
 setMirror <- function(mirror = NULL) {
   if (is.null(mirror)) {
     # Set the CRAN mirror to the first available mirror
@@ -95,6 +96,9 @@ loadPackages <- function(package_list, verbose = TRUE) {
     cat("Loading packages...\n")
   }
 
+  # Source pbapply here to avoid initial import error when setting up the environment
+  library("pbapply") 
+
   # Applying the function to each package with a progress bar
   pbapply::pblapply(names(package_list), function(pkg) install_and_check(pkg, package_list[[pkg]]))
 
@@ -127,21 +131,3 @@ setupEnv <- function() {
   )
 }
 
-
-#' Get the run arguments for a given action
-getRunArgs <- function(action) {
-  run_args <- METADATA$run_args
-
-  if (is.null(action)) {
-    stop("Please specify an action to execute. Use --help for more information.")
-  }
-
-  if (!(action %in% names(run_args))) {
-    stop_msg <- paste(
-      "Unknown action:", action,
-      "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
-    )
-    stop(stop_msg)
-  }
-  return(METADATA$run_args[[action]])
-}
