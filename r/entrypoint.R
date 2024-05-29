@@ -10,16 +10,17 @@
 
 # Static
 run_dir <- "meta-facilitator/R"
+new_dir <- NULL
 
 # Ensure the correct working directory regardless of invocation type
 if (exists(".vsc.getSession")) {
     message("Running in VS Code")
     session <- .vsc.getSession()
-    setwd(dirname(session$file)) # Set wd to this file - assume local debugging session invocation
+    new_dir <- dirname(session$file)
 } else if (interactive()) {
     message("Running in interactive mode") # Assume RStudio
     current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
-    setwd(dirname(current_document_path))
+    new_dir <- dirname(current_document_path)
 } else {
     message("Running in non-interactive mode")
     args <- commandArgs(trailingOnly = FALSE)
@@ -34,10 +35,11 @@ if (exists(".vsc.getSession")) {
     if (is.null(script_path)) {
         rlang::abort("Could not find the script path in the arguments. Try specifying the script path using --file=<path> argument.")
     }
-    setwd(dirname(script_path))
+    new_dir <- dirname(script_path)
     # action <- args[1]
     # run_args <- args[-1]
 }
+setwd(new_dir) # Fails if any of the conditions fail to attribute a new_dir
 
 # Check that the current WD ends with the expected directory substring
 if (!grepl(paste0(run_dir, "$"), getwd())) {
