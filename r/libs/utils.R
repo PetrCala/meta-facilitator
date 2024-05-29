@@ -73,15 +73,16 @@ getRunArgs <- function(action) {
   run_args <- METADATA$run_args
 
   if (is.null(action)) {
-    stop("Please specify an action to execute. Use --help for more information.")
+    abort("Please specify an action to execute. Use --help for more information.")
   }
 
   if (!(action %in% names(run_args))) {
-    stop_msg <- paste(
-      "Unknown action:", action,
-      "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
+    abort(
+      paste(
+            "Unknown action:", action,
+            "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
+      )
     )
-    stop(stop_msg)
   }
   return(METADATA$run_args[[action]])
 }

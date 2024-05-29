@@ -10,7 +10,7 @@ add <- function(x, y) {
             y <- as.numeric(y)
         },
         error = function(e) {
-            stop("Please provide numeric values for x and y")
+            abort("Please provide numeric values for x and y")
         }
     )
     print(paste("Sum is", x + y))

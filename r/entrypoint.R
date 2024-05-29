@@ -9,6 +9,7 @@
 #' - Specify the desired action in metadata.json and run the script inside an R session.
 
 library("rstudioapi")
+library("rlang")
 
 # Static
 run_dir <- "meta-facilitator/R"
@@ -32,7 +33,7 @@ if (interactive()) {
         }
     }
     if (is.null(script_path)) {
-        stop("Could not find the script path in the arguments. Try specifying the script path using --file=<path> argument.")
+        abort("Could not find the script path in the arguments. Try specifying the script path using --file=<path> argument.")
     }
     setwd(dirname(script_path))
     # action <- args[1]
@@ -41,7 +42,7 @@ if (interactive()) {
 
 # Check that the current WD ends with the expected directory substring
 if (!grepl(paste0(run_dir, "$"), getwd())) {
-    stop("Failed to set the working directory to the correct location. Try running the script again.")
+    abort("Failed to set the working directory to the correct location. Try running the script again.")
 }
 
 # Relative paths are sourced only after the WD is set correctly

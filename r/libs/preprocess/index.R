@@ -1,3 +1,6 @@
+library("rlang")
+source("libs/utils.R")
+
 #' Preprocess the raw excel data:
 #' - Adjust the source data dimensions
 #' - Transform ALL columns into the correct data type.
@@ -7,7 +10,7 @@
 #' @param input_var_list [data.frame] Data frame with variable descriptions.
 #' @return [data.frame] The preprocessed data
 preprocessData <- function(input_data, input_var_list) {
-    stopifnot(
+    validate(
         is.data.frame(input_data),
         is.data.frame(input_var_list)
     )
@@ -24,7 +27,7 @@ preprocessData <- function(input_data, input_var_list) {
     if (!all(varnames %in% expected_varnames) || !all(expected_varnames %in% varnames)) {
         missing_from_var_list <- varnames[!varnames %in% expected_varnames]
         missing_from_data <- expected_varnames[!expected_varnames %in% varnames]
-        message(
+        abort(
             paste(
                 "Mismatching variable names. \n",
                 "These variables are not a part of the variable list: ",
@@ -33,12 +36,11 @@ preprocessData <- function(input_data, input_var_list) {
                 paste(missing_from_data, collapse = ", "), "\n"
             )
         )
-        stop("Mismatching variable names")
     }
     # Check for correct ordering
     if (!identical(varnames, expected_varnames)) {
         problematic_indexes <- which(varnames != expected_varnames)
-        message(
+        abort(
             paste(
                 "The order of some columns in the data frame and the expected variable list is different. \n",
                 paste("Problematic indexes and their column names: \n"),
@@ -51,7 +53,6 @@ preprocessData <- function(input_data, input_var_list) {
                 )
             )
         )
-        stop("Ordering of some columns is not matching")
     }
 
     # Remove redundant rows
