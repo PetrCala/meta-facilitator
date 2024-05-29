@@ -6,7 +6,7 @@ source("stats/pcc.R")
 source("analyses/utils.R")
 
 #' Run the PCC analysis step. Used in the Chris analysis.
-getPCC <- function(df, analysis_name) {
+getPCC <- function(df, analysis_name = "", messages = c()) {
     analysis_metadata <- getAnalysisMetadata(analysis_name = analysis_name)
 
     n_studies_full <- getNumberOfStudies(df = df)

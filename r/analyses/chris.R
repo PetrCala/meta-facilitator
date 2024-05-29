@@ -9,12 +9,14 @@ chris_analyse <- function(...) {
     analysis <- METADATA$analyses$chris
     analysis_name <- analysis$analysis_name
 
+    msg <- c() # A vector of messages to log at the end
+
     # Clean the data
     df <- readAnalysisData(analysis_name = analysis_name)
     df <- cleanData(df = df, analysis_name = analysis_name)
 
     # Run analysis steps
-    getPCC(df = df, analysis_name = analysis_name, ...)
+    df <- getPCC(df = df, analysis_name = analysis_name, messages=msg, ...)
 
     saveAnalysisResults(
         df = df,
