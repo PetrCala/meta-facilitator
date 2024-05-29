@@ -47,10 +47,11 @@ if (!grepl(paste0(run_dir, "$"), getwd())) {
 # Set up the path for module imports
 options(box.path = getwd())
 
-
 # Relative paths are sourced only after the WD is set correctly
-box::use(actions/index[ACTIONS])
-box::use(actions/utils[getAction])
+box::use(
+    actions/index[ACTIONS],
+    actions/utils[getAction],
+)
 
 action <- getAction() # Get the action name from the metadata
 
