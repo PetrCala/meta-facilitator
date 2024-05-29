@@ -1,24 +1,18 @@
 [tool.poetry]
 name = "meta-facilitator"
-version = "0.1.1"
+version = "0.1.2"
 description = "Streamline data preprocessing for meta-analysis exploration"
 authors = ["PetrCala <cala.p@seznam.cz>"]
 license = "MIT"
 readme = "README.md"
 package-mode = false
 packages = [
-    { include = "meta_facilitator", from = "." },
-    { include = "r", from = "." },
+    { include = "R", from = "." }
 ]
 repository = "https://github.com/PetrCala/meta-facilitator"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-joblib = "^1.3.2"
-pandas = "^2.2.2"
-pytest = "^8.0.2"
-openpyxl = "^3.1.2"
-scikit-learn = "^1.4.2"
 
 [build-system]
 requires = ["poetry-core"]
