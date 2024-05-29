@@ -1,4 +1,4 @@
-# Handling script args
+## Handling script args
 
 Arguments can be passed to R scripts quite elegantly like so:
 
@@ -35,4 +35,30 @@ cat("Analysis done with method", opt$method, "with max iterations", opt$max_iter
 # [1] "Method: BFGS"
 # Analysis done with method BFGS with max iterations 1000
 
+```
+
+## Validating Conditions
+
+In this project, we use the `validate` function to ensure that certain conditions hold true before proceeding with further computations or operations. The `validate` function helps in maintaining the integrity of the program by aborting execution if any condition is not met. This function is inspired by modern error handling practices in R and leverages the `rlang` package for structured error messages.
+
+### How to Use the `validate` Function
+
+The `validate` function checks whether each argument passed to it is either a single logical value (TRUE or FALSE) or a list/vector of such values. It validates each condition and aborts with an appropriate error message if any condition does not hold.
+
+### Examples
+
+#### Valid Conditions
+
+```r
+validate(TRUE, list(TRUE, TRUE), c(TRUE, TRUE))
+```
+
+#### Invalid Conditions
+
+The following examples will abort with an error message:
+
+```r
+validate(FALSE)
+validate(TRUE, list(TRUE, FALSE), c(TRUE, FALSE))
+validate("not a condition")
 ```

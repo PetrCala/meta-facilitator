@@ -1,3 +1,4 @@
+library("rlang")
 source("METADATA.R")
 
 #' Capture the output of an expression:
@@ -83,4 +84,61 @@ getRunArgs <- function(action) {
     stop(stop_msg)
   }
   return(METADATA$run_args[[action]])
+}
+
+get_last_error <- function()
+{
+  tr <- .traceback()
+  if(length(tr) == 0)
+  {
+    return(NULL)
+  }
+  tryCatch(eval(parse(text = tr[[1]])), error = identity)
+}
+
+
+#' Validate Conditions
+#'
+#' This function validates input conditions. It checks that each argument is 
+#' either a single logical value (TRUE or FALSE) or a list/vector of such values.
+#' If any condition is invalid or does not hold, the function aborts with an 
+#' appropriate error message including the failed condition and a backtrace.
+#'
+#' @param ... Any number of logical conditions or lists/vectors of logical conditions.
+#'
+#' @return NULL. The function is called for its side effects.
+#' @export
+#'
+#' @examples
+#' validate(TRUE, list(TRUE, TRUE), c(TRUE, TRUE))
+#' # The following examples will abort with an error and print a backtrace
+#' # validate(FALSE)
+#' # validate(TRUE, list(TRUE, FALSE), c(TRUE, FALSE))
+#' # validate("not a condition")
+validate <- function(...) {
+  options(
+    rlang_backtrace_on_error = "full",
+    error = rlang::entrace
+  )
+  
+  conditions <- list(...)
+  conditions_expr <- as.list(substitute(list(...)))[-1]
+  
+  # Validate each condition
+  for (i in seq_along(conditions)) {
+    cond <- conditions[[i]]
+    cond_expr <- deparse(conditions_expr[[i]])
+    if (!is.logical(cond) || length(cond) != 1) {
+      abort(
+        message = paste("Condition must be a single logical value (TRUE or FALSE):", cond_expr),
+        .subclass = "validation_error"
+      )
+    }
+    if (!cond) {
+      abort(
+        message = paste("Condition did not hold:", cond_expr),
+        .subclass = "validation_error"
+      )
+    }
+  }
 }
