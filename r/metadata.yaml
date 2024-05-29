@@ -20,7 +20,7 @@ analyses:
     unique:
       pcc_identifier: "correlation" # How PCC studies are denoted
 
-clean_df_cols:
+f_cols:
   study: "Study name/ID"
   effect_type: "Effect type (i.e., correlation, d, etc.)"
   effect: "Effect"

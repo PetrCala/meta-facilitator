@@ -40,26 +40,26 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
             class = "unknown_pcc_identifier"
         )
     }
+    messages <- c(messages, "Subsetting to PCC studies only")
     df <- copy(df[df$effect_type == pcc_identifier, ])
     n_of_studies_pcc <- getNumberOfStudies(df = df)
+    messages <- c(messages, "Subsetting to PCC studies only.")
     # TODO log this
 
-    pcc_df <- data.frame(matrix(nrow = nrow(df), ncol = 0)) # An empty PCC data frame
-
     # Calculate the PCC variance
-    pcc_df$pcc_var_1 <- getPCCVariance(
+    df$pcc_var_1 <- getPCCVariance(
         pcc = df$effect,
         sample_size = df$sample_size,
         dof = df$df,
         offset = 1
     )
-    pcc_df$pcc_var_2 <- getPCCVariance(
+    df$pcc_var_2 <- getPCCVariance(
         pcc = df$effect,
         sample_size = df$sample_size,
         dof = df$df,
         offset = 2
     )
-    return(pcc_df)
+    return(df)
 }
 
 

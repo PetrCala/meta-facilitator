@@ -3,6 +3,7 @@ source("libs/utils.R")
 source("libs/env.R")
 source("analyses/index.R")
 
+#' This is a placeholder function to demonstrate the usage of actions, and will be removed fruther on.
 add <- function(x, y) {
     tryCatch(
         {
@@ -16,7 +17,7 @@ add <- function(x, y) {
     print(paste("Sum is", x + y))
 }
 
-run_analysis <- function(analysis_name = NULL, ...) {
+runAnalysis <- function(analysis_name = NULL, ...) {
     run_args <- getRunArgs("analyse")
 
     if (is.null(analysis_name)) {
@@ -44,5 +45,5 @@ run_analysis <- function(analysis_name = NULL, ...) {
 
 ACTIONS <- list(
     add = add,
-    analyse = run_analysis
+    analyse = runAnalysis
 )
