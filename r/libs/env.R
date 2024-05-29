@@ -67,7 +67,6 @@ loadPackages <- function(package_list, verbose = TRUE) {
       cat(sprintf("%-100s", message)) # Add enough whitespace to make sure the whole line is cleared
       flush.console()
     }
-    # Check if the package is installed and if the version matches (if specified)
     if (!pkg %in% rownames(installed.packages()) || (!is.na(version) && packageVersion(pkg) != version)) {
       tryCatch(
         {

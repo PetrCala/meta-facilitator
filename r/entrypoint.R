@@ -15,7 +15,6 @@ run_dir <- "meta-facilitator/R"
 wd <- getwd()
 
 
-
 # Ensure the correct working directory regardless of invocation type
 if (interactive()) {
     message("Running in interactive mode")
