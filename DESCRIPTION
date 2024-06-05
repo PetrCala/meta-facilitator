@@ -1,0 +1,11 @@
+Package: metaFacilitator
+Type: Package
+Title: Meta Facilitator
+Version: 0.1.0
+Author: PetrCala
+Maintainer: Petr Čala <cala.p@seznam.cz>
+Description: Streamline data preprocessing for meta-analysis exploration
+License: MIT
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.3.1

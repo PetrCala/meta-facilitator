@@ -6,6 +6,17 @@ cache/
 metadata.json
 output/*
 
+# R files
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+*.tar.gz
+*.Rproj
+.vscode/
+.Rbuildignore
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -159,9 +170,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
-# VSCode
-.vscode/
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
