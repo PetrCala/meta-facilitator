@@ -44,10 +44,17 @@ run_analysis <- function(analysis_name = NULL, ...) {
     message("Analysis complete")
 }
 
+run_tests <- function(...) {
+    # devtools::test("$TEST_DIR")
+    print("hello, world!")
+    return(NULL)
+}
+
 #' A list of executable actions for the entrypoint.R
 ACTIONS <- list(
     add = add,
-    analyse = run_analysis
+    analyse = run_analysis,
+    test = run_tests
 )
 
 box::export(ACTIONS)
