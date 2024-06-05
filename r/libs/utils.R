@@ -1,5 +1,5 @@
 box::use(
-  base/metadata[METADATA]
+  base / metadata[METADATA]
 )
 
 #' Check whether an object is a function call (created using 'call').
@@ -8,44 +8,44 @@ box::use(
 #' @param obj [any] The object to evaluate
 #' @return [logical] TRUE if the object is a function call, FALSE otherwise
 isFunctionCall <- function(obj) {
-    if (is.call(obj)) {
-        func_name <- as.character(obj[[1]])
-        is_valid_function_call <- exists(func_name) && is.function(get(func_name))
-        if (!(is_valid_function_call)) {
-            return(FALSE)
-        }
-    } else {
-        return(FALSE)
+  if (is.call(obj)) {
+    func_name <- as.character(obj[[1]])
+    is_valid_function_call <- exists(func_name) && is.function(get(func_name))
+    if (!(is_valid_function_call)) {
+      return(FALSE)
     }
-    return(TRUE)
+  } else {
+    return(FALSE)
+  }
+  return(TRUE)
 }
 
 
 #' Check whether an object is empty.
 isEmpty <- function(obj) {
-    type_obj <- typeof(obj)
+  type_obj <- typeof(obj)
 
-    result <- switch(type_obj,
-        logical = all(!obj),
-        integer = length(obj) == 0 || all(is.na(obj)),
-        double = length(obj) == 0 || all(is.na(obj)), # Treat numeric as double
-        character = length(obj) == 0 || any(obj == ""),
-        list = length(obj) == 0,
-        NULL = TRUE,
-        data.frame = is.data.frame(obj) && nrow(obj) == 0,
-        factor = length(obj) == 0 || all(is.na(obj)),
-        # Default case if none of the above types match
-        {
-            if (is.na(obj)) {
-                TRUE # Single NA values are considered empty
-            } else {
-                FALSE # If it's a different type and not NA, it's not empty
-            }
-        }
-    )
+  result <- switch(type_obj,
+    logical = all(!obj),
+    integer = length(obj) == 0 || all(is.na(obj)),
+    double = length(obj) == 0 || all(is.na(obj)), # Treat numeric as double
+    character = length(obj) == 0 || any(obj == ""),
+    list = length(obj) == 0,
+    NULL = TRUE,
+    data.frame = is.data.frame(obj) && nrow(obj) == 0,
+    factor = length(obj) == 0 || all(is.na(obj)),
+    # Default case if none of the above types match
+    {
+      if (is.na(obj)) {
+        TRUE # Single NA values are considered empty
+      } else {
+        FALSE # If it's a different type and not NA, it's not empty
+      }
+    }
+  )
 
-    # Return the result
-    return(result)
+  # Return the result
+  return(result)
 }
 
 
@@ -60,8 +60,8 @@ getRunArgs <- function(action) {
   if (!(action %in% names(run_args))) {
     rlang::abort(
       paste(
-            "Unknown action:", action,
-            "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
+        "Unknown action:", action,
+        "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
       )
     )
   }
@@ -71,9 +71,9 @@ getRunArgs <- function(action) {
 
 #' Validate Conditions
 #'
-#' This function validates input conditions. It checks that each argument is 
+#' This function validates input conditions. It checks that each argument is
 #' a single logical value (TRUE or FALSE).
-#' If any condition is invalid or does not hold, the function aborts with an 
+#' If any condition is invalid or does not hold, the function aborts with an
 #' appropriate error message including the failed condition and a backtrace.
 #'
 #' @param ... Any number of logical conditions.
@@ -92,10 +92,10 @@ validate <- function(...) {
     rlang_backtrace_on_error = "full",
     error = rlang::entrace
   )
-  
+
   conditions <- list(...)
   conditions_expr <- as.list(substitute(list(...)))[-1]
-  
+
   # Validate each condition
   for (i in seq_along(conditions)) {
     cond <- conditions[[i]]

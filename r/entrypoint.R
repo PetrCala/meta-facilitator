@@ -51,8 +51,8 @@ options(box.path = getwd())
 
 # Relative paths are sourced only after the WD is set correctly
 box::use(
-    actions/index[ACTIONS],
-    actions/utils[getAction],
+    actions / index[ACTIONS],
+    actions / utils[getAction],
 )
 
 action <- getAction() # Get the action name from the metadata

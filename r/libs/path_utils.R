@@ -1,6 +1,6 @@
 box::use(
-    base/paths[PATHS],
-    base/const[CONST]
+    base / paths[PATHS],
+    base / const[CONST]
 )
 
 getScriptPath <- function() {

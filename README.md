@@ -15,6 +15,7 @@
   - [Examples](#examples)
     - [Valid Conditions](#valid-conditions)
     - [Invalid Conditions](#invalid-conditions)
+- [Formatting code](#formatting-code)
 - [Using `lintr` for Code Quality](#using-lintr-for-code-quality)
   - [Installation](#installation)
   - [Usage](#usage)
@@ -173,6 +174,12 @@ validate(FALSE)
 validate(TRUE, 1 == 2, FALSE)
 validate("not a condition")
 ```
+
+# Formatting code
+
+We use `styler` for code formatting. See [the package website here](https://github.com/r-lib/styler?tab=readme-ov-file).
+
+Depending on your IDE of choice, the setup for using _styler_ may differ, so we highly recommend you read through the documentation.
 
 # Using `lintr` for Code Quality
 

@@ -1,5 +1,5 @@
 box::use(
-    libs/utils[isEmpty]
+    libs / utils[isEmpty]
 )
 
 #' Create a folder in the working directory if it does not exist yet

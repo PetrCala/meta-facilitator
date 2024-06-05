@@ -94,7 +94,7 @@ loadPackages <- function(package_list, verbose = TRUE) {
   }
 
   # Source pbapply here to avoid initial import error when setting up the environment
-  library("pbapply") 
+  library("pbapply")
 
   # Applying the function to each package with a progress bar
   pbapply::pblapply(names(package_list), function(pkg) install_and_check(pkg, package_list[[pkg]]))
@@ -127,4 +127,3 @@ setupEnv <- function() {
     }
   )
 }
-

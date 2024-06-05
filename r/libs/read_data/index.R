@@ -1,8 +1,8 @@
 box::use(
-    base/metadata[METADATA],
-    base/paths[PATHS],
-    analyses/utils[getAnalysisMetadata],
-    libs/cache/index[runCachedFunction],
+    base / metadata[METADATA],
+    base / paths[PATHS],
+    analyses / utils[getAnalysisMetadata],
+    libs / cache / index[runCachedFunction],
 )
 
 

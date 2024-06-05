@@ -5,7 +5,7 @@
 #' \dontrun{
 #' dir <- getScriptDirectory()
 #' }
-getScriptDirectory <- function() {;
+getScriptDirectory <- function() {
     # Check all calls in the call stack
     calls <- sys.calls()
     for (i in length(calls):1) {

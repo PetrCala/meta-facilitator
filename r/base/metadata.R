@@ -1,6 +1,6 @@
 box::use(
     yaml[read_yaml],
-    base/paths[PATHS]
+    base / paths[PATHS]
 )
 
 #' Read the metadata.json file and return it as a list
