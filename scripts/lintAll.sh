@@ -24,8 +24,22 @@ if [ $# -eq 1 ]; then
     LINT_PATH=$(get_abs_path "$1")
 fi
 
+# Define the path to custom linters
+CUSTOM_LINTERS_FILE_PATH="$LINT_PATH/custom_linters.R"
+
 # Lint all R files in the directory
 Rscript -e "lintr::lint_dir('$LINT_PATH')"
 
+# An option with custom linters
+# Rscript -e "source('$CUSTOM_LINTERS_FILE_PATH'); lintr::lint_dir('$LINT_PATH')"
+
 # Exit with the status of the last command
-exit $?
+if [[ ! $? -eq 0 ]]; then
+    error "Linting failed"
+    exit 1
+fi
+
+# Run custom linting functions
+# Rscript -e "source(\"$CUSTOM_LINTERS_FILE_PATH\")" "$LINT_PATH"
+
+success "Linting successful!"

@@ -8,7 +8,7 @@
 get_script_directory <- function() {
     # Check all calls in the call stack
     calls <- sys.calls()
-    for (i in length(calls):1) {
+    for (i in rev(seq_along(calls))) {
         call <- calls[[i]]
         # Check if the call is a source() function call
         if (typeof(call) == "language" && deparse(call[[1]]) == "source") {
