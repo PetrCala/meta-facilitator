@@ -1,0 +1,7 @@
+linters: linters_with_defaults(
+  # Disable assignment linter if you use assignment arrows other than `<-`
+  assignment_linter = NULL)
+  # Ensure all imports are handled well
+  # object_usage_linter = object_usage_linter(imports = c("box")))
+exclusions: list(
+  "tests/")

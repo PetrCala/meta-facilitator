@@ -7,8 +7,8 @@ TEST_DIR="tests"
 SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
 source "$SCRIPTS_DIR/shellUtils.sh"
 
-ROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
-PROJECT_ROOT=$(get_abs_path "$ROJECT_ROOT_REL")
+PROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
+PROJECT_ROOT=$(get_abs_path "$PROJECT_ROOT_REL")
 
 cd $PROJECT_ROOT
 

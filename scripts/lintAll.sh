@@ -13,8 +13,8 @@ LINT_DIRECTORY_NAME="R"
 SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
 source "$SCRIPTS_DIR/shellUtils.sh"
 
-ROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
-PROJECT_ROOT=$(get_abs_path "$ROJECT_ROOT_REL")
+PROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
+PROJECT_ROOT=$(get_abs_path "$PROJECT_ROOT_REL")
 
 # Set the default lint path for when no arguments are provided
 LINT_PATH="$PROJECT_ROOT/$LINT_DIRECTORY_NAME"
