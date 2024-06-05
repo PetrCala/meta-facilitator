@@ -3,9 +3,9 @@
 #' @return [character] The directory of the currently sourced script.
 #' @example
 #' \dontrun{
-#' dir <- getScriptDirectory()
+#' dir <- get_script_directory()
 #' }
-getScriptDirectory <- function() {
+get_script_directory <- function() {
     # Check all calls in the call stack
     calls <- sys.calls()
     for (i in length(calls):1) {

@@ -1,4 +1,6 @@
 linters: linters_with_defaults(
+  # https://lintr.r-lib.org/reference/index.html#individual-linters
+  #
   # Disable assignment linter if you use assignment arrows other than `<-`
   assignment_linter = NULL,
   # Ensure all imports are handled well
@@ -8,6 +10,9 @@ linters: linters_with_defaults(
   # Check for trailing commas in function calls
   # trailing_comma_linter = trailing_comma_linter(),
   # Check that all commas are followed by spaces, but do not have spaces before them.
-  commas_linter = commas_linter(allow_trailing = FALSE))
+  commas_linter = commas_linter(allow_trailing = FALSE),
+  # Check that all comments are preceded by a space
+  object_name_linter = object_name_linter(styles = c("snake_case", "SNAKE_CASE"))
+  )
 exclusions: list(
   "tests/")
