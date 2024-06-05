@@ -1,6 +1,6 @@
 box::use(
-    libs/utils[getRunArgs],
-    analyses/index[ANALYSES],
+    libs / utils[get_run_args],
+    analyses / index[ANALYSES],
 )
 
 #' This is a placeholder function to demonstrate the usage of actions, and will be removed fruther on.
@@ -18,8 +18,8 @@ add <- function(x, y) {
 }
 
 #' @export
-runAnalysis <- function(analysis_name = NULL, ...) {
-    run_args <- getRunArgs("analyse")
+run_analysis <- function(analysis_name = NULL, ...) {
+    run_args <- get_run_args("analyse")
 
     if (is.null(analysis_name)) {
         message("Reading analysis name from metadata")
@@ -47,7 +47,7 @@ runAnalysis <- function(analysis_name = NULL, ...) {
 #' A list of executable actions for the entrypoint.R
 ACTIONS <- list(
     add = add,
-    analyse = runAnalysis
+    analyse = run_analysis
 )
 
 box::export(ACTIONS)

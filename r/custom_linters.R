@@ -1,5 +1,7 @@
-# custom_linters.R
-
+#' Box import linter
+#'
+#' Force box imports across the project
+#'  - Use 'box::' for importing modules
 box_import_linter <- function(source_file) {
   lapply(ids_with_token(source_file, "SYMBOL_PACKAGE"), function(id) {
     token <- with_id(source_file, id)

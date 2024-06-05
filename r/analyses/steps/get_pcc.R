@@ -1,7 +1,7 @@
 box::use(
-    libs/utils[isEmpty],
-    libs/df_utils[getNumberOfStudies],
-    analyses/utils[getAnalysisMetadata] 
+    libs / utils[is_empty],
+    libs / df_utils[get_number_of_studies],
+    analyses / utils[get_analysis_metadata]
 )
 
 #' Calculate the PCC variance.
@@ -24,13 +24,13 @@ getPCCVariance <- function(pcc, sample_size, dof, offset) {
 
 #' Run the PCC analysis step. Used in the Chris analysis.
 getPCC <- function(df, analysis_name = "", messages = c()) {
-    analysis_metadata <- getAnalysisMetadata(analysis_name = analysis_name)
+    analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
 
-    n_studies_full <- getNumberOfStudies(df = df)
+    n_studies_full <- get_number_of_studies(df = df)
 
     # Subset to PCC studies only
     pcc_identifier <- analysis_metadata$unique$pcc_identifier
-    if (isEmpty(pcc_identifier)) {
+    if (is_empty(pcc_identifier)) {
         rlang::abort(
             paste0(
                 "Unknown PCC identified for analysis ",
@@ -42,7 +42,7 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
     }
     messages <- c(messages, "Subsetting to PCC studies only")
     df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
-    n_of_studies_pcc <- getNumberOfStudies(df = df)
+    n_of_studies_pcc <- get_number_of_studies(df = df)
     messages <- c(messages, "Subsetting to PCC studies only.")
     # TODO log this
 

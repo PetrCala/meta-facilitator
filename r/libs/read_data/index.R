@@ -1,18 +1,18 @@
 box::use(
     base / metadata[METADATA],
     base / paths[PATHS],
-    analyses / utils[getAnalysisMetadata],
-    libs / cache / index[runCachedFunction],
+    analyses / utils[get_analysis_metadata],
+    libs / cache / index[run_cached_function],
 )
 
 
-#' getDataPath function
+#' get_data_path function
 #'
 #' This function returns the path of the data file for a given analysis.
 #'
 #' @param analysis_name [character] Name of the analysis.
 #' @returns [character] Path of the data file for the given analysis.
-getDataPath <- function(analysis_name) {
+get_data_path <- function(analysis_name) {
     data_dir <- PATHS$DIR_DATA
     source_df <- METADATA$analyses[[analysis_name]]$source_df
     path <- file.path(data_dir, source_df)
@@ -30,7 +30,7 @@ getDataPath <- function(analysis_name) {
     return(path)
 }
 
-#' readDataCustom function
+#' read_data_custom function
 #'
 #' This function reads data from a given source path, infers the decimal mark and grouping mark,
 #' and checks if the data is read correctly. It specifically designed for files where data
@@ -47,7 +47,7 @@ getDataPath <- function(analysis_name) {
 #' @examples
 #' \dontrun{
 #' # To read a file, just pass the path of the file
-#' data <- readDataCustom("/path/to/your/data.txt")
+#' data <- read_data_custom("/path/to/your/data.txt")
 #' print(data)
 #' }
 #'
@@ -55,7 +55,7 @@ getDataPath <- function(analysis_name) {
 #' \code{\link[utils]{read.delim}}, \code{\link[utils]{readLines}}
 #'
 #' @export
-readDataCustom <- function(source_path, separators = NA) {
+read_data_custom <- function(source_path, separators = NA) {
     # Validate the file existence and infer the separators
     if (!file.exists(source_path)) {
         rlang::abort(
@@ -87,15 +87,15 @@ readDataCustom <- function(source_path, separators = NA) {
 }
 
 
-#' readAnalysisData function
+#' read_analysis_data function
 #'
 #' This function reads the data for a given analysis and returns it as a data frame.
-readAnalysisData <- function(analysis_name) {
+read_analysis_data <- function(analysis_name) {
     message("Reading the data for the analysis ", analysis_name)
-    df_path <- getDataPath(analysis_name = analysis_name)
-    analysis_metadata <- getAnalysisMetadata(analysis_name)
+    df_path <- get_data_path(analysis_name = analysis_name)
+    analysis_metadata <- get_analysis_metadata(analysis_name)
     sheet_name <- analysis_metadata$source_sheet
-    df <- runCachedFunction(
+    df <- run_cached_function(
         f = readxl::read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
         verbose_function = function(...) {
             "Finished reading the data."
@@ -111,6 +111,6 @@ readAnalysisData <- function(analysis_name) {
 }
 
 box::export(
-    readAnalysisData,
-    readDataCustom
+    read_analysis_data,
+    read_data_custom
 )

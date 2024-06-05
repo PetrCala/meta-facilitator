@@ -1,5 +1,5 @@
 box::use(
-    libs / utils[isEmpty]
+    libs / utils[is_empty]
 )
 
 #' Create a folder in the working directory if it does not exist yet
@@ -8,7 +8,7 @@ box::use(
 #' "./<name_of_the_folder>/
 #' @param require_existence [logical] Only check the existence of the folder.
 #'  Raise an error in case the folder does not exist.
-validateFolderExistence <- function(folder_name, require_existence = FALSE) {
+validate_folder_existence <- function(folder_name, require_existence = FALSE) {
     if (!file.exists(folder_name)) {
         if (require_existence) {
             rlang::abort(
@@ -26,7 +26,7 @@ validateFolderExistence <- function(folder_name, require_existence = FALSE) {
 #' Print out a status message after the validation.
 #'
 #' @param files[vector] A vector of strings.
-validateFiles <- function(files) {
+validate_files <- function(files) {
     for (file in files) {
         if (!file.exists(file)) {
             rlang::abort(
@@ -48,15 +48,15 @@ validateFiles <- function(files) {
 #' @param msg_list [list] A list of messages to write to the file
 #' @param full_path [character] The full path to the file to create
 #' @return [NULL] The function writes the file and does not return anything
-writeTxtFile <- function(msg_list, full_path) {
-    if (isEmpty(msg_list)) {
+write_txt_file <- function(msg_list, full_path) {
+    if (is_empty(msg_list)) {
         return(NULL) # Nothing to write
     }
     writeLines(unlist(msg_list), full_path)
 }
 
 box::export(
-    validateFolderExistence,
-    validateFiles,
-    writeTxtFile
+    validate_folder_existence,
+    validate_files,
+    write_txt_file
 )

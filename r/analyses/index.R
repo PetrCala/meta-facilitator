@@ -1,9 +1,9 @@
 box::use(
-    analyses/chris[chrisAnalyse]
+    analyses / chris[chris_analyse]
 )
 
 ANALYSES <- list(
-    CHRIS = chrisAnalyse
+    CHRIS = chris_analyse
 )
 
 box::export(

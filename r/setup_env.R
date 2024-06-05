@@ -3,7 +3,7 @@ source("libs/env.R")
 cat("Setting up the environment.\n")
 tryCatch(
     {
-        setupEnv()
+        setup_env()
     },
     error = function(e) {
         message("Error setting up the environment:")

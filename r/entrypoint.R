@@ -52,10 +52,10 @@ options(box.path = getwd())
 # Relative paths are sourced only after the WD is set correctly
 box::use(
     actions / index[ACTIONS],
-    actions / utils[getAction],
+    actions / utils[get_action],
 )
 
-action <- getAction() # Get the action name from the metadata
+action <- get_action() # Get the action name from the metadata
 
 # Convert the rest of the arguments to a list to be passable into the do.call
 # arg_list <- as.list(run_args)
