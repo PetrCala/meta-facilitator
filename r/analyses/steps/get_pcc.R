@@ -12,7 +12,7 @@ box::use(
 #' @param offset [int] An offset value to subtract from the degrees of freedom
 #'  in case they are missing.
 #' @return [vector] A vector of PCC variances.
-getPCCVariance <- function(pcc, sample_size, dof, offset) {
+get_pcc_variance <- function(pcc, sample_size, dof, offset) {
     # Calculate the PCC variance.
     non_null_df <- !is.na(dof)
 
@@ -23,10 +23,10 @@ getPCCVariance <- function(pcc, sample_size, dof, offset) {
 }
 
 #' Run the PCC analysis step. Used in the Chris analysis.
-getPCC <- function(df, analysis_name = "", messages = c()) {
+get_pcc <- function(df, analysis_name = "", messages = c()) {
     analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
 
-    n_studies_full <- get_number_of_studies(df = df)
+    # n_studies_full <- get_number_of_studies(df = df)
 
     # Subset to PCC studies only
     pcc_identifier <- analysis_metadata$unique$pcc_identifier
@@ -42,18 +42,18 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
     }
     messages <- c(messages, "Subsetting to PCC studies only")
     df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
-    n_of_studies_pcc <- get_number_of_studies(df = df)
+    # n_of_studies_pcc <- get_number_of_studies(df = df)
     messages <- c(messages, "Subsetting to PCC studies only.")
     # TODO log this
 
     # Calculate the PCC variance
-    df$pcc_var_1 <- getPCCVariance(
+    df$pcc_var_1 <- get_pcc_variance(
         pcc = df$effect,
         sample_size = df$sample_size,
         dof = df$df,
         offset = 1
     )
-    df$pcc_var_2 <- getPCCVariance(
+    df$pcc_var_2 <- get_pcc_variance(
         pcc = df$effect,
         sample_size = df$sample_size,
         dof = df$df,
@@ -67,6 +67,6 @@ getPCC <- function(df, analysis_name = "", messages = c()) {
 # a. RE1 & RE2: Calculate random-effects twice (report its both the estimate and t-value for each) using the SEs for equation (1) and (2). I know that R has standard routines for this.  You should probably use the REML (restricted max likelihood) flavor of RE.
 
 box::export(
-    getPCC,
-    getPCCVariance
+    get_pcc,
+    get_pcc_variance
 )

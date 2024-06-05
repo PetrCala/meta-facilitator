@@ -1,7 +1,7 @@
 box::use(
     base / metadata[METADATA],
     libs / df_utils[get_number_of_studies],
-    analyses / steps / get_pcc[getPCC],
+    analyses / steps / get_pcc[get_pcc],
     analyses / utils[get_analysis_metadata, save_analysis_results],
     libs / clean_data / index[clean_data],
     libs / read_data / index[read_analysis_data],
@@ -28,7 +28,7 @@ chris_analyse <- function(...) {
     # Run analysis steps
     message("Calculating statistics...")
     # This subsets the analysis to pcc studies only
-    df <- getPCC(df = df, analysis_name = analysis_name, messages = msg, ...)
+    df <- get_pcc(df = df, analysis_name = analysis_name, messages = msg, ...)
     n_studies <- get_number_of_studies(df = df)
 
     # analyseSingleChrisStudy <- function(single_study_data) {
