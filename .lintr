@@ -1,7 +1,13 @@
 linters: linters_with_defaults(
   # Disable assignment linter if you use assignment arrows other than `<-`
-  assignment_linter = NULL)
+  assignment_linter = NULL,
   # Ensure all imports are handled well
-  # object_usage_linter = object_usage_linter(imports = c("box")))
+  # object_usage_linter = object_usage_linter(imports = c("box")),
+  # Set indentation to 8 spaces
+  indentation_linter = indentation_linter(4L),
+  # Check for trailing commas in function calls
+  # trailing_comma_linter = trailing_comma_linter(),
+  # Check that all commas are followed by spaces, but do not have spaces before them.
+  commas_linter = commas_linter(allow_trailing = FALSE))
 exclusions: list(
   "tests/")
