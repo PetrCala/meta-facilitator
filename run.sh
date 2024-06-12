@@ -5,6 +5,7 @@ show_help() {
     echo "Usage: $0 <command> [args]"
     echo
     echo "Commands:"
+    echo "  R               Invoke the R entrypoint script"
     echo "  lint            Lint all files in the R folder"
     echo "  merge           Merge the currently checked out git branch with another one, and push the changes to the remote repository"
     echo "  setup           Setup the environment"
@@ -20,6 +21,10 @@ fi
 
 # Main switch-case to handle commands
 case "$1" in
+R)
+    shift
+    sh scripts/runR.sh "$@"
+    ;;
 lint)
     shift
     sh scripts/lintAll.sh "$@"

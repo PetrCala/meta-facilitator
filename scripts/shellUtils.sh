@@ -106,3 +106,19 @@ get_abs_path() {
 
     echo "$abs_path"
 }
+
+#' Execute an R script in a new R session
+#' After the script is executed, the R session will be closed
+run_r_script_interactively() {
+    local script_full_path=$1
+
+    # Check if the R script exists
+    if [ ! -f "$script_full_path" ]; then
+        error "R script not found: $script_full_path"
+        exit 1
+    fi
+
+    R --interactive --no-save --quiet <<EOT
+    source("$script_full_path")
+EOT
+}
