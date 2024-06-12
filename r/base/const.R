@@ -10,6 +10,10 @@ CONST <- list(
         "devtools",
         "pbapply"
     ),
+    # A list of packages that should not be attached through 'library'
+    NON_ATTACHED_PACKAGES = c(
+        "box"
+    ),
     PACKAGES = list(
         "cachem" = "1.0.8",
         "data.table" = "1.15.4",

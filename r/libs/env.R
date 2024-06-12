@@ -1,5 +1,5 @@
 # Source as few modules as possible to avoid initial setup errors
-source("CONST.R") # can not use 'box' here, as it is not loaded yet
+source("base/CONST.R") # can not use 'box' here, as it is not loaded yet
 
 #' Set the CRAN mirror
 set_mirror <- function(mirror = NULL) {
@@ -29,7 +29,13 @@ load_initial_packages <- function(verbose = TRUE) {
     # Load several packages necessary for the environment preparation
     load_initial_package <- function(pkg, quietly = TRUE) {
         if (!require(pkg, quietly = quietly, character.only = TRUE)) install.packages(pkg)
-        library(pkg, quietly = quietly, character.only = TRUE)
+        if (pkg %in% CONST$NON_ATTACHED_PACKAGES) return(NULL)
+        tryCatch({
+            library(pkg, quietly = quietly, character.only = TRUE)
+        },
+        error = function(e) {
+            message("Package loading failed for ", pkg, ": ", e$message)
+        })
     }
 
     if (verbose) {
