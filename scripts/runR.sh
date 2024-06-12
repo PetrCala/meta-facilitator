@@ -9,7 +9,13 @@ ENTRYPOINT_FILE_NAME="entrypoint.R"
 SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
 source "$SCRIPTS_DIR/shellUtils.sh"
 
-info "Invoking the entrypoint script..."
+ARGS_STR=""
+
+if [[ ! -z "$@" ]]; then
+  ARGS_STR=" with these args: '$*'"
+fi
+
+info "Invoking the entrypoint script$ARGS_STR..."
 
 ROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
 PROJECT_ROOT=$(get_abs_path "$ROJECT_ROOT_REL")
