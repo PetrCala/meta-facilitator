@@ -14,6 +14,4 @@ setup_logging <- function() {
   }
 }
 
-box::export(
-  setup_logging
-)
+box::export(setup_logging)

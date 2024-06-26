@@ -50,7 +50,10 @@ PATHS <- list(
   R_METADATA = file.path(DIR_R, "METADATA.R"),
   R_CONST = file.path(DIR_R, "CONST.R"),
   R_PATHS = file.path(DIR_R, "PATHS.R"),
-  R_ACTIONS = file.path(DIR_R, "actions.R")
+  R_ACTIONS = file.path(DIR_R, "actions.R"),
+
+  # Test files
+  DIR_TESTS = file.path(PROJECT_ROOT, "tests")
 )
 
 box::export(PATHS)

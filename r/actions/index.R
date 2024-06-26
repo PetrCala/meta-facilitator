@@ -1,5 +1,5 @@
 box::use(
-  libs / utils[get_run_args],
+  base / paths[PATHS],
   analyses / index[ANALYSES],
 )
 
@@ -18,13 +18,7 @@ add <- function(x, y) {
 }
 
 #' @export
-run_analysis <- function(analysis_name = NULL, ...) {
-  run_args <- get_run_args("analyse")
-
-  if (is.null(analysis_name)) {
-    logger::log_info("Reading analysis name from metadata")
-    analysis_name <- run_args$analysis_name
-  }
+run_analysis <- function(analysis_name, ...) {
 
   logger::log_info(paste("Analysing", analysis_name, "data"))
 
@@ -45,8 +39,8 @@ run_analysis <- function(analysis_name = NULL, ...) {
 }
 
 run_tests <- function(...) {
-  # devtools::test("$TEST_DIR")
-  print("hello, world!")
+  test_path <- PATHS$DIR_TESTS
+  devtools::test(test_path)
   return(NULL)
 }
 

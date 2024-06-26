@@ -33,4 +33,4 @@ get_action <- function() {
   return(action)
 }
 
-box::export(get_action)
+box::export(validate_action, get_action)

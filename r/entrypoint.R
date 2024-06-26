@@ -25,8 +25,9 @@ if (is_testing) {
   new_dir <- dirname(session$file)
 } else if (interactive()) {
   logger::log_info("Running in interactive mode") # Assume RStudio
-  current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
-  new_dir <- dirname(current_document_path)
+  rlang::abort("Interactive mode is not supported yet. Please use the console instead.")
+  # current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
+  # new_dir <- dirname(current_document_path)
 } else {
   logger::log_info("Running in non-interactive mode")
   args <- commandArgs(trailingOnly = FALSE)
@@ -42,8 +43,6 @@ if (is_testing) {
     rlang::abort("Could not find the script path in the arguments. Try specifying the script path using --file=<path> argument.")
   }
   new_dir <- dirname(script_path)
-  # action <- args[1]
-  # run_args <- args[-1]
 }
 setwd(new_dir) # Fails if any of the conditions fail to attribute a new_dir
 
@@ -61,16 +60,21 @@ options(box.path = getwd())
 # Relative paths are sourced only after the WD is set correctly
 box::use(
   actions / index[ACTIONS],
-  actions / utils[get_action],
+  actions / utils[validate_action],
   libs / logs / index[setup_logging]
 )
 
 # Setup logging first
 setup_logging()
 
-action <- get_action() # Get the action name from the metadata
+# Determine the run args
+all_args <- commandArgs(trailingOnly = TRUE)
+action <- all_args[1]
+run_args <- all_args[-1]
+validate_action(action)
 
-# Convert the rest of the arguments to a list to be passable into the do.call
-# arg_list <- as.list(run_args)
+logger::log_info(paste("Running action:", action))
 
-do.call(ACTIONS[[action]], list())
+arg_list <- as.list(run_args)
+
+do.call(ACTIONS[[action]], arg_list)

@@ -30,7 +30,7 @@ if [ ! -f "$ENTRYPOINT_FILE_PATH" ]; then
   exit 1
 fi
 
-Rscript "$ENTRYPOINT_FILE_PATH"
+Rscript "$ENTRYPOINT_FILE_PATH" "$@"
 
 # Alternatively, you can run the script interactively
 # This, however, still does not support debugging

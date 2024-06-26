@@ -13,14 +13,15 @@ PROJECT_ROOT=$(get_abs_path "$PROJECT_ROOT_REL")
 
 R_FOLDER_PATH="$PROJECT_ROOT/$R_DIR_NAME"
 TEST_FOLDER_PATH="$PROJECT_ROOT/$TEST_DIR_NAME"
+ENTRYPOINT_PATH="$R_FOLDER_PATH/entrypoint.R"
 
 cd $R_FOLDER_PATH
 
 # Make the invocation recognize the environment as test
 export TESTTHAT=true
 
-Rscript -e "devtools::test('$TEST_FOLDER_PATH')"
-# Rscript -e "source('$ENTRYPOINT_PATH')" "test"
+# Rscript -e "devtools::test('$TEST_FOLDER_PATH')"
+Rscript -e "source('$ENTRYPOINT_PATH')" "test"
 
 unset TESTTHAT
 

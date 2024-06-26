@@ -49,26 +49,6 @@ is_empty <- function(obj) {
 }
 
 
-#' Get the run arguments for a given action
-get_run_args <- function(action) {
-  run_args <- METADATA$run_args
-
-  if (is.null(action)) {
-    rlang::abort("Please specify an action to execute. Use --help for more information.")
-  }
-
-  if (!(action %in% names(run_args))) {
-    rlang::abort(
-      paste(
-        "Unknown action:", action,
-        "\nPlease choose from the following actions:", paste(names(run_args), collapse = ", ")
-      )
-    )
-  }
-  return(METADATA$run_args[[action]])
-}
-
-
 #' Validate Conditions
 #'
 #' This function validates input conditions. It checks that each argument is
@@ -117,7 +97,6 @@ validate <- function(...) {
 
 
 box::export(
-  get_run_args,
   is_empty,
   is_function_call,
   validate
