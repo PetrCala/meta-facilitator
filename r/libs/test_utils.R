@@ -14,3 +14,7 @@ run_tests_recursively <- function(path) {
     run_tests_recursively(subdir)
   }
 }
+
+box::export(
+  run_tests_recursively
+)
