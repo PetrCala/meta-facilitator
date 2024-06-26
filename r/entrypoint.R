@@ -12,8 +12,14 @@
 run_dir <- "meta-facilitator/R"
 new_dir <- NULL
 
+# Environment variables
+is_testing <- Sys.getenv("TESTTHAT") == "true"
+
 # Ensure the correct working directory regardless of invocation type
-if (exists(".vsc.getSession")) {
+if (is_testing) {
+  logger::log_info("Running in testing mode")
+  new_dir <- getwd()
+} else if (exists(".vsc.getSession")) {
   logger::log_info("Running in VS Code")
   session <- .vsc.getSession()
   new_dir <- dirname(session$file)
@@ -41,8 +47,11 @@ if (exists(".vsc.getSession")) {
 }
 setwd(new_dir) # Fails if any of the conditions fail to attribute a new_dir
 
+
 # Check that the current WD ends with the expected directory substring
-if (!grepl(paste0(run_dir, "$"), getwd())) {
+# In testing, the WD does not have to match the expected directory
+run_dir_matches <- grepl(paste0(run_dir, "$"), getwd())
+if (!run_dir_matches && !is_testing) {
   rlang::abort("Failed to set the working directory to the correct location. Try running the script again.")
 }
 

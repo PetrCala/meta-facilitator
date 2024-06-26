@@ -16,8 +16,13 @@ TEST_FOLDER_PATH="$PROJECT_ROOT/$TEST_DIR_NAME"
 
 cd $R_FOLDER_PATH
 
+# Make the invocation recognize the environment as test
+export TESTTHAT=true
+
 Rscript -e "devtools::test('$TEST_FOLDER_PATH')"
 # Rscript -e "source('$ENTRYPOINT_PATH')" "test"
+
+unset TESTTHAT
 
 success "Done."
 

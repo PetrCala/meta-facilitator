@@ -1,12 +1,16 @@
 box::use(
-    testthat[expect_error, expect_silent, test_that],
-    # libs / clean_data / index[check_for_missing_cols]
+  testthat[expect_error, expect_silent, test_that],
+  # libs / clean_data / index[check_for_missing_cols]
 )
 
 test_that("some_test", {
-    expect_silent({
-        print("hello, world!")
-    })
+  expect_silent({
+    print("hello, world!")
+  })
+
+  expect_error({
+    stop("This is an error")
+  }, "This is an error")
 })
 
 # test_that("checkForMissingCols handles missing columns correctly", {
