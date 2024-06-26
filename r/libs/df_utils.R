@@ -1,7 +1,7 @@
 #' Assign NA to a column in a data frame
 assign_na_col <- function(df, colname) {
-    df[[colname]] <- rep(NA, nrow(df))
-    return(df)
+  df[[colname]] <- rep(NA, nrow(df))
+  return(df)
 }
 
 
@@ -12,13 +12,13 @@ assign_na_col <- function(df, colname) {
 #' @param study_colname [str] The column name holding names of all studies.
 #' @return [int] The number of studies.
 get_number_of_studies <- function(df) {
-    if (!"study" %in% colnames(df)) {
-        rlang::abort("The data frame does not have a 'study' column.", class = "missing_study_column")
-    }
-    return(length(table(df$study)))
+  if (!"study" %in% colnames(df)) {
+    rlang::abort("The data frame does not have a 'study' column.", class = "missing_study_column")
+  }
+  return(length(table(df$study)))
 }
 
 box::export(
-    assign_na_col,
-    get_number_of_studies
+  assign_na_col,
+  get_number_of_studies
 )

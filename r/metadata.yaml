@@ -48,6 +48,10 @@ locale:
   grouping_mark: ";"
   tz: "UTC" # Timezone
 
+options:
+  log_to_console: false # If false, the log will be saved to a file
+  log_file_name: "logger.log" # The name of the log file
+
 cache_handling:
   # I recommend you use caches only after you are certain the functions run correctly
   use_cache: true # Store intermediate output in a cache in the /_cache/ folder.

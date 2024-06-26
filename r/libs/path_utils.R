@@ -1,11 +1,11 @@
 box::use(
-    base / paths[PATHS],
-    base / const[CONST]
+  base / paths[PATHS],
+  base / const[CONST]
 )
 
 get_script_path <- function() {
-    script_path <- commandArgs(trailingOnly = TRUE)[1]
-    return(script_path)
+  script_path <- commandArgs(trailingOnly = TRUE)[1]
+  return(script_path)
 }
 
 #' Ensure that a path (character) ends with a substring.
@@ -15,30 +15,30 @@ get_script_path <- function() {
 #' @param substr [character] The substring to check for.
 #' @return [logical] TRUE if the path ends with the substring, FALSE otherwise.
 path_ends_with <- function(path, substr) {
-    return(grepl(paste0(substr, "$"), path))
+  return(grepl(paste0(substr, "$"), path))
 }
 
 #' Set working directory based on a script path
 set_working_directory <- function(script_path = NA) {
-    if (is.null(script_path)) {
-        cat("Please provide the full path to the script.\n")
-    } else {
-        script_directory <- dirname(script_path)
-        setwd(script_directory)
-        cat("Working directory set to:", script_directory, "\n")
-    }
+  if (is.null(script_path)) {
+    cat("Please provide the full path to the script.\n")
+  } else {
+    script_directory <- dirname(script_path)
+    setwd(script_directory)
+    cat("Working directory set to:", script_directory, "\n")
+  }
 }
 
 #' Using a path in the PATHS object, return the full path.
 get_full_path <- function(path) {
-    path <- normalizePath(path)
-    path <- gsub("\\\\", "/", path)
-    path
+  path <- normalizePath(path)
+  path <- gsub("\\\\", "/", path)
+  path
 }
 
 box::export(
-    get_script_path,
-    path_ends_with,
-    set_working_directory,
-    get_full_path
+  get_script_path,
+  path_ends_with,
+  set_working_directory,
+  get_full_path
 )

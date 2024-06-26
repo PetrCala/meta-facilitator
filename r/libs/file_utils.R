@@ -1,5 +1,5 @@
 box::use(
-    libs / utils[is_empty]
+  libs / utils[is_empty]
 )
 
 #' Create a folder in the working directory if it does not exist yet
@@ -9,15 +9,15 @@ box::use(
 #' @param require_existence [logical] Only check the existence of the folder.
 #'  Raise an error in case the folder does not exist.
 validate_folder_existence <- function(folder_name, require_existence = FALSE) {
-    if (!file.exists(folder_name)) {
-        if (require_existence) {
-            rlang::abort(
-                paste("The folder", folder_name, "must exist in the working directory."),
-                class = "folder_not_found"
-            )
-        }
-        dir.create(folder_name, recursive = TRUE)
+  if (!file.exists(folder_name)) {
+    if (require_existence) {
+      rlang::abort(
+        paste("The folder", folder_name, "must exist in the working directory."),
+        class = "folder_not_found"
+      )
     }
+    dir.create(folder_name, recursive = TRUE)
+  }
 }
 
 
@@ -27,19 +27,19 @@ validate_folder_existence <- function(folder_name, require_existence = FALSE) {
 #'
 #' @param files[vector] A vector of strings.
 validate_files <- function(files) {
-    for (file in files) {
-        if (!file.exists(file)) {
-            rlang::abort(
-                paste(
-                    file,
-                    "does not exist or could not be located.",
-                    "Please make sure to include it in the working directory."
-                ),
-                class = "file_not_found"
-            )
-        }
+  for (file in files) {
+    if (!file.exists(file)) {
+      rlang::abort(
+        paste(
+          file,
+          "does not exist or could not be located.",
+          "Please make sure to include it in the working directory."
+        ),
+        class = "file_not_found"
+      )
     }
-    print("All necessary files located successfully.")
+  }
+  print("All necessary files located successfully.")
 }
 
 
@@ -49,14 +49,14 @@ validate_files <- function(files) {
 #' @param full_path [character] The full path to the file to create
 #' @return [NULL] The function writes the file and does not return anything
 write_txt_file <- function(msg_list, full_path) {
-    if (is_empty(msg_list)) {
-        return(NULL) # Nothing to write
-    }
-    writeLines(unlist(msg_list), full_path)
+  if (is_empty(msg_list)) {
+    return(NULL) # Nothing to write
+  }
+  writeLines(unlist(msg_list), full_path)
 }
 
 box::export(
-    validate_folder_existence,
-    validate_files,
-    write_txt_file
+  validate_folder_existence,
+  validate_files,
+  write_txt_file
 )
