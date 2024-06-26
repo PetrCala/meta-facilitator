@@ -17,7 +17,7 @@ get_data_path <- function(analysis_name) {
     source_df <- METADATA$analyses[[analysis_name]]$source_df
     path <- file.path(data_dir, source_df)
     if (!(file.exists(path))) {
-        message(
+        logger::log_error(
             paste(
                 "The data file for the analysis",
                 analysis_name,
@@ -91,7 +91,7 @@ read_data_custom <- function(source_path, separators = NA) {
 #'
 #' This function reads the data for a given analysis and returns it as a data frame.
 read_analysis_data <- function(analysis_name) {
-    message("Reading the data for the analysis ", analysis_name)
+    logger::log_info("Reading the data for the analysis ", analysis_name)
     df_path <- get_data_path(analysis_name = analysis_name)
     analysis_metadata <- get_analysis_metadata(analysis_name)
     sheet_name <- analysis_metadata$source_sheet

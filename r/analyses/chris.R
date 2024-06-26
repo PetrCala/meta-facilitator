@@ -13,20 +13,20 @@ get_chris_meta_flavours <- function(df) {
 }
 
 chris_analyse <- function(...) {
-    message("Running the chris analysis")
+    logger::log_info("Running the chris analysis")
     analysis <- METADATA$analyses$chris
     analysis_name <- analysis$analysis_name
 
     msg <- c() # A vector of messages to log at the end
 
     # Clean the data
-    message("Preprocessing and cleaning data...")
+    logger::log_info("Preprocessing and cleaning data...")
     df <- read_analysis_data(analysis_name = analysis_name)
     df <- clean_data(df = df, analysis_name = analysis_name)
 
 
     # Run analysis steps
-    message("Calculating statistics...")
+    logger::log_info("Calculating statistics...")
     # This subsets the analysis to pcc studies only
     df <- get_pcc(df = df, analysis_name = analysis_name, messages = msg, ...)
     n_studies <- get_number_of_studies(df = df)
@@ -42,7 +42,7 @@ chris_analyse <- function(...) {
 
     # results <- data.frame(matrix(ncol=0, nrow=nrow(pcc_df)))
 
-    message("Exporting results...")
+    logger::log_info("Exporting results...")
     save_analysis_results(
         df = df_out,
         analysis_name = analysis_name,

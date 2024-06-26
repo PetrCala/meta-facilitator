@@ -31,7 +31,7 @@ save_analysis_results <- function(df, analysis_name, analysis_messages) {
     results_folder <- file.path(output_folder, analysis_folder)
     validate_folder_existence(folder_name = results_folder)
 
-    message("Saving the results to ", results_folder)
+    logger::log_info("Saving the results to ", results_folder)
 
     # Save the results
     write_txt_file(analysis_messages, file.path(results_folder, CONST$ANALYSIS_INFO_FILE_NAME))

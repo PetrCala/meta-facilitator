@@ -14,15 +14,15 @@ new_dir <- NULL
 
 # Ensure the correct working directory regardless of invocation type
 if (exists(".vsc.getSession")) {
-    message("Running in VS Code")
+    logger::log_info("Running in VS Code")
     session <- .vsc.getSession()
     new_dir <- dirname(session$file)
 } else if (interactive()) {
-    message("Running in interactive mode") # Assume RStudio
+    logger::log_info("Running in interactive mode") # Assume RStudio
     current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
     new_dir <- dirname(current_document_path)
 } else {
-    message("Running in non-interactive mode")
+    logger::log_info("Running in non-interactive mode")
     args <- commandArgs(trailingOnly = FALSE)
     # Iterate through arguments to find the "--file" followed by the script path
     script_path <- NULL

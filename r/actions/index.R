@@ -22,11 +22,11 @@ run_analysis <- function(analysis_name = NULL, ...) {
     run_args <- get_run_args("analyse")
 
     if (is.null(analysis_name)) {
-        message("Reading analysis name from metadata")
+        logger::log_info("Reading analysis name from metadata")
         analysis_name <- run_args$analysis_name
     }
 
-    message(paste("Analysing", analysis_name, "data"))
+    logger::log_info(paste("Analysing", analysis_name, "data"))
 
     analysis_name <- toupper(analysis_name)
 
@@ -41,7 +41,7 @@ run_analysis <- function(analysis_name = NULL, ...) {
     }
     do.call(ANALYSES[[analysis_name]], args = list(...))
 
-    message("Analysis complete")
+    logger::log_success("Analysis complete")
 }
 
 run_tests <- function(...) {

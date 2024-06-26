@@ -18,6 +18,7 @@ CONST <- list(
         "cachem" = "1.0.8",
         "data.table" = "1.15.4",
         "devtools" = "2.4.5",
+        "logger" = NA,
         "memoise" = "2.0.1",
         "readr" = "2.1.5",
         "readxl" = "0.1.1",

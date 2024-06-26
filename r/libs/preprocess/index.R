@@ -72,7 +72,7 @@ preprocess_data <- function(input_data, input_var_list) {
             input_data[[col_name]] <- as.character(input_data[[col_name]])
         }
     }
-    message("Preprocessing finished.")
+    logger::log_info("Preprocessing finished.")
     return(input_data)
 }
 
