@@ -44,8 +44,9 @@ run_analysis <- function(analysis_name, ...) {
 }
 
 run_tests <- function(...) {
-  test_path <- PATHS$DIR_TESTS
-  devtools::test(test_path)
+  test_dir_path <- PATHS$DIR_TESTS
+  Sys.setenv(TESTTHAT = "true")
+  testthat::test_dir(test_dir_path)
   return(NULL)
 }
 

@@ -2,7 +2,7 @@
 
 set -e
 
-TEST_DIR_NAME="tests"
+TEST_DIR_NAME="tests/testthat"
 R_DIR_NAME="R"
 
 SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
@@ -17,11 +17,9 @@ ENTRYPOINT_PATH="$R_FOLDER_PATH/entrypoint.R"
 
 cd $R_FOLDER_PATH
 
-# Make the invocation recognize the environment as test
 export TESTTHAT=true
 
-# Rscript -e "devtools::test('$TEST_FOLDER_PATH')"
-Rscript -e "source('$ENTRYPOINT_PATH')" "test"
+Rscript -e "testthat::test_dir('$TEST_FOLDER_PATH')"
 
 unset TESTTHAT
 

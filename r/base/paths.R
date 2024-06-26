@@ -53,7 +53,7 @@ PATHS <- list(
   R_ACTIONS = file.path(DIR_R, "actions.R"),
 
   # Test files
-  DIR_TESTS = file.path(PROJECT_ROOT, "tests")
+  DIR_TESTS = file.path(PROJECT_ROOT, "tests", "testthat")
 )
 
 box::export(PATHS)
