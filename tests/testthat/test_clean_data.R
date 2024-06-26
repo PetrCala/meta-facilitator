@@ -4,6 +4,13 @@ box::use(
 
 test_that("tests run correctly", {
 
+  expect_silent({
+    x <- 1
+    y <- 2
+    sum <- x + y
+    expect_equal(sum, 3)
+  })
+
   expect_error({
     stop("This is an error")
   }, "This is an error")

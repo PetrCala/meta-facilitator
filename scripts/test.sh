@@ -21,8 +21,8 @@ export TESTTHAT=true
 
 Rscript -e "
 suppressPackageStartupMessages(library(testthat)); 
-testthat::test_dir('$TEST_FOLDER_PATH')
-"
+source('$ENTRYPOINT_PATH');
+" test
 
 unset TESTTHAT
 

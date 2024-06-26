@@ -1,6 +1,7 @@
 box::use(
   base / paths[PATHS],
   analyses / index[ANALYSES],
+  libs / test_utils[run_tests_recursively]
 )
 
 #' This is a placeholder function to demonstrate the usage of actions, and will be removed fruther on.
@@ -43,12 +44,13 @@ run_analysis <- function(analysis_name, ...) {
   logger::log_success("Analysis complete")
 }
 
+
 run_tests <- function(...) {
   # Silence the package startup messages, and warnings from 'box'
   suppressWarnings(suppressPackageStartupMessages(library(testthat)))
   test_dir_path <- PATHS$DIR_TESTS
   Sys.setenv(TESTTHAT = "true")
-  testthat::test_dir(test_dir_path)
+  run_tests_recursively(test_dir_path)
 }
 
 #' A list of executable actions for the entrypoint.R
