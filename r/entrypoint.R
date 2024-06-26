@@ -25,9 +25,8 @@ if (is_testing) {
   new_dir <- dirname(session$file)
 } else if (interactive()) {
   logger::log_info("Running in interactive mode") # Assume RStudio
-  rlang::abort("Interactive mode is not supported yet. Please use the console instead.")
-  # current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
-  # new_dir <- dirname(current_document_path)
+  current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
+  new_dir <- dirname(current_document_path)
 } else {
   logger::log_info("Running in non-interactive mode")
   args <- commandArgs(trailingOnly = FALSE)
@@ -60,21 +59,13 @@ options(box.path = getwd())
 # Relative paths are sourced only after the WD is set correctly
 box::use(
   actions / index[ACTIONS],
-  actions / utils[validate_action],
+  actions / utils[validate_action, get_invocation_args],
   libs / logs / index[setup_logging]
 )
 
 # Setup logging first
 setup_logging()
 
-# Determine the run args
-all_args <- commandArgs(trailingOnly = TRUE)
-action <- all_args[1]
-run_args <- all_args[-1]
-validate_action(action)
+args <- get_invocation_args()
 
-logger::log_info(paste("Running action:", action))
-
-arg_list <- as.list(run_args)
-
-do.call(ACTIONS[[action]], arg_list)
+do.call(ACTIONS[[args$action]], args$run_args)

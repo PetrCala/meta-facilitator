@@ -20,6 +20,10 @@ add <- function(x, y) {
 #' @export
 run_analysis <- function(analysis_name, ...) {
 
+  if (!length(analysis_name)) {
+    rlang::abort("Please provide an analysis name")
+  }
+
   logger::log_info(paste("Analysing", analysis_name, "data"))
 
   analysis_name <- toupper(analysis_name)
@@ -33,6 +37,7 @@ run_analysis <- function(analysis_name, ...) {
       class = "unknown_analysis"
     )
   }
+
   do.call(ANALYSES[[analysis_name]], args = list(...))
 
   logger::log_success("Analysis complete")

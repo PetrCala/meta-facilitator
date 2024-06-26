@@ -33,4 +33,32 @@ get_action <- function() {
   return(action)
 }
 
-box::export(validate_action, get_action)
+#' Determine the arguments with which the script was invoked
+#' In interactive mode, use the metadata run args
+#' In non-interactive mode, use the command line arguments
+#'
+#' @return [list] A list containing the action and run arguments
+#' @usage
+#' args <- get_invocation_args()
+#' print(args$action) # 'some-action'
+#' print(args$run_args) # list('arg1', 'arg2')
+get_invocation_args <- function() {
+
+  # Use an explicit if-else statement to avoid an ifelse bug
+  if (interactive()) {
+    args <- METADATA$run_args
+  } else {
+    args <- commandArgs(trailingOnly = TRUE)
+  }
+
+  action <- args[1]
+  run_args <- args[-1]
+  validate_action(action)
+
+  # If no run args are provided, return an empty list
+  run_args <- ifelse(length(run_args) == 0, list(), list(run_args))
+
+  return(list(action = action, run_args = run_args))
+}
+
+box::export(validate_action, get_action, get_invocation_args)
