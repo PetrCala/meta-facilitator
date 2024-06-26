@@ -1,12 +1,8 @@
 box::use(
-  testthat[expect_error, expect_silent, test_that],
-  # libs / clean_data / index[check_for_missing_cols]
+  testthat[expect_error, expect_silent, test_that]
 )
 
-test_that("some_test", {
-  expect_silent({
-    print("hello, world!")
-  })
+test_that("tests run correctly", {
 
   expect_error({
     stop("This is an error")
@@ -26,5 +22,5 @@ test_that("some_test", {
 #     # Test with all columns present
 #     df$`Lower CI` <- rnorm(3)
 #     df$`Upper CI` <- rnorm(3)
-#     expect_silent(check_for_missing_cols()(df, c("Effect", "Standard Error", "Lower CI", "Upper CI")))
+#   expect_silent(check_for_missing_cols()(df, c("Effect", "Standard Error", "Lower CI", "Upper CI")))
 # })

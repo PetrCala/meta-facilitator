@@ -19,10 +19,11 @@ cd $R_FOLDER_PATH
 
 export TESTTHAT=true
 
-Rscript -e "testthat::test_dir('$TEST_FOLDER_PATH')"
+Rscript -e "
+suppressPackageStartupMessages(library(testthat)); 
+testthat::test_dir('$TEST_FOLDER_PATH')
+"
 
 unset TESTTHAT
-
-success "Done."
 
 exit 0

@@ -44,10 +44,11 @@ run_analysis <- function(analysis_name, ...) {
 }
 
 run_tests <- function(...) {
+  # Silence the package startup messages, and warnings from 'box'
+  suppressWarnings(suppressPackageStartupMessages(library(testthat)))
   test_dir_path <- PATHS$DIR_TESTS
   Sys.setenv(TESTTHAT = "true")
   testthat::test_dir(test_dir_path)
-  return(NULL)
 }
 
 #' A list of executable actions for the entrypoint.R
