@@ -26,7 +26,7 @@ get_analysis_metadata <- function(analysis_name) {
 save_analysis_results <- function(df, analysis_name, analysis_messages) {
   # Create the output folder
   output_folder <- PATHS$DIR_OUTPUT
-  time_info <- format(Sys.time(), CONST$DATE_FORMAT)
+  time_info <- format(Sys.time(), CONST$DATE_ONLY_FORMAT)
   analysis_folder <- paste0(analysis_name, "_", time_info)
   results_folder <- file.path(output_folder, analysis_folder)
   validate_folder_existence(folder_name = results_folder)
@@ -34,9 +34,7 @@ save_analysis_results <- function(df, analysis_name, analysis_messages) {
   logger::log_info("Saving the results to ", results_folder)
 
   # Save the results
-  write_txt_file(analysis_messages, file.path(results_folder, CONST$ANALYSIS_INFO_FILE_NAME))
-  # TODO enable this
-  # write.csv(df, file.path(results_folder, CONST$ANALYSIS_RESULTS_FILE_NAME), row.names = FALSE)
+  utils::write.csv(df, file.path(results_folder, CONST$ANALYSIS_RESULTS_FILE_NAME), row.names = FALSE)
 }
 
 box::export(
