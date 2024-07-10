@@ -45,12 +45,15 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
 
   # Replace missing DF with 0
   # Do this after calculating the variance (the calculation needs NAs for identification)
-  missing_dfs <- is.na(df$df)
-  missing_dfs_count <- sum(missing_dfs)
-  if (missing_dfs_count > 0) {
-    missing_dfs_perc <- missing_dfs_count / nrow(df) * 100
-    logger::log_warn(paste0("Identified ", missing_dfs_count, " missing degrees of freedom in the source data (", missing_dfs_perc, "%). Converting these to 0..."))
-    df$df[missing_dfs] <- 0
+  replace_missing_dfs_with_0 <- FALSE
+  if (replace_missing_dfs_with_0) {
+    missing_dfs <- is.na(df$df)
+    missing_dfs_count <- sum(missing_dfs)
+    if (missing_dfs_count > 0) {
+      missing_dfs_perc <- missing_dfs_count / nrow(df) * 100
+      logger::log_warn(paste0("Identified ", missing_dfs_count, " missing degrees of freedom in the source data (", missing_dfs_perc, "%). Converting these to 0..."))
+      df$df[missing_dfs] <- 0
+    }
   }
 
   # Drop observations for which variance could not be calculated or is infinite

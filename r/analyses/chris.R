@@ -40,7 +40,9 @@ get_chris_meta_flavours <- function(df) {
     uwls1_est = uwls1$est,
     uwls1_t_value = uwls1$t_value,
     uwls2_est = uwls2$est,
-    uwls2_t_value = uwls2$t_value
+    uwls2_t_value = uwls2$t_value,
+    uwls3_est = uwls3$est,
+    uwls3_t_value = uwls3$t_value
   ))
 }
 

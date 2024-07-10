@@ -57,11 +57,15 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @export
 uwls3 <- function(df) {
   t_ <- df$effect / df$se
-  n_ <- df$df
-  if (sum(is.na(n_)) > 0) { # Extra safety check
-    rlang::abort("Missing degrees of freedom when calculating UWLS+3. Make sure to convert all missing DoF's to 0 first.")
-  }
-  pcc <- t_ / sqrt(t_^2 + n_ + 1) # Also marked as r_3
-  # r <-
-  return(1)
+  df_ <- df$df
+  # Replace DF with 'sample size - 7' when missing
+  df_[is.na(df_)] <- df$sample_size[is.na(df_)] - 7
+
+  pcc_ <- t_ / sqrt(t_^2 + df_ + 1) # r_3 Q: +1?
+  pcc_var_ <- (1 - pcc_^2) / (df_ - 4) # S_3^2 Q: -4?
+  se_ <- sqrt(pcc_var_) # SEr_3
+
+  uwls <- uwls(df, effect = pcc_var_, se = se_)
+
+  return(uwls)
 }
