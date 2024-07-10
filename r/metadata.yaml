@@ -47,7 +47,7 @@ locale:
   tz: "UTC" # Timezone
 
 options:
-  log_to_console: true # If false, the log will be saved to a file
+  log_to_console: false # If false, the log will be saved to a file
   log_file_name: "logger.log" # The name of the log file
 
 cache_handling:
