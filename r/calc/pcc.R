@@ -29,7 +29,24 @@ re <- function(x, y) {
   return(plm::plm(x ~ y, model = "random"))
 }
 
+#' Extract the DoF vector from a data frame. Where the DoF's are missing, use sample size minus 7.
+#'
+#' @param df [data.frame] The data frame to extract the information from
+#' @return [vector] A vector of either DoF's, or adjusted sample sizes.
+df_or_sample_size <- function(df) {
+  expected_cols <- c("df", "sample_size")
+  if (!all(expected_cols %in% colnames(df))) {
+    rlang::abort(paste("Invalid column names:", paste(colnames(df), collapse = ", ")), "Expected to contain:", paste(expected_cols, collapse = ", "))
+  }
+  df_ <- df$df
+  # Replace DF with 'sample size - 7' when missing
+  df_[is.na(df_)] <- df$sample_size[is.na(df_)] - 7
+  return(df_)
+}
+
 #' Calculate UWLS
+#'
+#' @note Here, the statistics upon which the UWLS is calculated are more variable, thus flexibility is provided when defining the input through the 'effect' and 'se' arguments. To see how this can be leveraged, refer, for example, to the 'uwls3' function, or the 'get_chris_meta_flavours' function.
 #'
 #' @param df [data.frame] The data frame on which to run the calculation
 #' @param effect [vector] The vector of effects. If not provided, defaults to df$effect.
@@ -54,12 +71,13 @@ uwls <- function(df, effect = NULL, se = NULL) {
 
 
 #' Calculate UWLS+3
+#'
+#' @param df [data.frame] The data frame to calculate the UWLS+3 with
+#' @return [list] A list with properties "est", "t_value".
 #' @export
 uwls3 <- function(df) {
-  t_ <- df$effect / df$se
-  df_ <- df$df
-  # Replace DF with 'sample size - 7' when missing
-  df_[is.na(df_)] <- df$sample_size[is.na(df_)] - 7
+  t_ <- df$effect / df$se # Q: Here, the effect is PCC - ok?
+  df_ <- df_or_sample_size(df)
 
   pcc_ <- t_ / sqrt(t_^2 + df_ + 1) # r_3 Q: +1?
   pcc_var_ <- (1 - pcc_^2) / (df_ - 4) # S_3^2 Q: -4?
@@ -68,4 +86,25 @@ uwls3 <- function(df) {
   uwls <- uwls(df, effect = pcc_var_, se = se_)
 
   return(uwls)
+}
+
+#' Calculate the Hunter-Schmidt estimate
+#'
+#' @param df [data.frame] The data frame to calculate the UWLS+3 with
+#' @return [list] A list with properties "est", "t_value".
+#' @export
+hsma <- function(df) {
+  df_ <- df_or_sample_size(df)
+  r_avg <- sum(df_ * df$effect) / sum(df_)
+  sd_sq <- sum(df_ * ((df$effect - r_avg)^2)) / sum(df_) # SD_r^2
+  se_r = sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
+  t_value <- r_avg / se_r
+  return(list(est = se_r, t_value = t_value))
+}
+
+#' Calculate Fisher's z
+fishers_z <- function(df) {
+
+  return(list(est = NA, t_value = NA))
+
 }

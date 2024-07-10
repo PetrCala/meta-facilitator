@@ -30,8 +30,10 @@ get_chris_meta_flavours <- function(df) {
   uwls3 <- pcc_calc$uwls3(df)
 
   # Hunter and Schmidt
+  hsma <- pcc_calc$hsma(df)
 
   # Fisher's z
+  fishers_z <- pcc_calc$fishers_z(df)
 
   # Summary statistics
 
@@ -42,7 +44,11 @@ get_chris_meta_flavours <- function(df) {
     uwls2_est = uwls2$est,
     uwls2_t_value = uwls2$t_value,
     uwls3_est = uwls3$est,
-    uwls3_t_value = uwls3$t_value
+    uwls3_t_value = uwls3$t_value,
+    hsma_est = hsma$est,
+    hsma_t_value = hsma$t_value,
+    fishers_z_est = fishers_z$est,
+    fishers_z_t_value = fishers_z$t_value
   ))
 }
 
