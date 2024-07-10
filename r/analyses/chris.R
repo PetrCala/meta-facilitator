@@ -23,8 +23,8 @@ get_chris_meta_flavours <- function(df) {
   # re2 <- plm::plm(effect ~ sqrt(pcc_var_2), data = df, model = "random")
 
   # UWLS
-  uwls1 <- calc$uwls(df, se = sqrt(df[["pcc_var_1"]]))
-  uwls2 <- calc$uwls(df, se = sqrt(df[["pcc_var_2"]]))
+  uwls1 <- pcc_calc$uwls(df, se = sqrt(df[["pcc_var_1"]]))
+  uwls2 <- pcc_calc$uwls(df, se = sqrt(df[["pcc_var_2"]]))
 
   return(data.frame(
     study = study,
