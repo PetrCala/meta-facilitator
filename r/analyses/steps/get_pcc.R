@@ -28,6 +28,7 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
   # n_of_studies_pcc <- get_number_of_studies(df = df)
 
+
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(
     pcc = df$effect,
@@ -42,17 +43,36 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
     offset = 2
   )
 
+  # Replace missing DF with 0
+  # Do this after calculating the variance (the calculation needs NAs for identification)
+  missing_dfs <- is.na(df$df)
+  missing_dfs_count <- sum(missing_dfs)
+  if (missing_dfs_count > 0) {
+    missing_dfs_perc <- missing_dfs_count / nrow(df) * 100
+    logger::log_warn(paste0("Identified ", missing_dfs_count, " missing degrees of freedom in the source data (", missing_dfs_perc, "%). Converting these to 0..."))
+    df$df[missing_dfs] <- 0
+  }
+
   # Drop observations for which variance could not be calculated or is infinite
+  n_rows_before <- nrow(df)
   drop_pcc_rows <- function(df_, condition_vector, reason) {
     logger::log_warn(paste("Identified", sum(condition_vector), "rows for which PCC variance", reason, "Dropping these rows..."))
-    return(df[!condition_vector, ])
+    return(df_[!condition_vector, ])
   }
 
   na_rows <- is.na(df$pcc_var_1) | is.na(df$pcc_var_2)
-  inf_rows <- is.infinite((df$pcc_var_1)) | is.infinite(df$pcc_var_2)
-
   df <- drop_pcc_rows(df, na_rows, "could not be calculated.")
+
+  inf_rows <- is.infinite((df$pcc_var_1)) | is.infinite(df$pcc_var_2)
   df <- drop_pcc_rows(df, inf_rows, "was infinite.")
+
+  # Check that the rows were dropped correctly
+  n_rows_after <- nrow(df)
+  should_have_dropped <- sum(na_rows) + sum(inf_rows)
+  if (n_rows_after + should_have_dropped != n_rows_before) {
+    rlang::abort(paste0("Something went wrong when dropping missing PCC variance rows.", "\nNrows before: ", n_rows_before, "\nNrows after: ", n_rows_after, "\nShould have dropped: ", should_have_dropped)
+    )
+  }
 
   return(df)
 }

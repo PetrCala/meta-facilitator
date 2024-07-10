@@ -26,6 +26,15 @@ get_chris_meta_flavours <- function(df) {
   uwls1 <- pcc_calc$uwls(df, se = sqrt(df[["pcc_var_1"]]))
   uwls2 <- pcc_calc$uwls(df, se = sqrt(df[["pcc_var_2"]]))
 
+  # UWLS+3
+  uwls3 <- pcc_calc$uwls3(df)
+
+  # Hunter and Schmidt
+
+  # Fisher's z
+
+  # Summary statistics
+
   return(data.frame(
     study = study,
     uwls1_est = uwls1$est,

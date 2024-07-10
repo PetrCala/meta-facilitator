@@ -8,12 +8,13 @@
 #' @return [vector] A vector of PCC variances.
 #' @export
 pcc_variance <- function(pcc, sample_size, dof, offset) {
-  # Calculate the PCC variance.
-  non_null_df <- !is.na(dof)
-
   numerator <- (1 - pcc^2)^2
-  denominator <- sample_size - 7
-  denominator[non_null_df] <- dof[non_null_df] - offset
+
+  # When DoF available, use DoF - offset vs. when missing, use n - 7
+  denominator <- rep(NA, length(numerator))
+  denominator[!is.na(dof)] <- denominator[!is.na(dof)] - offset
+  denominator[is.na(dof)] <- sample_size - 7
+
   variance <- numerator / denominator
   return(variance)
 }
@@ -49,4 +50,18 @@ uwls <- function(df, effect = NULL, se = NULL) {
   est <- summary_uwls$coefficients[1, "Estimate"]
   t_value <- summary_uwls$coefficients[1, "t value"]
   return(list(est = est, t_value = t_value))
+}
+
+
+#' Calculate UWLS+3
+#' @export
+uwls3 <- function(df) {
+  t_ <- df$effect / df$se
+  n_ <- df$df
+  if (sum(is.na(n_)) > 0) { # Extra safety check
+    rlang::abort("Missing degrees of freedom when calculating UWLS+3. Make sure to convert all missing DoF's to 0 first.")
+  }
+  pcc <- t_ / sqrt(t_^2 + n_ + 1) # Also marked as r_3
+  # r <-
+  return(1)
 }
