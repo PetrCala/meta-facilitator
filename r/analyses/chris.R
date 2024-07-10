@@ -17,8 +17,6 @@ chris_analyse <- function(...) {
   analysis <- METADATA$analyses$chris
   analysis_name <- analysis$analysis_name
 
-  msg <- c() # A vector of messages to log at the end
-
   # Clean the data
   logger::log_info("Preprocessing and cleaning data...")
   df <- read_analysis_data(analysis_name = analysis_name)
@@ -28,7 +26,7 @@ chris_analyse <- function(...) {
   # Run analysis steps
   logger::log_info("Calculating statistics...")
   # This subsets the analysis to pcc studies only
-  df <- get_pcc(df = df, analysis_name = analysis_name, messages = msg, ...)
+  df <- get_pcc(df = df, analysis_name = analysis_name, ...)
   n_studies <- get_number_of_studies(df = df)
 
   # analyseSingleChrisStudy <- function(single_study_data) {

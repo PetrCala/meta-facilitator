@@ -23,7 +23,7 @@ get_pcc_variance <- function(pcc, sample_size, dof, offset) {
 }
 
 #' Run the PCC analysis step. Used in the Chris analysis.
-get_pcc <- function(df, analysis_name = "", messages = c()) {
+get_pcc <- function(df, analysis_name = "", ...) {
   analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
 
   # n_studies_full <- get_number_of_studies(df = df)
@@ -40,11 +40,9 @@ get_pcc <- function(df, analysis_name = "", messages = c()) {
       class = "unknown_pcc_identifier"
     )
   }
-  messages <- c(messages, "Subsetting to PCC studies only")
+  logger::log_info("Subsetting to PCC studies only")
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
   # n_of_studies_pcc <- get_number_of_studies(df = df)
-  messages <- c(messages, "Subsetting to PCC studies only.")
-  # TODO log this
 
   # Calculate the PCC variance
   df$pcc_var_1 <- get_pcc_variance(
