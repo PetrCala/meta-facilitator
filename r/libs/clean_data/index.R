@@ -11,6 +11,7 @@ box::use(
 #' cols <- get_analysis_cols_list("chris")
 #' print(cols)
 #' # list(effect = "Effect", se = "Standard Error", ...)
+#' @export
 get_analysis_cols_list <- function(analysis_name) {
   analysis_metadata <- get_analysis_metadata(analysis_name)
   cols <- analysis_metadata$cols
@@ -30,6 +31,7 @@ get_analysis_cols_list <- function(analysis_name) {
 #' @example
 #' check_for_missing_cols(df, c("Effect", "Standard Error", "Lower CI", "Upper CI"))
 #' # Throws an error if any of the columns are missing
+#' @export
 check_for_missing_cols <- function(df, expected_cols) {
   missing_cols <- setdiff(expected_cols, colnames(df))
   if (length(missing_cols) > 0) {
@@ -42,6 +44,7 @@ check_for_missing_cols <- function(df, expected_cols) {
 
 
 #' Clean a data frame for analysis
+#' @export
 clean_data <- function(df, analysis_name) {
   source_cols <- get_analysis_cols_list(analysis_name)
 
@@ -64,9 +67,3 @@ clean_data <- function(df, analysis_name) {
 
   return(df)
 }
-
-box::export(
-  get_analysis_cols_list,
-  check_for_missing_cols,
-  clean_data
-)

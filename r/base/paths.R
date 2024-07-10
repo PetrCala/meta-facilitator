@@ -36,6 +36,7 @@ PROJECT_ROOT <- dirname(DIR_R)
 #' box::use(base/paths[PATHS])
 #' print(PATHS$PROJECT_ROOT)
 #' }
+#' @export
 PATHS <- list(
   # Root files
   PROJECT_ROOT = dirname(DIR_R),
@@ -55,5 +56,3 @@ PATHS <- list(
   # Test files
   DIR_TESTS = file.path(PROJECT_ROOT, "tests", "testthat")
 )
-
-box::export(PATHS)

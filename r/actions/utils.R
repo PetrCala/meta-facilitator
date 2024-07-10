@@ -7,6 +7,7 @@ box::use(
 #' Validate that an action is specified and is valid
 #'
 #' @param action [character] The action to validate
+#' @export
 validate_action <- function(action) {
   if (is.null(action)) {
     rlang::abort("Please specify an action to execute. Use --help for more information.", class = "no_action")
@@ -27,6 +28,7 @@ validate_action <- function(action) {
 #' Retrieve an action from the metadata, and validate it
 #'
 #' @return [character] The action to execute
+#' @export
 get_action <- function() {
   action <- METADATA$run$action
   validate_action(action)
@@ -42,6 +44,7 @@ get_action <- function() {
 #' args <- get_invocation_args()
 #' print(args$action) # 'some-action'
 #' print(args$run_args) # list('arg1', 'arg2')
+#' @export
 get_invocation_args <- function() {
 
   # Use an explicit if-else statement to avoid an ifelse bug
@@ -60,5 +63,3 @@ get_invocation_args <- function() {
 
   return(list(action = action, run_args = run_args))
 }
-
-box::export(validate_action, get_action, get_invocation_args)

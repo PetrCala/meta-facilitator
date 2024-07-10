@@ -54,10 +54,9 @@ run_tests <- function(...) {
 }
 
 #' A list of executable actions for the entrypoint.R
+#' @export
 ACTIONS <- list(
   add = add,
   analyse = run_analysis,
   test = run_tests
 )
-
-box::export(ACTIONS)

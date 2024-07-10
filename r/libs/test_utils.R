@@ -1,4 +1,5 @@
 #' Function to run test_dir on a directory and all its subdirectories
+#' @export
 run_tests_recursively <- function(path) {
   # message("Testing in: ", path)
   test_results <- testthat::test_dir(path)
@@ -14,7 +15,3 @@ run_tests_recursively <- function(path) {
     run_tests_recursively(subdir)
   }
 }
-
-box::export(
-  run_tests_recursively
-)

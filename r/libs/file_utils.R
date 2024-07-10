@@ -8,6 +8,7 @@ box::use(
 #' "./<name_of_the_folder>/
 #' @param require_existence [logical] Only check the existence of the folder.
 #'  Raise an error in case the folder does not exist.
+#' @export
 validate_folder_existence <- function(folder_name, require_existence = FALSE) {
   if (!file.exists(folder_name)) {
     if (require_existence) {
@@ -26,6 +27,7 @@ validate_folder_existence <- function(folder_name, require_existence = FALSE) {
 #' Print out a status message after the validation.
 #'
 #' @param files[vector] A vector of strings.
+#' @export
 validate_files <- function(files) {
   for (file in files) {
     if (!file.exists(file)) {
@@ -48,15 +50,10 @@ validate_files <- function(files) {
 #' @param msg_list [list] A list of messages to write to the file
 #' @param full_path [character] The full path to the file to create
 #' @return [NULL] The function writes the file and does not return anything
+#' @export
 write_txt_file <- function(msg_list, full_path) {
   if (is_empty(msg_list)) {
     return(NULL) # Nothing to write
   }
   writeLines(unlist(msg_list), full_path)
 }
-
-box::export(
-  validate_folder_existence,
-  validate_files,
-  write_txt_file
-)

@@ -9,6 +9,7 @@ box::use(
 #' Based on an analysis name, get that analysis metadata
 #'
 #' @return [list] The analysis metadata
+#' @export
 get_analysis_metadata <- function(analysis_name) {
   if (!analysis_name %in% names(METADATA$analyses)) {
     rlang::abort(
@@ -23,6 +24,7 @@ get_analysis_metadata <- function(analysis_name) {
 #' Save the analysis results to the output folder
 #'
 #' TODO: Add arguments after the function has been finalized
+#' @export
 save_analysis_results <- function(df, analysis_name, analysis_messages) {
   # Create the output folder
   output_folder <- PATHS$DIR_OUTPUT
@@ -36,8 +38,3 @@ save_analysis_results <- function(df, analysis_name, analysis_messages) {
   # Save the results
   utils::write.csv(df, file.path(results_folder, CONST$ANALYSIS_RESULTS_FILE_NAME), row.names = FALSE)
 }
-
-box::export(
-  get_analysis_metadata,
-  save_analysis_results
-)

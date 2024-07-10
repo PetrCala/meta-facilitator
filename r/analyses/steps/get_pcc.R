@@ -6,6 +6,7 @@ box::use(
 )
 
 #' Run the PCC analysis step. Used in the Chris analysis.
+#' @export
 get_pcc <- function(df, analysis_name = "", ...) {
   analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
 
@@ -46,7 +47,3 @@ get_pcc <- function(df, analysis_name = "", ...) {
 
 
 # a. RE1 & RE2: Calculate random-effects twice (report its both the estimate and t-value for each) using the SEs for equation (1) and (2). I know that R has standard routines for this.  You should probably use the REML (restricted max likelihood) flavor of RE.
-
-box::export(
-  get_pcc
-)

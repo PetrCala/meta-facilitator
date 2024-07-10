@@ -26,6 +26,7 @@ get_chris_meta_flavours <- function(df) {
   return(data.frame(re1 = 1, re2 = 2))
 }
 
+#' @export
 chris_analyse <- function(...) {
   logger::log_info("Running the chris analysis")
   analysis <- METADATA$analyses$chris
@@ -55,5 +56,3 @@ chris_analyse <- function(...) {
     analysis_messages = c("hello", "world")
   )
 }
-
-box::export(chris_analyse)

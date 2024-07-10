@@ -10,6 +10,7 @@ box::use(
 #' @param input_data [data.frame] Main data frame
 #' @param input_var_list [data.frame] Data frame with variable descriptions.
 #' @return [data.frame] The preprocessed data
+#' @export
 preprocess_data <- function(input_data, input_var_list) {
   validate(
     is.data.frame(input_data),
@@ -75,7 +76,3 @@ preprocess_data <- function(input_data, input_var_list) {
   logger::log_info("Preprocessing finished.")
   return(input_data)
 }
-
-box::export(
-  preprocess_data
-)

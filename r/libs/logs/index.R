@@ -4,6 +4,7 @@ box::use(
 )
 
 #' Setup logging for the project
+#' @export
 setup_logging <- function() {
   logger::log_appender(logger::appender_console) # Console logger
 
@@ -15,5 +16,3 @@ setup_logging <- function() {
     logger::log_appender(logger::appender_file(log_file, max_files = 1L), index = 2)
   }
 }
-
-box::export(setup_logging)

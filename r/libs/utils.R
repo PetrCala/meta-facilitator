@@ -7,6 +7,7 @@ box::use(
 #'
 #' @param obj [any] The object to evaluate
 #' @return [logical] TRUE if the object is a function call, FALSE otherwise
+#' @export
 is_function_call <- function(obj) {
   if (is.call(obj)) {
     func_name <- as.character(obj[[1]])
@@ -22,6 +23,7 @@ is_function_call <- function(obj) {
 
 
 #' Check whether an object is empty.
+#' @export
 is_empty <- function(obj) {
   type_obj <- typeof(obj)
 
@@ -67,6 +69,7 @@ is_empty <- function(obj) {
 #' # validate(FALSE)
 #' # validate(TRUE, FALSE, FALSE)
 #' # validate("not a condition")
+#' @export
 validate <- function(...) {
   options(
     rlang_backtrace_on_error = "full",
@@ -94,10 +97,3 @@ validate <- function(...) {
     }
   }
 }
-
-
-box::export(
-  is_empty,
-  is_function_call,
-  validate
-)

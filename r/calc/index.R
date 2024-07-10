@@ -6,6 +6,7 @@
 #' @param offset [int] An offset value to subtract from the degrees of freedom
 #'  in case they are missing.
 #' @return [vector] A vector of PCC variances.
+#' @export
 pcc_variance <- function(pcc, sample_size, dof, offset) {
   # Calculate the PCC variance.
   non_null_df <- !is.na(dof)
@@ -21,12 +22,7 @@ pcc_variance <- function(pcc, sample_size, dof, offset) {
 #' @param x [vector] A vector of regressand values
 #' @param y [vector] A vector of regressor values
 #' @return [vector] A vector of results.
+#' @export
 re <- function(x, y) {
   return(plm::plm(x ~ y, model = "random"))
 }
-
-
-box::export(
-  pcc_variance,
-  re
-)
