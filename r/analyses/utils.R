@@ -33,8 +33,8 @@ save_analysis_results <- function(df, analysis_name, analysis_messages) {
   results_folder <- file.path(output_folder, analysis_folder)
   validate_folder_existence(folder_name = results_folder)
 
-  logger::log_info("Saving the results to ", results_folder)
-
   # Save the results
+  logger::log_debug("Saving the results to ", results_folder)
   utils::write.csv(df, file.path(results_folder, CONST$ANALYSIS_RESULTS_FILE_NAME), row.names = FALSE)
+  logger::log_info(paste("Results can be found under", results_folder))
 }

@@ -92,7 +92,7 @@ read_data_custom <- function(source_path, separators = NA) {
 #' This function reads the data for a given analysis and returns it as a data frame.
 #' @export
 read_analysis_data <- function(analysis_name) {
-  logger::log_info("Reading the data for the analysis ", analysis_name)
+  logger::log_debug("Reading the data for the analysis ", analysis_name)
   df_path <- get_data_path(analysis_name = analysis_name)
   analysis_metadata <- get_analysis_metadata(analysis_name)
   sheet_name <- analysis_metadata$source_sheet

@@ -25,7 +25,7 @@ run_analysis <- function(analysis_name, ...) {
     rlang::abort("Please provide an analysis name")
   }
 
-  logger::log_info(paste("Analysing", analysis_name, "data"))
+  logger::log_debug(paste("Analysing", analysis_name, "data"))
 
   analysis_name <- toupper(analysis_name)
 

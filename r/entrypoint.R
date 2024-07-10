@@ -17,18 +17,18 @@ is_testing <- Sys.getenv("TESTTHAT") == "true"
 
 # Ensure the correct working directory regardless of invocation type
 if (is_testing) {
-  logger::log_info("Running in testing mode")
+  logger::log_debug("Running in testing mode")
   new_dir <- getwd()
 } else if (exists(".vsc.getSession")) {
-  logger::log_info("Running in VS Code")
+  logger::log_debug("Running in VS Code")
   session <- .vsc.getSession()
   new_dir <- dirname(session$file)
 } else if (interactive()) {
-  logger::log_info("Running in interactive mode") # Assume RStudio
+  logger::log_debug("Running in interactive mode") # Assume RStudio
   current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
   new_dir <- dirname(current_document_path)
 } else {
-  logger::log_info("Running in non-interactive mode")
+  logger::log_debug("Running in non-interactive mode")
   args <- commandArgs(trailingOnly = FALSE)
   # Iterate through arguments to find the "--file" followed by the script path
   script_path <- NULL

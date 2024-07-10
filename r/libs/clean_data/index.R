@@ -42,6 +42,36 @@ check_for_missing_cols <- function(df, expected_cols) {
   }
 }
 
+#' Convert selected columns to numeric
+convert_columns_to_numeric <- function(df, cols) {
+  logger::log_info(paste("Converting the following columns to numeric values:", paste(cols, collapse = ", ")))
+  for (col in cols) {
+    if (col %in% names(df)) {
+      df[[col]] <- as.numeric(as.character(df[[col]]))
+    } else {
+      logger::log_warn(paste("Column", col, "does not exist in the dataframe"))
+    }
+  }
+  return(df)
+}
+
+#' Drop observations with a missing effect
+drop_rows_with_missing_values <- function(df, cols = c("effect")) {
+  missing_rows <- rep(FALSE, nrow(df))
+  for (col in cols) {
+    if (!col %in% colnames(df)) {
+      logger::log_warn(paste0("Unknown column name: ", col, ". Skipping NA values check..."))
+    } else {
+      missing_rows <- missing_rows | is.na(df[col])
+    }
+  }
+  logger::log_info(paste("Dropping", sum(missing_rows), "rows where at least one of these columns is missing a value:", paste(cols, collapse = ", ")))
+
+  return(
+    df[!missing_rows, ]
+  )
+}
+
 
 #' Clean a data frame for analysis
 #' @export
@@ -64,6 +94,12 @@ clean_data <- function(df, analysis_name) {
 
   # Rename the columns
   colnames(df) <- names(source_cols)
+
+  # Drop NA values
+  df <- drop_rows_with_missing_values(df, cols = c("effect", "se"))
+
+  # Ensure numeric values
+  df <- convert_columns_to_numeric(df, cols = c("effect", "se", "sample_size", "df"))
 
   return(df)
 }

@@ -7,7 +7,7 @@ box::use(
 
 #' Run the PCC analysis step. Used in the Chris analysis.
 #' @export
-get_pcc <- function(df, analysis_name = "", ...) {
+get_pcc_data <- function(df, analysis_name = "", ...) {
   analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
 
   # n_studies_full <- get_number_of_studies(df = df)
@@ -41,6 +41,19 @@ get_pcc <- function(df, analysis_name = "", ...) {
     dof = df$df,
     offset = 2
   )
+
+  # Drop observations for which variance could not be calculated or is infinite
+  drop_pcc_rows <- function(df_, condition_vector, reason) {
+    logger::log_warn(paste("Identified", sum(condition_vector), "rows for which PCC variance", reason, "Dropping these rows..."))
+    return(df[!condition_vector, ])
+  }
+
+  na_rows <- is.na(df$pcc_var_1) | is.na(df$pcc_var_2)
+  inf_rows <- is.infinite((df$pcc_var_1)) | is.infinite(df$pcc_var_2)
+
+  df <- drop_pcc_rows(df, na_rows, "could not be calculated.")
+  df <- drop_pcc_rows(df, inf_rows, "was infinite.")
+
   return(df)
 }
 
