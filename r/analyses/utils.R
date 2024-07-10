@@ -23,9 +23,11 @@ get_analysis_metadata <- function(analysis_name) {
 
 #' Save the analysis results to the output folder
 #'
-#' TODO: Add arguments after the function has been finalized
+#' @param df [data.frame] The data frame to run the analysis upon
+#' @param analysis_name [character] The name of the analysis
+#' @return NULL - The results are saved to the output folder
 #' @export
-save_analysis_results <- function(df, analysis_name, analysis_messages) {
+save_analysis_results <- function(df, analysis_name) {
   # Create the output folder
   output_folder <- PATHS$DIR_OUTPUT
   time_info <- format(Sys.time(), CONST$DATE_ONLY_FORMAT)

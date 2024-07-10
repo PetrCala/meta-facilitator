@@ -16,6 +16,7 @@ box::use(
 #' @param df [data.frame] The single meta-analysis data frame
 #' @return [vector] A vector of the flavour results
 get_chris_meta_flavours <- function(df) {
+  logger::log_debug("Calculating statistics...")
   study <- as.character(unique(df$study))
 
   # Random Effects - regressor is PCC SE, i.e. sqrt of PCC variance
@@ -71,13 +72,10 @@ chris_analyse <- function(...) {
   analysis_name <- analysis$analysis_name
 
   # Clean the data
-  logger::log_debug("Preprocessing and cleaning data...")
   df <- read_analysis_data(analysis_name = analysis_name)
   df <- clean_data(df = df, analysis_name = analysis_name)
-  logger::log_info(paste("Rows after data cleaning:", nrow(df)))
 
   # Run the PCC analysis - use pcc studies only
-  logger::log_debug("Calculating statistics...")
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
   pcc_list <- lapply(split(pcc_df, pcc_df$study), get_chris_meta_flavours)
   pcc_df_out <- do.call(rbind, pcc_list)
@@ -89,10 +87,8 @@ chris_analyse <- function(...) {
   pcc_full_df <- get_chris_meta_flavours(pcc_df)
   pcc_df_out <- do.call(rbind, list(pcc_df_out, pcc_full_df))
 
-  logger::log_debug("Exporting results...")
   save_analysis_results(
     df = pcc_df_out,
-    analysis_name = analysis_name,
-    analysis_messages = c("hello", "world")
+    analysis_name = analysis_name
   )
 }

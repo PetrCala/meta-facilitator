@@ -76,6 +76,7 @@ drop_rows_with_missing_values <- function(df, cols = c("effect")) {
 #' Clean a data frame for analysis
 #' @export
 clean_data <- function(df, analysis_name) {
+  logger::log_debug("Cleaning data...")
   source_cols <- get_analysis_cols_list(analysis_name)
 
   # Replace missing columns with NAs
@@ -100,6 +101,8 @@ clean_data <- function(df, analysis_name) {
 
   # Ensure numeric values
   df <- convert_columns_to_numeric(df, cols = c("effect", "se", "sample_size", "df"))
+
+  logger::log_info(paste("Rows after data cleaning:", nrow(df)))
 
   return(df)
 }
