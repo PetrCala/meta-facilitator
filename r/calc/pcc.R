@@ -1,3 +1,5 @@
+box::use(stats[model.frame])
+
 #' Calculate the PCC variance.
 #'
 #' @param pcc [vector] A vector of PCC values.
@@ -17,16 +19,6 @@ pcc_variance <- function(pcc, sample_size, dof, offset) {
 
   variance <- numerator / denominator
   return(variance)
-}
-
-#' Calculate random errors
-#'
-#' @param x [vector] A vector of regressand values
-#' @param y [vector] A vector of regressor values
-#' @return [vector] A vector of results.
-#' @export
-re <- function(x, y) {
-  return(plm::plm(x ~ y, model = "random"))
 }
 
 #' Extract the DoF vector from a data frame. Where the DoF's are missing, use sample size minus 7.
@@ -103,8 +95,17 @@ hsma <- function(df) {
 }
 
 #' Calculate Fisher's z
+#' @export
 fishers_z <- function(df) {
+  df_ <- df_or_sample_size(df)
+  z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
+  se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
 
+  # Run the Random effects
+  re_df <- data.frame(z_ = z_, se_ = se_)
+  # browser()
+  # re_ <- plm::plm(z_ ~ se_, data = re_df, model = "random", index = "study")
+
+  # TODO
   return(list(est = NA, t_value = NA))
-
 }
