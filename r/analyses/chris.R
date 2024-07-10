@@ -56,7 +56,7 @@ chris_analyse <- function(...) {
 
   logger::log_debug("Exporting results...")
   save_analysis_results(
-    df = pcc_df,
+    df = pcc_df_out,
     analysis_name = analysis_name,
     analysis_messages = c("hello", "world")
   )
