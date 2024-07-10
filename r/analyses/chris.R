@@ -36,6 +36,7 @@ get_chris_meta_flavours <- function(df) {
   fishers_z <- pcc_calc$fishers_z(df)
 
   # Summary statistics
+  sum_stats <- pcc_calc$pcc_sum_stats(df, log_results = FALSE)
 
   return(data.frame(
     study = study,
@@ -48,7 +49,18 @@ get_chris_meta_flavours <- function(df) {
     hsma_est = hsma$est,
     hsma_t_value = hsma$t_value,
     fishers_z_est = fishers_z$est,
-    fishers_z_t_value = fishers_z$t_value
+    fishers_z_t_value = fishers_z$t_value,
+    k_ = sum_stats$k_,
+    avg_n = sum_stats$avg_n,
+    median_n = sum_stats$median_n,
+    quantile_1_n = sum_stats$quantile_1_n,
+    quantile_3_n = sum_stats$quantile_3_n,
+    ss_lt_50 = sum_stats$ss_lt_50,
+    ss_lt_100 = sum_stats$ss_lt_100,
+    ss_lt_200 = sum_stats$ss_lt_200,
+    ss_lt_400 = sum_stats$ss_lt_400,
+    ss_lt_1600 = sum_stats$ss_lt_1600,
+    ss_lt_3200 = sum_stats$ss_lt_3200
   ))
 }
 
@@ -64,15 +76,18 @@ chris_analyse <- function(...) {
   df <- clean_data(df = df, analysis_name = analysis_name)
   logger::log_info(paste("Rows after data cleaning:", nrow(df)))
 
-  # Run analysis steps
+  # Run the PCC analysis - use pcc studies only
   logger::log_debug("Calculating statistics...")
-  # This subsets the analysis to pcc studies only
-  n_studies <- get_number_of_studies(df = df)
-
-  # Run the PCC analysis
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
   pcc_list <- lapply(split(pcc_df, pcc_df$study), get_chris_meta_flavours)
   pcc_df_out <- do.call(rbind, pcc_list)
+  pcc_studies <- get_number_of_studies(df = pcc_df)
+  logger::log_info(paste("Number of PCC studies:", pcc_studies))
+
+  # Add a row for the full data frame
+  pcc_df$study <- "All studies" # The pcc_df object can be reused here
+  pcc_full_df <- get_chris_meta_flavours(pcc_df)
+  pcc_df_out <- do.call(rbind, list(pcc_df_out, pcc_full_df))
 
   logger::log_debug("Exporting results...")
   save_analysis_results(

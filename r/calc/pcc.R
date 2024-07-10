@@ -109,3 +109,37 @@ fishers_z <- function(df) {
   # TODO
   return(list(est = NA, t_value = NA))
 }
+
+#' Calculate various summary statistics associated with the PCC data frame
+#' @export
+pcc_sum_stats <- function(df, log_results = TRUE) {
+  k_ <- nrow(df)
+  quantiles = stats::quantile(df$sample_size, probs = c(0.25, 0.75))
+
+  # ss_lt ~ sample sizes less than
+  get_ss_lt <- function(lt) {
+    return(
+      sum(df$sample_size < lt) / k_
+    )
+  }
+
+  res <- list(
+    k_ = k_,
+    avg_n = mean(df$sample_size),
+    median_n = mean(df$sample_size),
+    quantile_1_n = as.numeric(quantiles[1]),
+    quantile_3_n = as.numeric(quantiles[2]),
+    ss_lt_50 = get_ss_lt(50),
+    ss_lt_100 = get_ss_lt(100),
+    ss_lt_200 = get_ss_lt(200),
+    ss_lt_400 = get_ss_lt(400),
+    ss_lt_1600 = get_ss_lt(1600),
+    ss_lt_3200 = get_ss_lt(3200)
+  )
+
+  if (log_results) {
+    logger::log_info("PCC analysis summary statistics:")
+    logger::log_info(paste("Number of PCC "))
+  }
+  return(res)
+}
