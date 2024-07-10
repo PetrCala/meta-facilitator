@@ -17,52 +17,34 @@ box::use(
 #' @return [vector] A vector of the flavour results
 get_chris_meta_flavours <- function(df) {
   logger::log_debug("Calculating statistics...")
+
+  # Initialize results list with the study identifier
   study <- as.character(unique(df$study))
+  results <- list(study = study)
+
+  # Define the various methods to calculate the PCC
+  methods <- list(
+    uwls1 = pcc_calc$uwls(df, se = sqrt(df[["pcc_var_1"]])),
+    uwls2 = pcc_calc$uwls(df, se = sqrt(df[["pcc_var_2"]])),
+    uwls3 = pcc_calc$uwls3(df),
+    hsma = pcc_calc$hsma(df),
+    fishers_z = pcc_calc$fishers_z(df)
+  )
 
   # Random Effects - regressor is PCC SE, i.e. sqrt of PCC variance
-  # re1 <- plm::plm(effect ~ sqrt(pcc_var_1), data = df, model = "random")
   # re2 <- plm::plm(effect ~ sqrt(pcc_var_2), data = df, model = "random")
+  # 1 <- plm::plm(effect ~ sqrt(pcc_var_1), data = df, model = "random")
+  for (method in names(methods)) {
+    res <- methods[[method]]
+    results[[paste0(method, "_est")]] <- res$est
+    results[[paste0(method, "_t_value")]] <- res$t_value
+  }
 
-  # UWLS
-  uwls1 <- pcc_calc$uwls(df, se = sqrt(df[["pcc_var_1"]]))
-  uwls2 <- pcc_calc$uwls(df, se = sqrt(df[["pcc_var_2"]]))
-
-  # UWLS+3
-  uwls3 <- pcc_calc$uwls3(df)
-
-  # Hunter and Schmidt
-  hsma <- pcc_calc$hsma(df)
-
-  # Fisher's z
-  fishers_z <- pcc_calc$fishers_z(df)
-
-  # Summary statistics
+  # Add summary statistics for the whole PCC data frame
   sum_stats <- pcc_calc$pcc_sum_stats(df, log_results = FALSE)
 
-  return(data.frame(
-    study = study,
-    uwls1_est = uwls1$est,
-    uwls1_t_value = uwls1$t_value,
-    uwls2_est = uwls2$est,
-    uwls2_t_value = uwls2$t_value,
-    uwls3_est = uwls3$est,
-    uwls3_t_value = uwls3$t_value,
-    hsma_est = hsma$est,
-    hsma_t_value = hsma$t_value,
-    fishers_z_est = fishers_z$est,
-    fishers_z_t_value = fishers_z$t_value,
-    k_ = sum_stats$k_,
-    avg_n = sum_stats$avg_n,
-    median_n = sum_stats$median_n,
-    quantile_1_n = sum_stats$quantile_1_n,
-    quantile_3_n = sum_stats$quantile_3_n,
-    ss_lt_50 = sum_stats$ss_lt_50,
-    ss_lt_100 = sum_stats$ss_lt_100,
-    ss_lt_200 = sum_stats$ss_lt_200,
-    ss_lt_400 = sum_stats$ss_lt_400,
-    ss_lt_1600 = sum_stats$ss_lt_1600,
-    ss_lt_3200 = sum_stats$ss_lt_3200
-  ))
+  results <- c(results, sum_stats)
+  return(as.data.frame(results))
 }
 
 #' @export
