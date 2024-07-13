@@ -99,19 +99,38 @@ hsma <- function(df) {
 }
 
 #' Calculate Fisher's z
+#'
+#' @note For the calculation, all studies should be present in the dataset.
 #' @export
 fishers_z <- function(df) {
+  study <- unique(df$study)
   df_ <- df_or_sample_size(df)
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
 
-  # Run the Random effects
-  # re_df <- data.frame(fishers_z_ = fishers_z_, se_ = se_)
-  # re_ <- plm::plm(fishers_z_ ~ se_, data = re_df, model = "random", index = "study")
-  # t_value <- fishers_z_ / se_
-  t_value = NA
+  # Optionally check for missing SE values
+  # se_na_count <- sum(is.na(se_))
+  # if (se_na_count > 0) {
+  #   logger::log_warn(paste("Identified", se_na_count, "missing SE values when calculating Fisher's z for study", study))
+  # }
 
-  return(list(est = t_value, t_value = t_value))
+  # Run the Random effects
+  # 1. Weights of each SE
+  w_ <- 1 / se_^2 # W_i
+
+  # 2. Weighted mean of z-scores
+  z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE) # z_re
+
+  # 3. Variance of the weighted mean
+  var_z_re_ <- 1 / sum(z_re_)
+
+  # 4. t-values
+  t_values_ <- (fishers_z_ - z_re_) / se_
+
+  # 5. r_re
+  r_re_ <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
+
+  return(list(est = r_re_, t_value = NA))
 }
 
 #' Calculate various summary statistics associated with the PCC data frame
