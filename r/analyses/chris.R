@@ -59,6 +59,7 @@ chris_analyse <- function(...) {
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
+  browser()
   pcc_list <- lapply(split(pcc_df, pcc_df$study), get_chris_meta_flavours)
   pcc_df_out <- do.call(rbind, pcc_list)
   pcc_studies <- get_number_of_studies(df = pcc_df)

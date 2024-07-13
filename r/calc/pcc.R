@@ -12,7 +12,7 @@ df_or_sample_size <- function(df, offset = NULL) {
   validate_columns(df, c("df", "sample_size"))
   offset <- ifelse(is.null(offset), 0, offset)
 
-  df_ <- df$df
+  df_ <- data.table::copy(df$df)
   missing_df <- is.na(df_) # boolean vector
 
   # Replace DF with 'sample size - 7' when missing
