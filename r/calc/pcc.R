@@ -1,39 +1,43 @@
-box::use(stats[model.frame])
-
-#' Calculate the PCC variance.
-#'
-#' @param pcc [vector] A vector of PCC values.
-#' @param sample_size [vector] A vector of sample sizes.
-#' @param dof [vector] A vector of degrees of freedom.
-#' @param offset [int] An offset value to subtract from the degrees of freedom
-#'  in case they are missing.
-#' @return [vector] A vector of PCC variances.
-#' @export
-pcc_variance <- function(pcc, sample_size, dof, offset) {
-  numerator <- (1 - pcc^2)^2
-
-  # When DoF available, use DoF - offset vs. when missing, use n - 7
-  denominator <- rep(NA, length(numerator))
-  denominator[!is.na(dof)] <- denominator[!is.na(dof)] - offset
-  denominator[is.na(dof)] <- sample_size - 7
-
-  variance <- numerator / denominator
-  return(variance)
-}
+box::use(
+  stats[model.frame],
+  libs / utils[validate_columns],
+)
 
 #' Extract the DoF vector from a data frame. Where the DoF's are missing, use sample size minus 7.
 #'
 #' @param df [data.frame] The data frame to extract the information from
+#' @param offset [numeric] The number to offset the sample size by
 #' @return [vector] A vector of either DoF's, or adjusted sample sizes.
-df_or_sample_size <- function(df) {
-  expected_cols <- c("df", "sample_size")
-  if (!all(expected_cols %in% colnames(df))) {
-    rlang::abort(paste("Invalid column names:", paste(colnames(df), collapse = ", ")), "Expected to contain:", paste(expected_cols, collapse = ", "))
-  }
+df_or_sample_size <- function(df, offset = NULL) {
+  validate_columns(df, c("df", "sample_size"))
+  offset <- ifelse(is.null(offset), 0, offset)
+
   df_ <- df$df
+  missing_df <- is.na(df_) # boolean vector
+
   # Replace DF with 'sample size - 7' when missing
-  df_[is.na(df_)] <- df$sample_size[is.na(df_)] - 7
+  df_[missing_df] <- df$sample_size[missing_df] - 7
+
+  # Modify by offset when present (default 0)
+  df_[!missing_df] <- df$sample_size - offset
   return(df_)
+}
+
+
+#' Calculate the PCC variance.
+#'
+#' @param df [data.frame] The data frame upon which to calculate the PCC vairance. Should include the columns 'effect', 'sample_size', 'dof'
+#' @param offset [int] An offset value to subtract from the degrees of freedom
+#'  in case they are missing.
+#' @return [vector] A vector of PCC variances.
+#' @export
+pcc_variance <- function(df, offset) {
+  validate_columns(df, c("df", "sample_size", "effect"))
+  pcc_ <- df$effect
+  numerator <- (1 - pcc_^2)^2
+  denominator <- df_or_sample_size(df, offset = offset)
+  variance <- numerator / denominator
+  return(variance)
 }
 
 #' Calculate UWLS
@@ -98,16 +102,16 @@ hsma <- function(df) {
 #' @export
 fishers_z <- function(df) {
   df_ <- df_or_sample_size(df)
-  z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
+  fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
+  t_value <- NA
+  # t_value <- fishers_z / se_
 
   # Run the Random effects
-  re_df <- data.frame(z_ = z_, se_ = se_)
-  # browser()
-  # re_ <- plm::plm(z_ ~ se_, data = re_df, model = "random", index = "study")
+  # re_df <- data.frame(fishers_z_ = fishers_z_, se_ = se_)
+  # re_ <- plm::plm(fishers_z_ ~ se_, data = re_df, model = "random", index = "study")
 
-  # TODO
-  return(list(est = NA, t_value = NA))
+  return(list(est = t_value, t_value = t_value))
 }
 
 #' Calculate various summary statistics associated with the PCC data frame

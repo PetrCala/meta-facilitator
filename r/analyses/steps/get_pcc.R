@@ -28,18 +28,13 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
   # n_of_studies_pcc <- get_number_of_studies(df = df)
 
-
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(
-    pcc = df$effect,
-    sample_size = df$sample_size,
-    dof = df$df,
+    df = df,
     offset = 1
   )
   df$pcc_var_2 <- pcc_calc$pcc_variance(
-    pcc = df$effect,
-    sample_size = df$sample_size,
-    dof = df$df,
+    df = df,
     offset = 2
   )
 

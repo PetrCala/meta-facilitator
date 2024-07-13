@@ -97,3 +97,25 @@ validate <- function(...) {
     }
   }
 }
+
+
+#' Check that a data frame contains specific columns
+#'
+#' @param df [data.frame] The data frame to check
+#' @param columns [vector[character]] A set of columns to check
+#' @return NULL Checks that the columns exist in the data frame
+#' @example
+#' validate_columns(df, c("effect", "se"))
+#' @export
+validate_columns <- function(df, columns) {
+  if (!is.data.frame(df)) {
+    rlang::abort("'df' must be a data frame.")
+  }
+  if (!is.character(columns)) {
+    rlang::abort("'columns' must be a character vector")
+  }
+
+  if (!all(columns %in% colnames(df))) {
+    rlang::abort(paste("Invalid column names:", paste(colnames(df), collapse = ", ")), "Expected to contain:", paste(columns, collapse = ", "))
+  }
+}
