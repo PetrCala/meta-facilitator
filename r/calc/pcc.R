@@ -104,8 +104,7 @@ fishers_z <- function(df) {
   df_ <- df_or_sample_size(df)
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
-  t_value <- NA
-  # t_value <- fishers_z / se_
+  t_value <- fishers_z_ / se_
 
   # Run the Random effects
   # re_df <- data.frame(fishers_z_ = fishers_z_, se_ = se_)
