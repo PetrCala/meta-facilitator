@@ -108,11 +108,16 @@ fishers_z <- function(df) {
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
 
-  # Optionally check for missing SE values
-  # se_na_count <- sum(is.na(se_))
-  # if (se_na_count > 0) {
-  #   logger::log_warn(paste("Identified", se_na_count, "missing SE values when calculating Fisher's z for study", study))
-  # }
+  # The previous calculation means SE will be NA sometimes
+  se_na_count <- sum(is.na(se_))
+  if (se_na_count > 0) {
+    logger::log_debug(paste("Identified", se_na_count, "missing SE values when calculating Fisher's z for study", study))
+
+    # Drop rows with missing SE values
+    df <- df[!is.na(se_), ]
+  }
+  re_data <- data.frame(y = fishers_z_, x = se_)
+  re_ <- plm::plm(y ~ x, data = re_data, model = "random")
 
   # Run the Random effects
   # 1. Weights of each SE
