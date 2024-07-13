@@ -76,7 +76,7 @@ uwls3 <- function(df) {
   df_ <- df_or_sample_size(df)
 
   pcc_ <- t_ / sqrt(t_^2 + df_ + 1) # r_3 Q: +1?
-  pcc_var_ <- (1 - pcc_^2) / (df_ - 4) # S_3^2 Q: -4?
+  pcc_var_ <- (1 - pcc_^2) / (df_ + 3) # S_3^2 Q: +3?
   se_ <- sqrt(pcc_var_) # SEr_3
 
   uwls <- uwls(df, effect = pcc_var_, se = se_)
@@ -104,11 +104,12 @@ fishers_z <- function(df) {
   df_ <- df_or_sample_size(df)
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
-  t_value <- fishers_z_ / se_
 
   # Run the Random effects
   # re_df <- data.frame(fishers_z_ = fishers_z_, se_ = se_)
   # re_ <- plm::plm(fishers_z_ ~ se_, data = re_df, model = "random", index = "study")
+  # t_value <- fishers_z_ / se_
+  t_value = NA
 
   return(list(est = t_value, t_value = t_value))
 }
