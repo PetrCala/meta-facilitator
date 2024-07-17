@@ -22,11 +22,11 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
     )
   }
   nrow_full <- nrow(df)
-  logger::log_info("Loading the full data frame with", nrow_full, "rows...")
+  logger::log_info("Full data frame row count: ", nrow_full)
   logger::log_info("Subsetting to PCC studies only...")
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
   nrow_pcc <- nrow(df)
-  logger::log_info(paste0("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)"))
+  logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)")
 
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(
