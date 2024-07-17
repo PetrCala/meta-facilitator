@@ -9,12 +9,15 @@ analyses:
     source_df: "chris_data.xlsx"
     source_sheet: "Main"
     cols:
-      study: "Filename"
+      study: "Title"
       effect_type: "Effect type"
       effect: "Effect size"
       se: "Standard error"
       sample_size: "Sample size"
       df: null
+      meta: "Filename"
+      author1: "Author 1"
+      year: "Year published"
     unique:
       pcc_identifier: "correlation" # How PCC studies are denoted
 
@@ -25,6 +28,7 @@ f_cols:
   se: "Standard Error"
   sample_size: "Sample size"
   df: "Degrees of freedom"
+  meta: "Name of the meta-analysis"
 
 analysed_df_cols:
   n_est: "The number of estimates (k)"

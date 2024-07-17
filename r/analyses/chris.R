@@ -7,6 +7,7 @@ box::use(
   analyses / steps / get_pcc[get_pcc_data],
   analyses / utils[get_analysis_metadata, save_analysis_results],
   libs / clean_data / index[clean_data],
+  libs / clean_data / fill[fill_study_name],
   libs / read_data / index[read_analysis_data],
 )
 
@@ -55,6 +56,7 @@ chris_analyse <- function(...) {
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
   df <- clean_data(df = df, analysis_name = analysis_name)
+  df <- fill_study_name(df = df, variable_cols = c("author1", "year"))
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
