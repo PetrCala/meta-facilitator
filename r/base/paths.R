@@ -46,7 +46,7 @@ PATHS <- list(
   DIR_CACHE = file.path(PROJECT_ROOT, "_cache"),
 
   # R files
-  R_ENTRYPOINT = file.path(DIR_R, "entrypoint.R"),
+  R_RUN = file.path(DIR_R, "run"),
   R_METADATA_YAML = file.path(DIR_R, "metadata.yaml"),
   R_METADATA = file.path(DIR_R, "METADATA.R"),
   R_CONST = file.path(DIR_R, "CONST.R"),

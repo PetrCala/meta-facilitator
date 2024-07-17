@@ -28,6 +28,7 @@ CONST <- list(
     "readxl" = "0.1.1",
     "rlang" = "1.1.3",
     "testthat" = "3.2.1",
+    "tidyr" = NA,
     "yaml" = "2.3.8"
   )
 )

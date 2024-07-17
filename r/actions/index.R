@@ -53,7 +53,7 @@ run_tests <- function(...) {
   run_tests_recursively(test_dir_path)
 }
 
-#' A list of executable actions for the entrypoint.R
+#' A list of executable actions for the run.R
 #' @export
 ACTIONS <- list(
   add = add,

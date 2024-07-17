@@ -4,7 +4,7 @@
 #' or from an interactive R session.
 #'
 #' Usage
-#' - From a command line, run `Rscript entrypoint.R <action> <args>`
+#' - From a command line, run `Rscript run <action> <args>`
 #'  or
 #' - Specify the desired action in metadata.json and run the script inside an R session.
 

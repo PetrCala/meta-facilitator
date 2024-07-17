@@ -71,13 +71,13 @@ chmod +x run.sh
 <!-- 5. Choose an action to run out of the [Available Actions section](#available-actions). Run it using:
 
 ```bash
-Rscript entrypoint.R <action> [--args]
+Rscript run.R <action> [--args]
 ```
 
 For example, to run the Chris analysis, do
 
 ```bash
-Rscript entrypoint.R analyse Chris
+Rscript run.R analyse Chris
 ```
 
 6. Find the results in ... -->

@@ -7,7 +7,7 @@ box::use(
   analyses / steps / get_pcc[get_pcc_data],
   analyses / utils[get_analysis_metadata, save_analysis_results],
   libs / clean_data / index[clean_data],
-  libs / clean_data / fill[fill_study_name],
+  libs / clean_data / fill[modify_missing_values],
   libs / read_data / index[read_analysis_data],
 )
 
@@ -19,10 +19,11 @@ box::use(
 get_chris_metaflavours <- function(df) {
   logger::log_debug("Calculating PCC statistics...")
 
-  # Initialize results list with the study identifier
-  study <- "All studies"
-  results <- list(study = study)
+  # Get the name of the meta-analysis
+  meta <- unique(df$meta)
+  stopifnot(length(meta) == 1) # Extra check
 
+  results <- list(meta = as.character(meta))
   # Define the various methods to calculate the PCC
   methods <- list(
     re1 = list(est = NA, t_value = NA),
@@ -56,18 +57,18 @@ chris_analyse <- function(...) {
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
   df <- clean_data(df = df, analysis_name = analysis_name)
-  df <- fill_study_name(df = df, variable_cols = c("author1", "year"))
+  df <- modify_missing_values(df = df, target_col = "study", columns = c("author1", "year"), missing_value_prefix = "Missing study")
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
 
-  pcc_list <- lapply(split(pcc_df, pcc_df$study), get_chris_metaflavours)
+  pcc_list <- lapply(split(pcc_df, pcc_df$meta), get_chris_metaflavours)
   pcc_df_out <- do.call(rbind, pcc_list)
   pcc_studies <- get_number_of_studies(df = pcc_df)
   logger::log_info(paste("Number of PCC studies:", pcc_studies))
 
   # Add a row for the full data frame
-  pcc_df$study <- "All studies" # The pcc_df object can be reused here
+  pcc_df$meta <- "All meta-analyses" # The pcc_df object can be reused here
   pcc_full_df <- get_chris_metaflavours(pcc_df)
   pcc_df_out <- do.call(rbind, list(pcc_df_out, pcc_full_df))
 
