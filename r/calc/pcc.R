@@ -8,19 +8,19 @@ box::use(
 #' @param df [data.frame] The data frame to extract the information from
 #' @param offset [numeric] The number to offset the sample size by
 #' @return [vector] A vector of either DoF's, or adjusted sample sizes.
-df_or_sample_size <- function(df, offset = NULL) {
-  validate_columns(df, c("df", "sample_size"))
+dof_or_sample_size <- function(df, offset = NULL) {
+  validate_columns(df, c("dof", "sample_size"))
   offset <- ifelse(is.null(offset), 0, offset)
 
-  df_ <- data.table::copy(df$df)
-  missing_df <- is.na(df_) # boolean vector
+  dof_ <- data.table::copy(df$dof) # Get DoF
+  missing_dof <- is.na(dof_) # boolean vector
 
   # Replace DF with 'sample size - 7' when missing
-  df_[missing_df] <- df$sample_size[missing_df] - 7
+  dof_[missing_dof] <- df$sample_size[missing_dof] - 7
 
   # Modify by offset when present (default 0)
-  df_[!missing_df] <- df$sample_size - offset
-  return(df_)
+  dof_[!missing_dof] <- df$sample_size - offset
+  return(dof_)
 }
 
 
@@ -32,10 +32,10 @@ df_or_sample_size <- function(df, offset = NULL) {
 #' @return [vector] A vector of PCC variances.
 #' @export
 pcc_variance <- function(df, offset) {
-  validate_columns(df, c("df", "sample_size", "effect"))
+  validate_columns(df, c("dof", "sample_size", "effect"))
   pcc_ <- df$effect
   numerator <- (1 - pcc_^2)^2
-  denominator <- df_or_sample_size(df, offset = offset)
+  denominator <- dof_or_sample_size(df, offset = offset)
   variance <- numerator / denominator
   return(variance)
 }
@@ -73,10 +73,10 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @export
 uwls3 <- function(df) {
   t_ <- df$effect / df$se # Q: Here, the effect is PCC - ok?
-  df_ <- df_or_sample_size(df)
+  dof_ <- dof_or_sample_size(df)
 
-  pcc_ <- t_ / sqrt(t_^2 + df_ + 1) # r_3 Q: +1?
-  pcc_var_ <- (1 - pcc_^2) / (df_ + 3) # S_3^2 Q: +3?
+  pcc_ <- t_ / sqrt(t_^2 + dof_ + 1) # r_3 Q: +1?
+  pcc_var_ <- (1 - pcc_^2) / (dof_ + 3) # S_3^2 Q: +3?
   se_ <- sqrt(pcc_var_) # SEr_3
 
   uwls <- uwls(df, effect = pcc_var_, se = se_)
@@ -90,9 +90,9 @@ uwls3 <- function(df) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 hsma <- function(df) {
-  df_ <- df_or_sample_size(df)
-  r_avg <- sum(df_ * df$effect) / sum(df_)
-  sd_sq <- sum(df_ * ((df$effect - r_avg)^2)) / sum(df_) # SD_r^2
+  dof_ <- dof_or_sample_size(df)
+  r_avg <- sum(dof_ * df$effect) / sum(dof_)
+  sd_sq <- sum(dof_ * ((df$effect - r_avg)^2)) / sum(dof_) # SD_r^2
   se_r = sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
   t_value <- r_avg / se_r
   return(list(est = se_r, t_value = t_value))
@@ -104,18 +104,22 @@ hsma <- function(df) {
 #' @export
 fishers_z <- function(df) {
   meta <- unique(df$meta)
-  df_ <- df_or_sample_size(df)
-  fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
-  se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
+  dof_ <- dof_or_sample_size(df)
 
-  # The previous calculation means SE will be NA sometimes
-  se_na_count <- sum(is.na(se_))
-  if (se_na_count > 0) {
-    logger::log_debug(paste("Identified", se_na_count, "missing SE values when calculating Fisher's z for meta-analysis", meta))
-
-    # Drop rows with missing SE values
-    df <- df[!is.na(se_), ]
+  # Sometimes the DoF - x yields NA -> remove these rows
+  suppressWarnings(
+    na_rows <- is.na(sqrt(dof_ - 1))
+  )
+  if (sum(na_rows) > 0) {
+    logger::log_debug(paste("Identified", sum(na_rows), "missing DoF values when calculating Fisher's z for meta-analysis", meta))
+    df <- df[!na_rows, ]
+    dof_ <- dof_or_sample_size(df)
   }
+
+  fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
+  se_ <- sqrt(dof_ - 1)
+  # logger::log_debug("Meta:", meta, "Fisher's z calculation:")
+
   re_data <- data.frame(y = fishers_z_, x = se_, study = df$study)
   re_ <- plm::plm(y ~ x, data = re_data, index = "study", model = "random")
 

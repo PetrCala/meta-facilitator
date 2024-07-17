@@ -22,13 +22,17 @@ get_chris_metaflavours <- function(df) {
   meta <- unique(df$meta)
   stopifnot(length(meta) == 1) # Extra check
 
+  # Get the UWLS standard errors - silence NaNs
+  suppressWarnings(uwls1_se <- sqrt(df[["pcc_var_1"]]))
+  suppressWarnings(uwls2_se <- sqrt(df[["pcc_var_2"]]))
+
   results <- list(meta = as.character(meta))
   # Define the various methods to calculate the PCC
   methods <- list(
     re1 = list(est = NA, t_value = NA),
     re2 = list(est = NA, t_value = NA),
-    uwls1 = pcc_calc$uwls(df, se = sqrt(df[["pcc_var_1"]])),
-    uwls2 = pcc_calc$uwls(df, se = sqrt(df[["pcc_var_2"]])),
+    uwls1 = pcc_calc$uwls(df, se = uwls1_se),
+    uwls2 = pcc_calc$uwls(df, se = uwls2_se),
     uwls3 = pcc_calc$uwls3(df),
     hsma = pcc_calc$hsma(df),
     fishers_z = pcc_calc$fishers_z(df)

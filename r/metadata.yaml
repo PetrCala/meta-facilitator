@@ -14,7 +14,7 @@ analyses:
       effect: "Effect size"
       se: "Standard error"
       sample_size: "Sample size"
-      df: null
+      dof: null
       meta: "Filename"
       author1: "Author 1"
       year: "Year published"
@@ -53,6 +53,7 @@ locale:
 options:
   log_to_console_only: false # If false, the log will be saved to a file
   log_file_name: "logger.log" # The name of the log file
+  log_level: "DEBUG" # The level of logging
 
 cache_handling:
   # I recommend you use caches only after you are certain the functions run correctly

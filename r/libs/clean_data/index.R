@@ -101,7 +101,7 @@ clean_data <- function(df, analysis_name) {
   df <- drop_rows_with_missing_values(df, cols = c("effect", "se"))
 
   # Ensure numeric values
-  df <- convert_columns_to_numeric(df, cols = c("effect", "se", "sample_size", "df"))
+  df <- convert_columns_to_numeric(df, cols = c("effect", "se", "sample_size", "dof"))
 
   # Fill missing studies
   df <- fill_missing_values(df = df, target_col = "study", columns = c("author1", "year"), missing_value_prefix = "Missing study")
