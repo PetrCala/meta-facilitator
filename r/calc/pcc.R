@@ -40,6 +40,44 @@ pcc_variance <- function(df, offset) {
   return(variance)
 }
 
+#' Calculate random effects
+#'
+#' @param df [data.frame] The data frame to calculate the RE with
+#' @param effect [vector] The vector of effects. If not provided, defaults to df$effect.
+#' @param se [vector] The vector of SEs. If not provided, defaults to df$se.
+#' @export
+re <- function(df, effect = NULL, se = NULL) {
+  if (is.null(effect)) {
+    effect <- df$effect
+  }
+  if (is.null(se)) {
+    se <- df$se
+  }
+  # Compute RE - for some cases, the model can't be fitted
+  # See: https://stackoverflow.com/questions/45121817/plm-package-in-r-empty-model-when-including-only-variables-without-variation-o
+  result <- tryCatch({
+    meta <- unique(df$meta)
+    if (length(meta) != 1) {
+      logger::log_warn("Could not calculate RE for multiple meta-analyses")
+      return(list(est = NA, t_value = NA))
+    }
+    re_data_ <- data.frame(y = effect, x = se, study = df$study)
+    re_ <- plm::plm(y ~ x, data = re_data_, index = "study", model = "random") # Q: REML?
+
+    re_summary <- summary(re_)
+    re_est <- re_summary$coefficients[1, "Estimate"]
+    re_se <- re_summary$coefficients[1, "Std. Error"]
+    re_t_value <- re_est / re_se
+    return(list(est = re_est, t_value = re_t_value))
+  },
+  error = function(e) {
+    logger::log_debug(paste("Could not fit the RE model for meta-analysis", meta, ": ", e))
+    return(list(est = NA, t_value = NA))
+  })
+
+  return(result)
+}
+
 #' Calculate UWLS
 #'
 #' @note Here, the statistics upon which the UWLS is calculated are more variable, thus flexibility is provided when defining the input through the 'effect' and 'se' arguments. To see how this can be leveraged, refer, for example, to the 'uwls3' function, or the 'get_chris_meta_flavours' function.
@@ -119,40 +157,25 @@ fishers_z <- function(df) {
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- sqrt(dof_ - 1)
 
-  re_data <- data.frame(y = fishers_z_, x = se_, study = df$study)
+  re_data <- data.frame(y = fishers_z_, x = se_, study = df$study, meta = df$meta)
+  re_list <- re(df = re_data, effect = fishers_z_, se = se_)
 
-  # Compute RE - for some cases, the model can't be fitted
-  # See: https://stackoverflow.com/questions/45121817/plm-package-in-r-empty-model-when-including-only-variables-without-variation-o
-  result <- tryCatch({
-    re_ <- plm::plm(y ~ x, data = re_data, index = "study", model = "random")
+  re_est <- re_list$est
+  re_t_value <- re_list$t_value
 
-    # Get the RE t-value
-    re_summary <- summary(re_)
-    re_est <- re_summary$coefficients[1, "Estimate"]
-    re_se <- re_summary$coefficients[1, "Std. Error"]
-    re_t_value <- re_est / re_se
+  # RE_z estimate
+  re_z <- exp(
+    (2 * re_est - 1) / (2 * re_est + 1)
+  )
 
-    # RE_z estimate
-    re_z <- exp(
-      (2 * re_est - 1) / (2 * re_est + 1)
-    )
+  # Q: Alternative?
+  # 1. Weights of each SE
+  # w_ <- 1 / se_^2
+  # 2. Weighted mean of z-scores
+  # z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE)
+  # re_z <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
 
-    # Q: Alternative?
-    # 1. Weights of each SE
-    # w_ <- 1 / se_^2
-    # 2. Weighted mean of z-scores
-    # z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE)
-    # re_z <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
-
-    return(list(est = re_z, t_value = re_t_value))
-
-  },
-  error = function(e) {
-    logger::log_warn(paste("Could not fit the RE model when calculating Fisher's z for meta-analysis", meta))
-    return(list(est = NA, t_value = NA))
-  })
-
-  return(result)
+  return(list(est = re_z, t_value = re_t_value))
 }
 
 #' Calculate various summary statistics associated with the PCC data frame
