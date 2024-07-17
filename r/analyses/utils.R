@@ -1,8 +1,9 @@
 box::use(
-  libs / file_utils[validate_folder_existence, write_txt_file],
   base / metadata[METADATA],
   base / paths[PATHS],
   base / const[CONST],
+  libs / file_utils[validate_folder_existence, write_txt_file],
+  libs / validation / index[is_char_vector_or_empty]
 )
 
 
@@ -19,6 +20,25 @@ get_analysis_metadata <- function(analysis_name) {
   }
   return(METADATA$analyses[[analysis_name]])
 }
+
+#' Log various information about the data frame
+#'
+#' @param df [data.frame] The data frame to log information about
+#' @param colnames_to_analyse [character] The column names to analyse
+#' @export
+log_dataframe_info <- function(df, colnames_to_analyse = NULL) {
+
+  logger::log_info(paste("The data frame has", nrow(df), "rows and", ncol(df), "columns"))
+
+  if (!is.null(colnames_to_analyse)) {
+    is_char_vector_or_empty(colnames_to_analyse, throw_error = TRUE)
+    for (colname in colnames_to_analyse) {
+      n_ <- length(unique(df[[colname]]))
+      logger::log_info(paste0("'", colname, "' column: ", n_, " unique observations"))
+    }
+  }
+}
+
 
 
 #' Save the analysis results to the output folder

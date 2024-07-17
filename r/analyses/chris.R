@@ -3,9 +3,8 @@ box::use(
   stats[model.frame], # For dplyr
   pcc_calc = calc / pcc,
   base / metadata[METADATA],
-  libs / df_utils[get_number_of_studies],
   analyses / steps / get_pcc[get_pcc_data],
-  analyses / utils[get_analysis_metadata, save_analysis_results],
+  analyses / utils[get_analysis_metadata, save_analysis_results, log_dataframe_info],
   libs / clean_data / index[clean_data],
   libs / read_data / index[read_analysis_data],
 )
@@ -62,11 +61,10 @@ chris_analyse <- function(...) {
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
+  log_dataframe_info(df = pcc_df, colnames_to_analyse = c("study", "meta"))
 
   pcc_list <- lapply(split(pcc_df, pcc_df$meta), get_chris_metaflavours)
   pcc_df_out <- do.call(rbind, pcc_list)
-  pcc_studies <- get_number_of_studies(df = pcc_df)
-  logger::log_info(paste("Number of PCC studies:", pcc_studies))
 
   # Add a row for the full data frame
   pcc_df$meta <- "All meta-analyses" # The pcc_df object can be reused here

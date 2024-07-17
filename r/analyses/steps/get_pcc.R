@@ -1,7 +1,6 @@
 box::use(
   pcc_calc = calc / pcc,
   libs / utils[is_empty],
-  libs / df_utils[get_number_of_studies],
   analyses / utils[get_analysis_metadata]
 )
 
@@ -9,8 +8,6 @@ box::use(
 #' @export
 get_pcc_data <- function(df, analysis_name = "", ...) {
   analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
-
-  # n_studies_full <- get_number_of_studies(df = df)
 
   # Subset to PCC studies only
   pcc_identifier <- analysis_metadata$unique$pcc_identifier
@@ -26,7 +23,6 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   }
   logger::log_info("Subsetting to PCC studies only")
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
-  # n_of_studies_pcc <- get_number_of_studies(df = df)
 
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(
