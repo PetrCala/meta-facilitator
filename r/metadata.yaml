@@ -51,9 +51,10 @@ locale:
   tz: "UTC" # Timezone
 
 options:
+  clean_names: false # If TRUE, remove spaces and special characters from the study/meta column names
   log_to_console_only: false # If false, the log will be saved to a file
   log_file_name: "logger.log" # The name of the log file
-  log_level: "DEBUG" # The level of logging
+  log_level: "INFO" # The level of logging
 
 cache_handling:
   # I recommend you use caches only after you are certain the functions run correctly

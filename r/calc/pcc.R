@@ -118,30 +118,41 @@ fishers_z <- function(df) {
 
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- sqrt(dof_ - 1)
-  # logger::log_debug("Meta:", meta, "Fisher's z calculation:")
 
   re_data <- data.frame(y = fishers_z_, x = se_, study = df$study)
-  re_ <- plm::plm(y ~ x, data = re_data, index = "study", model = "random")
 
-  # Get the RE t-value
-  re_summary <- summary(re_)
-  re_est <- re_summary$coefficients[1, "Estimate"]
-  re_se <- re_summary$coefficients[1, "Std. Error"]
-  re_t_value <- re_est / re_se
+  # Compute RE - for some cases, the model can't be fitted
+  # See: https://stackoverflow.com/questions/45121817/plm-package-in-r-empty-model-when-including-only-variables-without-variation-o
+  result <- tryCatch({
+    re_ <- plm::plm(y ~ x, data = re_data, index = "study", model = "random")
 
-  # RE_z estimate
-  re_z <- exp(
-    (2 * re_est - 1) / (2 * re_est + 1)
-  )
+    # Get the RE t-value
+    re_summary <- summary(re_)
+    re_est <- re_summary$coefficients[1, "Estimate"]
+    re_se <- re_summary$coefficients[1, "Std. Error"]
+    re_t_value <- re_est / re_se
 
-  # Q: Alternative?
-  # 1. Weights of each SE
-  # w_ <- 1 / se_^2
-  # 2. Weighted mean of z-scores
-  # z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE)
-  # re_z <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
+    # RE_z estimate
+    re_z <- exp(
+      (2 * re_est - 1) / (2 * re_est + 1)
+    )
 
-  return(list(est = re_z, t_value = re_t_value))
+    # Q: Alternative?
+    # 1. Weights of each SE
+    # w_ <- 1 / se_^2
+    # 2. Weighted mean of z-scores
+    # z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE)
+    # re_z <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
+
+    return(list(est = re_z, t_value = re_t_value))
+
+  },
+  error = function(e) {
+    logger::log_warn(paste("Could not fit the RE model when calculating Fisher's z for meta-analysis", meta))
+    return(list(est = NA, t_value = NA))
+  })
+
+  return(result)
 }
 
 #' Calculate various summary statistics associated with the PCC data frame

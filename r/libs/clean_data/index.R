@@ -1,4 +1,5 @@
 box::use(
+  base / metadata[METADATA],
   analyses / utils[get_analysis_metadata],
   libs / utils[is_empty],
   libs / clean_data / fill[fill_missing_values],
@@ -73,6 +74,14 @@ drop_rows_with_missing_values <- function(df, cols = c("effect")) {
   )
 }
 
+#' Convert string columns to valid R names (remove special characters)
+clean_names <- function(df) {
+  logger::log_debug("Cleaning names...")
+  df$study <- make.names(df$study)
+  df$meta <- make.names(df$meta)
+  return(df)
+}
+
 
 #' Clean a data frame for analysis
 #' @export
@@ -105,6 +114,11 @@ clean_data <- function(df, analysis_name) {
 
   # Fill missing studies
   df <- fill_missing_values(df = df, target_col = "study", columns = c("author1", "year"), missing_value_prefix = "Missing study")
+
+  # Clean names of studies and files
+  if (METADATA$options$clean_names) {
+    df <- clean_names(df = df)
+  }
 
   logger::log_info(paste("Rows after data cleaning:", nrow(df)))
 

@@ -16,11 +16,11 @@ box::use(
 #' @param df [data.frame] The single meta-analysis data frame
 #' @return [vector] A vector of the flavour results
 get_chris_metaflavours <- function(df) {
-  logger::log_debug("Calculating PCC statistics...")
-
   # Get the name of the meta-analysis
   meta <- unique(df$meta)
   stopifnot(length(meta) == 1) # Extra check
+
+  logger::log_debug(paste("Calculating PCC statistics for", meta))
 
   # Get the UWLS standard errors - silence NaNs
   suppressWarnings(uwls1_se <- sqrt(df[["pcc_var_1"]]))
