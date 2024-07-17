@@ -28,6 +28,7 @@ get_script_directory <- function() {
 
 DIR_R <- getwd() # Assume this points to meta-facilitator/R folder
 PROJECT_ROOT <- dirname(DIR_R)
+DIR_BASE <- file.path(DIR_R, "base")
 
 #' A list of paths used in the project
 #'
@@ -38,9 +39,10 @@ PROJECT_ROOT <- dirname(DIR_R)
 #' }
 #' @export
 PATHS <- list(
-  # Root files
+  # Directories
   PROJECT_ROOT = dirname(DIR_R),
   DIR_R = DIR_R,
+  DIR_BASE = DIR_BASE,
   DIR_DATA = file.path(PROJECT_ROOT, "data"),
   DIR_OUTPUT = file.path(PROJECT_ROOT, "output"),
   DIR_CACHE = file.path(PROJECT_ROOT, "_cache"),
@@ -48,10 +50,10 @@ PATHS <- list(
   # R files
   R_RUN = file.path(DIR_R, "run"),
   R_METADATA_YAML = file.path(DIR_R, "metadata.yaml"),
-  R_METADATA = file.path(DIR_R, "METADATA.R"),
-  R_CONST = file.path(DIR_R, "CONST.R"),
-  R_PATHS = file.path(DIR_R, "PATHS.R"),
   R_ACTIONS = file.path(DIR_R, "actions.R"),
+  R_METADATA = file.path(DIR_BASE, "metadata.R"),
+  R_CONST = file.path(DIR_BASE, "const.R"),
+  R_PATHS = file.path(DIR_BASE, "paths.R"),
 
   # Test files
   DIR_TESTS = file.path(PROJECT_ROOT, "tests", "testthat")
