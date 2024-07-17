@@ -7,7 +7,6 @@ box::use(
   analyses / steps / get_pcc[get_pcc_data],
   analyses / utils[get_analysis_metadata, save_analysis_results],
   libs / clean_data / index[clean_data],
-  libs / clean_data / fill[modify_missing_values],
   libs / read_data / index[read_analysis_data],
 )
 
@@ -57,7 +56,6 @@ chris_analyse <- function(...) {
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
   df <- clean_data(df = df, analysis_name = analysis_name)
-  df <- modify_missing_values(df = df, target_col = "study", columns = c("author1", "year"), missing_value_prefix = "Missing study")
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)

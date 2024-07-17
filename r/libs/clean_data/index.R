@@ -1,6 +1,7 @@
 box::use(
   analyses / utils[get_analysis_metadata],
   libs / utils[is_empty],
+  libs / clean_data / fill[fill_missing_values],
   libs / df_utils[get_number_of_studies, assign_na_col],
 )
 
@@ -101,6 +102,9 @@ clean_data <- function(df, analysis_name) {
 
   # Ensure numeric values
   df <- convert_columns_to_numeric(df, cols = c("effect", "se", "sample_size", "df"))
+
+  # Fill missing studies
+  df <- fill_missing_values(df = df, target_col = "study", columns = c("author1", "year"), missing_value_prefix = "Missing study")
 
   logger::log_info(paste("Rows after data cleaning:", nrow(df)))
 
