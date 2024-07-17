@@ -8,12 +8,16 @@
 #'  or
 #' - Specify the desired action in metadata.json and run the script inside an R session.
 
+# Environment preparation
+rm(list = ls())
+is_testing <- Sys.getenv("TESTTHAT") == "true"
+options(scipen = 999) # No scientific notation
+Sys.setenv(PATH = paste("/bin", Sys.getenv("PATH"), sep = ":")) # For binary files
+
+
 # Static
 run_dir <- "meta-facilitator/R"
 new_dir <- NULL
-
-# Environment variables
-is_testing <- Sys.getenv("TESTTHAT") == "true"
 
 # Ensure the correct working directory regardless of invocation type
 if (is_testing) {
