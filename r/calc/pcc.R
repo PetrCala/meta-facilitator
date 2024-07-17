@@ -36,6 +36,7 @@ pcc_variance <- function(df, offset) {
   pcc_ <- df$effect
   numerator <- (1 - pcc_^2)^2
   denominator <- dof_or_sample_size(df, offset = offset)
+  browser()
   variance <- numerator / denominator
   return(variance)
 }

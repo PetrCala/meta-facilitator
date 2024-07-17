@@ -119,3 +119,12 @@ validate_columns <- function(df, columns) {
     rlang::abort(paste("Invalid column names:", paste(colnames(df), collapse = ", ")), "Expected to contain:", paste(columns, collapse = ", "))
   }
 }
+
+#' Convert a number to a percentage
+#'
+#' @param x [numeric] The number to convert
+#' @return [character] The number as a percentage
+#' @export
+to_perc <- function(x) {
+  return(paste0(round(x * 100, 2), "%"))
+}

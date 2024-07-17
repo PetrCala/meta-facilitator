@@ -1,6 +1,6 @@
 box::use(
   pcc_calc = calc / pcc,
-  libs / utils[is_empty],
+  libs / utils[is_empty, to_perc],
   analyses / utils[get_analysis_metadata]
 )
 
@@ -21,8 +21,12 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
       class = "unknown_pcc_identifier"
     )
   }
-  logger::log_info("Subsetting to PCC studies only")
+  nrow_full <- nrow(df)
+  logger::log_info("Loading the full data frame with", nrow_full, "rows...")
+  logger::log_info("Subsetting to PCC studies only...")
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
+  nrow_pcc <- nrow(df)
+  logger::log_info(paste0("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)"))
 
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(
