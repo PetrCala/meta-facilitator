@@ -119,23 +119,25 @@ fishers_z <- function(df) {
   re_data <- data.frame(y = fishers_z_, x = se_, study = df$study)
   re_ <- plm::plm(y ~ x, data = re_data, index = "study", model = "random")
 
-  # Run the Random effects
+  # Get the RE t-value
+  re_summary <- summary(re_)
+  re_est <- re_summary$coefficients[1, "Estimate"]
+  re_se <- re_summary$coefficients[1, "Std. Error"]
+  re_t_value <- re_est / re_se
+
+  # RE_z estimate
+  re_z <- exp(
+    (2 * re_est - 1) / (2 * re_est + 1)
+  )
+
+  # Q: Alternative?
   # 1. Weights of each SE
-  w_ <- 1 / se_^2 # W_i
-
+  # w_ <- 1 / se_^2
   # 2. Weighted mean of z-scores
-  z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE) # z_re
+  # z_re_ <- sum(w_ * fishers_z_, na.rm = TRUE) / sum(w_, na.rm = TRUE)
+  # re_z <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
 
-  # 3. Variance of the weighted mean
-  var_z_re_ <- 1 / sum(z_re_)
-
-  # 4. t-values
-  t_values_ <- (fishers_z_ - z_re_) / se_
-
-  # 5. r_re
-  r_re_ <- exp(2 * z_re_ - 1) / exp(2 * z_re_ + 1)
-
-  return(list(est = r_re_, t_value = NA))
+  return(list(est = re_z, t_value = re_t_value))
 }
 
 #' Calculate various summary statistics associated with the PCC data frame
