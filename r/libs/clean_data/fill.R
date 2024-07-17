@@ -46,6 +46,7 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
 
   # Evaluate the change expression separately
   df <- eval(parse(text = paste0("df %>% ", change_expr)), envir = environment())
+  df$change[is.na(df$change)] <- FALSE # NA -> FALSE
 
   # Continue with the rest of the pipeline
   df <- df %>%
@@ -54,6 +55,11 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
     # Modify the column if it is NA
     mutate(!!sym(target_col) := ifelse(is.na(!!sym(target_col)), paste(missing_value_prefix, change_count), !!sym(target_col))) %>%
     select(-change, -change_count)
+
+  invalid_value <- paste(missing_value_prefix, "NA")
+  if (invalid_value %in% df[[target_col]]) {
+    rlang::abort("The target column contains invalid values. Check the fill function.")
+  }
 
   return(df)
 }

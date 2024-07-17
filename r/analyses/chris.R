@@ -31,8 +31,8 @@ get_chris_metaflavours <- function(df) {
     uwls2 = pcc_calc$uwls(df, se = sqrt(df[["pcc_var_2"]])),
     uwls3 = pcc_calc$uwls3(df),
     hsma = pcc_calc$hsma(df),
-    # fishers_z = pcc_calc$fishers_z(df)
-    fishers_z = list(est = NA, t_value = NA) # TODO
+    fishers_z = pcc_calc$fishers_z(df)
+    # fishers_z = list(est = NA, t_value = NA) # TODO
   )
 
   for (method in names(methods)) {

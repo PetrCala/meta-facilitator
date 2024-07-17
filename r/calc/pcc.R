@@ -103,7 +103,7 @@ hsma <- function(df) {
 #' @note For the calculation, all studies should be present in the dataset.
 #' @export
 fishers_z <- function(df) {
-  study <- unique(df$study)
+  meta <- unique(df$meta)
   df_ <- df_or_sample_size(df)
   fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   se_ <- 1 / sqrt(df_ - 1) # Q: correct approach here?
@@ -111,13 +111,13 @@ fishers_z <- function(df) {
   # The previous calculation means SE will be NA sometimes
   se_na_count <- sum(is.na(se_))
   if (se_na_count > 0) {
-    logger::log_debug(paste("Identified", se_na_count, "missing SE values when calculating Fisher's z for study", study))
+    logger::log_debug(paste("Identified", se_na_count, "missing SE values when calculating Fisher's z for meta-analysis", meta))
 
     # Drop rows with missing SE values
     df <- df[!is.na(se_), ]
   }
-  re_data <- data.frame(y = fishers_z_, x = se_)
-  re_ <- plm::plm(y ~ x, data = re_data, model = "random")
+  re_data <- data.frame(y = fishers_z_, x = se_, study = df$study)
+  re_ <- plm::plm(y ~ x, data = re_data, index = "study", model = "random")
 
   # Run the Random effects
   # 1. Weights of each SE
