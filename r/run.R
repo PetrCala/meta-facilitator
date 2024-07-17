@@ -63,6 +63,7 @@ options(box.path = getwd())
 # Relative paths are sourced only after the WD is set correctly
 box::use(
   base / metadata[METADATA],
+  # base / config[load_options],
   actions / index[ACTIONS],
   actions / utils[validate_action, get_invocation_args],
   libs / logs / index[setup_logging]
@@ -70,6 +71,7 @@ box::use(
 
 # Setup logging first
 setup_logging(log_level = METADATA$options$log_level)
+# load_options()
 
 args <- get_invocation_args()
 

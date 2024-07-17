@@ -4,7 +4,13 @@ load_options <- function() {
     optparse::make_option(c("-i", "--input"), type = "character", default = "input_data.csv", help = "Input file path")
   )
   # Parse options
-  opt <- optparse::parse_args(optparse::OptionParser(option_list = option_list))
+  parser <- optparse::OptionParser(option_list = option_list)
+  opt <- optparse::parse_args(parser)
+  # TODO
+  # parser <- optparse::OptionParser(formatter = optparse::TitledHelpFormatter)
+  # parser <- optparse::add_option(parser, "--generator", help = "Generator option")
+  # browser()
+  # parser <- optparse::add_option(c("-i", "--input"), type = "character", default = "input_data.csv", help = "Input file path")
   return(opt)
 }
 # load_config <- function(yaml_file) {
