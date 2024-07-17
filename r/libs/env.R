@@ -1,5 +1,5 @@
 # Source as few modules as possible to avoid initial setup errors
-source("base/CONST.R") # can not use 'box' here, as it is not loaded yet
+source("base/PACKAGES.R") # can not use 'box' here, as it is not loaded yet
 
 #' Set the CRAN mirror
 set_mirror <- function(mirror = NULL) {
@@ -49,7 +49,7 @@ install_and_check <- function(pkg, version, verbose = TRUE) {
   }
 
   # Load the package - this is disabled, as no packages need to be sourced
-  # if (!pkg %in% CONST$NON_ATTACHED_PACKAGES) {
+  # if (!pkg %in% PACKAGES$NON_ATTACHED) {
   #     suppressPackageStartupMessages(library(pkg, character.only = TRUE))
   # }
 
@@ -65,7 +65,7 @@ load_initial_packages <- function(verbose = TRUE) {
     cat("Loading initial packages...\n")
   }
   install_initial_package <- function(x) suppressPackageStartupMessages(install_and_check(x, NA, verbose))
-  invisible(lapply(CONST$INITIAL_PACKAGES, install_initial_package))
+  invisible(lapply(PACKAGES$INITIAL, install_initial_package))
 }
 
 #' Load and install a list of R packages
@@ -116,7 +116,7 @@ setup_env <- function() {
 
   tryCatch(
     {
-      load_packages(CONST$PACKAGES, verbose = TRUE) # Defined in static
+      load_packages(PACKAGES$CORE, verbose = TRUE) # Defined in static
     },
     error = function(e) {
       message("Error loading the packages:")
