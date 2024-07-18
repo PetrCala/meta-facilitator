@@ -1,6 +1,6 @@
 box::use(
   stats[model.frame],
-  libs / utils[validate_columns],
+  libs / utils[validate_columns, validate],
 )
 
 #' Extract the DoF vector from a data frame. Where the DoF's are missing, use sample size minus 7.
@@ -10,7 +10,6 @@ box::use(
 #' @return [vector] A vector of either DoF's, or adjusted sample sizes.
 dof_or_sample_size <- function(df, offset = NULL) {
   validate_columns(df, c("dof", "sample_size"))
-  offset <- ifelse(is.null(offset), 0, offset)
 
   dof_ <- data.table::copy(df$dof) # Get DoF
   missing_dof <- is.na(dof_) # boolean vector
@@ -18,8 +17,11 @@ dof_or_sample_size <- function(df, offset = NULL) {
   # Replace DF with 'sample size - 7' when missing
   dof_[missing_dof] <- df$sample_size[missing_dof] - 7
 
-  # Modify by offset when present (default 0)
-  dof_[!missing_dof] <- df$sample_size - offset
+  # Modify by the offset
+  if (!is.null(offset)) {
+    validate(is.numeric(offset))
+    dof_ <- dof_ - offset
+  }
   return(dof_)
 }
 
