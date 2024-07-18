@@ -18,6 +18,7 @@ Sys.setenv(PATH = paste("/bin", Sys.getenv("PATH"), sep = ":")) # For binary fil
 # Static
 run_dir <- "meta-facilitator/R"
 new_dir <- NULL
+does_path_match <- function(path) grepl(paste0(run_dir, "$"), getwd())
 
 # Ensure the correct working directory regardless of invocation type
 if (is_testing) {
@@ -29,8 +30,12 @@ if (is_testing) {
   new_dir <- dirname(session$file)
 } else if (interactive()) {
   logger::log_debug("Running in interactive mode") # Assume RStudio
-  current_document_path <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
-  new_dir <- dirname(current_document_path)
+  current_file <- suppressWarnings(rstudioapi::getActiveDocumentContext()$path)
+  if (!does_path_match(dirname(current_file))) {
+    # Handle cases when the current file is not the one open (such as in VSCodee) - get currently executed scripts' location
+    current_file <- normalizePath(sys.frame(1)$ofile)
+  }
+  new_dir <- dirname(current_file)
 } else {
   logger::log_debug("Running in non-interactive mode")
   args <- commandArgs(trailingOnly = FALSE)

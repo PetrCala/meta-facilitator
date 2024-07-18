@@ -37,6 +37,7 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
     df = df,
     offset = 2
   )
+  # browser()
 
   # Replace missing DF with 0
   # Do this after calculating the variance (the calculation needs NAs for identification)
