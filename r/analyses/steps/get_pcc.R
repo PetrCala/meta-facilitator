@@ -1,7 +1,8 @@
 box::use(
   pcc_calc = calc / pcc,
   libs / utils[is_empty, to_perc],
-  analyses / utils[get_analysis_metadata]
+  analyses / utils[get_analysis_metadata],
+  libs / clean_data / fill[fill_dof_using_pcc],
 )
 
 #' Run the PCC analysis step. Used in the Chris analysis.
@@ -27,6 +28,9 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
   nrow_pcc <- nrow(df)
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)")
+
+  # Fill missing degrees of freedom
+  df <- fill_dof_using_pcc(df=df)
 
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(

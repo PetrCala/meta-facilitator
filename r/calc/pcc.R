@@ -90,6 +90,9 @@ re <- function(df, effect = NULL, se = NULL) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 uwls <- function(df, effect = NULL, se = NULL) {
+  meta <- unique(df$meta)
+  validate(length(meta) == 1)
+
   if (is.null(effect)) {
     effect <- df$effect
   }
@@ -98,11 +101,20 @@ uwls <- function(df, effect = NULL, se = NULL) {
   }
   df$t <- effect / se
   df$precision <- 1 / se
-  uwls <- stats::lm(t ~ precision - 1, data = df)
-  summary_uwls <- summary(uwls)
-  est <- summary_uwls$coefficients[1, "Estimate"]
-  t_value <- summary_uwls$coefficients[1, "t value"]
-  return(list(est = est, t_value = t_value))
+
+  result <- tryCatch({
+    uwls <- stats::lm(t ~ precision - 1, data = df)
+    summary_uwls <- summary(uwls)
+    est <- summary_uwls$coefficients[1, "Estimate"]
+    t_value <- summary_uwls$coefficients[1, "t value"]
+    return(list(est = est, t_value = t_value))
+  },
+  error = function(e) {
+    logger::log_debug(paste("Could not fit the UWLS model for meta-analysis", meta, ": ", e))
+    return(list(est = NA, t_value = NA))
+  })
+
+  return(result)
 }
 
 
@@ -160,6 +172,12 @@ fishers_z <- function(df) {
   se_ <- sqrt(dof_ - 1)
 
   re_data <- data.frame(y = fishers_z_, x = se_, study = df$study, meta = df$meta)
+
+  if (nrow(re_data) == 0) {
+    logger::log_debug(paste("No data to calculate Fisher's z for meta-analysis", meta))
+    return(list(est = NA, t_value = NA))
+  }
+
   re_list <- re(df = re_data, effect = fishers_z_, se = se_)
 
   re_est <- re_list$est
@@ -184,7 +202,7 @@ fishers_z <- function(df) {
 #' @export
 pcc_sum_stats <- function(df, log_results = TRUE) {
   k_ <- nrow(df)
-  quantiles = stats::quantile(df$sample_size, probs = c(0.25, 0.75))
+  quantiles = stats::quantile(df$sample_size, probs = c(0.25, 0.75), na.rm = TRUE)
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {

@@ -64,7 +64,7 @@ chris_analyse <- function(...) {
     df = df,
     analysis_name = analysis_name,
     clean_names = METADATA$options$clean_names,
-    fill_dof = TRUE
+    fill_dof = FALSE # Do this only after subsetting
   )
 
   # Run the PCC analysis - use pcc studies only
