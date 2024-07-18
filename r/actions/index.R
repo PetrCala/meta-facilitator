@@ -47,6 +47,7 @@ run_analysis <- function(analysis_name, ...) {
 }
 
 
+#' @export
 run_tests <- function(...) {
   # Silence the package startup messages, and warnings from 'box'
   Sys.setenv(TESTTHAT = "true")

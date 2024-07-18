@@ -69,7 +69,7 @@ options(box.path = getwd())
 box::use(
   base / metadata[METADATA],
   # base / config[load_options],
-  actions / index[ACTIONS],
+  actions / index[ACTIONS, run_tests],
   actions / utils[validate_action, get_invocation_args],
   libs / logs / index[setup_logging]
 )
