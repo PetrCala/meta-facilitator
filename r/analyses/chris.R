@@ -22,7 +22,6 @@ get_chris_metaflavours <- function(df) {
   logger::log_debug(paste("Calculating PCC statistics for", meta))
 
   # Get the standard errors - silence NaNs
-  browser()
   suppressWarnings(se1 <- sqrt(df[["pcc_var_1"]]))
   suppressWarnings(se2 <- sqrt(df[["pcc_var_2"]]))
 
