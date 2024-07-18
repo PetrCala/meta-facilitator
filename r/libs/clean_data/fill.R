@@ -39,7 +39,7 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
   change_expr <- paste0(
     "(", columns, " != lag(", columns, ", default = first(", columns, ")))"
   )
-  change_expr <- paste(change_expr, collapse = " | ")
+  change_expr <- paste(change_expr, collapse = " & ")
 
   # Construct the mutate expression as a string
   change_expr <- paste0("mutate(change = ", change_expr, ")")
@@ -60,6 +60,7 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
   if (invalid_value %in% df[[target_col]]) {
     rlang::abort("The target column contains invalid values. Check the fill function.")
   }
+  browser()
 
   return(df)
 }
