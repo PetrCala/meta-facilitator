@@ -23,7 +23,6 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
     )
   }
   nrow_full <- nrow(df)
-  logger::log_info("Full data frame row count: ", nrow_full)
   logger::log_info("Subsetting to PCC studies only...")
   df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
   nrow_pcc <- nrow(df)
