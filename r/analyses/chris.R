@@ -7,6 +7,7 @@ box::use(
   analyses / utils[get_analysis_metadata, save_analysis_results, log_dataframe_info],
   libs / clean_data / index[clean_data],
   libs / read_data / index[read_analysis_data],
+  libs / cache/ index[run_cached_function],
 )
 
 #' Calculate the flavours (statistics) of a single analysis data and return these as a vector
@@ -57,7 +58,14 @@ chris_analyse <- function(...) {
 
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
-  df <- clean_data(df = df, analysis_name = analysis_name)
+  # df <- run_cached_function(
+  #   f = clean_data,
+  df <- clean_data(
+    df = df,
+    analysis_name = analysis_name,
+    clean_names = METADATA$options$clean_names,
+    fill_dof = TRUE
+  )
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)

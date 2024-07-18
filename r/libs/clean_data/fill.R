@@ -3,6 +3,7 @@ box::use(
   dplyr[`%>%`, across, all_of, mutate, select, lag, first, row_number],
   stats[model.frame], # For dplyr
   libs / validation / index[is_char_vector_or_empty],
+  libs / utils[validate],
 )
 
 
@@ -60,6 +61,36 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
   if (invalid_value %in% df[[target_col]]) {
     rlang::abort("The target column contains invalid values. Check the fill function.")
   }
+
+  return(df)
+}
+
+#' Fill missing degrees of freedom based on t-values and PCCs
+#'
+#' @note Only use this function for interpolating missing degrees of freedom of PCC-type effects. The formula does not work for other effect types.
+#' @param df [data.frame] The input data frame.
+#' @return [data.frame] The modified data frame with updated degrees of freedom.
+#' @export
+fill_dof_using_pcc <- function(df) {
+  # validate(all("effect", "se", "t_value") %in% colnames(df), "The input data frame must contain columns 'effect', 'se', and 't_value'.")
+  pcc <- df$effect
+  se <- df$se
+  t_values <- df$t_value
+  dof <- df$dof
+
+  calculated_t_values <- pcc / se # Might create inf
+
+  t_values[is.na(t_values)] <- calculated_t_values[is.na(t_values)]
+  t_values[is.infinite(t_values)] <- NA
+
+  fillable_rows <- is.na(dof) & !is.na(t_values) & !is.na(pcc)
+  if (sum(fillable_rows) == 0) {
+    return(df)
+  }
+  df[fillable_rows, "dof"] <- ((1 / pcc[fillable_rows]^2) - 1) / t_values[fillable_rows]^2
+
+  unfilled_rowcount <- sum(is.na(df$dof))
+  logger::log_info(paste("Filled", sum(fillable_rows), "missing degrees of freedom. Could not fill", unfilled_rowcount, "rows."))
 
   return(df)
 }

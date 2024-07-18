@@ -13,6 +13,7 @@ analyses:
       effect_type: "Effect type"
       effect: "Effect size"
       se: "Standard error"
+      t_value: "t-stat"
       sample_size: "Sample size"
       dof: null
       meta: "Filename"

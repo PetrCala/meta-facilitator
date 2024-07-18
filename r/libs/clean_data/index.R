@@ -2,7 +2,7 @@ box::use(
   base / metadata[METADATA],
   analyses / utils[get_analysis_metadata],
   libs / utils[is_empty],
-  libs / clean_data / fill[fill_missing_values],
+  libs / clean_data / fill[fill_missing_values, fill_dof_using_pcc],
   libs / df_utils[get_number_of_studies, assign_na_col],
 )
 
@@ -84,8 +84,18 @@ clean_names <- function(df) {
 
 
 #' Clean a data frame for analysis
+#' 
+#' @param df [data.frame] The data frame to clean
+#' @param analysis_name [character] The name of the analysis
+#' @param clean_names [logical] Whether to clean the names of the studies and files. Defaults to TRUE
+#' @param fill_dof [logical] Whether to fill missing degrees of freedom using the PCC method. Defaults to TRUE
 #' @export
-clean_data <- function(df, analysis_name) {
+clean_data <- function(
+  df,
+  analysis_name,
+  clean_names = TRUE,
+  fill_dof = TRUE
+) {
   logger::log_debug("Cleaning data...")
   source_cols <- get_analysis_cols_list(analysis_name)
 
@@ -115,9 +125,13 @@ clean_data <- function(df, analysis_name) {
   # Fill missing studies
   df <- fill_missing_values(df = df, target_col = "study", columns = c("author1", "year"), missing_value_prefix = "Missing study")
 
-  # Clean names of studies and files
-  if (METADATA$options$clean_names) {
-    df <- clean_names(df = df)
+
+  if (clean_names) {
+    df <- clean_names(df = df) # Clean names of studies and files
+  }
+
+  if (fill_dof) {
+    df <- fill_dof_using_pcc(df = df) # Interpolate missing degrees of freedom
   }
 
   logger::log_info(paste("Rows after data cleaning:", nrow(df)))
