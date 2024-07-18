@@ -1,17 +1,15 @@
+# Function to find all test files recursively
+find_test_files <- function(path = "tests/testthat") {
+  test_files <- list.files(path, pattern = "^test.*\\.[rR]$", recursive = TRUE, full.names = TRUE)
+  return(test_files)
+}
+
 #' Function to run test_dir on a directory and all its subdirectories
 #' @export
-run_tests_recursively <- function(path, reporter = NULL) {
-  # message("Testing in: ", path)
-  test_results <- testthat::test_dir(path, reporter = reporter)
-
-  # Get list of subdirectories
-  subdirs <- list.dirs(path, full.names = TRUE, recursive = FALSE)
-
-  # Exclude the top-level directory itself from the list of subdirectories
-  subdirs <- subdirs[subdirs != path]
-
-  # Recursively run tests on each subdirectory
-  for (subdir in subdirs) {
-    run_tests_recursively(subdir)
+run_tests_recursively <- function(path = "tests/testthat", reporter = NULL) {
+  test_files <- find_test_files(path)
+  if (length(test_files) == 0) {
+    stop("No test files found")
   }
+  lapply(test_files, testthat::test_file, reporter = reporter)
 }

@@ -1,7 +1,9 @@
 box::use(
   base / paths[PATHS],
+  base / metadata[METADATA],
   analyses / index[ANALYSES],
-  libs / test_utils[run_tests_recursively]
+  libs / test_utils[run_tests_recursively],
+  reporters = testing / reporters,
 )
 
 #' This is a placeholder function to demonstrate the usage of actions, and will be removed fruther on.
@@ -50,8 +52,14 @@ run_tests <- function(...) {
   Sys.setenv(TESTTHAT = "true")
   suppressWarnings(suppressPackageStartupMessages(library(testthat)))
   test_dir_path <- PATHS$DIR_TESTS
-  silent_reporter <- testthat::ProgressReporter$new(show_praise = FALSE)
-  run_tests_recursively(test_dir_path, reporter = silent_reporter)
+
+  reporter <- NULL
+  if (METADATA$tests$silent_reporter) {
+    reporter <- testthat::ProgressReporter$new(show_praise = FALSE)
+  }
+  # reporter <- reporters$dot_reporter$new() # use custom
+
+  run_tests_recursively(test_dir_path, reporter = reporter)
 }
 
 #' A list of executable actions for the run.R
