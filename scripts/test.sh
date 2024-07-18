@@ -20,7 +20,6 @@ cd $R_FOLDER_PATH
 export TESTTHAT=true
 
 Rscript -e "
-suppressPackageStartupMessages(library(testthat)); 
 source('$RUN_PATH');
 " test
 

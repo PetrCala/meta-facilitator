@@ -47,10 +47,11 @@ run_analysis <- function(analysis_name, ...) {
 
 run_tests <- function(...) {
   # Silence the package startup messages, and warnings from 'box'
+  Sys.setenv(TESTTHAT = "true")
   suppressWarnings(suppressPackageStartupMessages(library(testthat)))
   test_dir_path <- PATHS$DIR_TESTS
-  Sys.setenv(TESTTHAT = "true")
-  run_tests_recursively(test_dir_path)
+  silent_reporter <- testthat::ProgressReporter$new(show_praise = FALSE)
+  run_tests_recursively(test_dir_path, reporter = silent_reporter)
 }
 
 #' A list of executable actions for the run.R

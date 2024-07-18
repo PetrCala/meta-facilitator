@@ -1,8 +1,8 @@
 #' Function to run test_dir on a directory and all its subdirectories
 #' @export
-run_tests_recursively <- function(path) {
+run_tests_recursively <- function(path, reporter = NULL) {
   # message("Testing in: ", path)
-  test_results <- testthat::test_dir(path)
+  test_results <- testthat::test_dir(path, reporter = reporter)
 
   # Get list of subdirectories
   subdirs <- list.dirs(path, full.names = TRUE, recursive = FALSE)
