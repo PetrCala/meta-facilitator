@@ -76,9 +76,8 @@ re <- function(df, effect = NULL, se = NULL) {
       re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "REML")
     ) # Use "DL" for DerSimonian-Laird estimator
 
-    re_summary <- summary(re_)
-    re_est <- re_summary$beta[1]
-    re_se <- re_summary$se[1]
+    re_est <- re_$beta[1]
+    re_se <- re_$se[1]
     re_t_value <- re_est / re_se
     return(list(est = re_est, t_value = re_t_value))
   },
