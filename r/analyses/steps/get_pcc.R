@@ -28,7 +28,7 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   pcc_rows[is.na(pcc_rows)] <- FALSE # NA -> FALSE, just R things
   df <- df[pcc_rows, ]
   nrow_pcc <- nrow(df)
-  logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)")
+  logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the clean dataset)")
 
   # Fill missing degrees of freedom
   df <- fill_dof_using_pcc(df = df)

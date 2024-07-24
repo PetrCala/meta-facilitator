@@ -58,6 +58,7 @@ chris_analyse <- function(...) {
 
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
+  logger::log_info("Rows in the raw data frame: ", nrow(df))
   # df <- run_cached_function(
   #   f = clean_data,
   df <- clean_data(
