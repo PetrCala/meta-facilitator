@@ -3,6 +3,7 @@ data/
 resources/
 _cache/
 cache/
+!R/libs/cache/
 metadata.json
 output/*
 
