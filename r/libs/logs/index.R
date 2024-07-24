@@ -60,7 +60,9 @@ setup_logging <- function(
 
     logger::log_appender(logger::appender_file(log_file, max_files = 1L), index = 2)
   }
-  flush_log_files(logger_name=logger_name)
+  if (METADATA$options$log_flush_on_run) {
+    flush_log_files(logger_name = logger_name)
+  }
 }
 
 #' Teardown the logger and remove the log file
