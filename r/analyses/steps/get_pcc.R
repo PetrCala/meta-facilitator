@@ -24,7 +24,9 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   }
   nrow_full <- nrow(df)
   logger::log_info("Subsetting to PCC studies only...")
-  df <- data.table::copy(df[df$effect_type == pcc_identifier, ])
+  pcc_rows <- df$effect_type == pcc_identifier
+  pcc_rows[is.na(pcc_rows)] <- FALSE # NA -> FALSE, just R things
+  df <- df[pcc_rows, ]
   nrow_pcc <- nrow(df)
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)")
 
@@ -57,8 +59,11 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   # Drop observations for which variance could not be calculated or is infinite
   n_rows_before <- nrow(df)
   drop_pcc_rows <- function(df_, condition_vector, reason) {
-    logger::log_warn(paste("Identified", sum(condition_vector), "rows for which PCC variance", reason, "Dropping these rows..."))
-    return(df_[!condition_vector, ])
+    if (any(condition_vector)) {
+      logger::log_warn(paste("Identified", sum(condition_vector), "rows for which PCC variance", reason, "Dropping these rows..."))
+      return(df_[!condition_vector, ])
+    }
+    return(df_)
   }
 
   na_rows <- is.na(df$pcc_var_1) | is.na(df$pcc_var_2)
