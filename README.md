@@ -1,4 +1,6 @@
 <div align="center">
+      <img src="assets/logo/artma_logo.png" 
+      width="64" height="64" alt="Artma Logo" style="border-radius: 15%!important;">
     <h1>
         Meta Facilitator
     </h1>
