@@ -22,6 +22,11 @@ dof_or_sample_size <- function(df, offset = NULL) {
     validate(is.numeric(offset))
     dof_ <- dof_ - offset
   }
+
+  # TEMP
+  dof_below_0 <- dof_ <= 0
+  dof_[dof_below_0] <- 1 # Q:
+
   return(dof_)
 }
 
@@ -37,6 +42,7 @@ pcc_variance <- function(df, offset) {
   validate_columns(df, c("dof", "sample_size", "effect"))
   pcc_ <- df$effect
   numerator <- (1 - pcc_^2)^2
+
   denominator <- dof_or_sample_size(df, offset = offset)
   variance <- numerator / denominator
   return(variance)
@@ -63,12 +69,16 @@ re <- function(df, effect = NULL, se = NULL) {
       logger::log_warn("Could not calculate RE for multiple meta-analyses")
       return(list(est = NA, t_value = NA))
     }
-    re_data_ <- data.frame(y = effect, x = se, study = df$study)
-    re_ <- plm::plm(y ~ x, data = re_data_, index = "study", model = "random") # Q: REML?
+
+    re_data_ <- data.frame(yi = effect, sei = se)
+
+    suppressWarnings(
+      re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "REML")
+    ) # Use "DL" for DerSimonian-Laird estimator
 
     re_summary <- summary(re_)
-    re_est <- re_summary$coefficients[1, "Estimate"]
-    re_se <- re_summary$coefficients[1, "Std. Error"]
+    re_est <- re_summary$beta[1]
+    re_se <- re_summary$se[1]
     re_t_value <- re_est / re_se
     return(list(est = re_est, t_value = re_t_value))
   },
@@ -168,17 +178,20 @@ fishers_z <- function(df) {
     dof_ <- dof_or_sample_size(df)
   }
 
-  fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
+  suppressWarnings(
+    fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
+  )
   se_ <- sqrt(dof_ - 1)
 
-  re_data <- data.frame(y = fishers_z_, x = se_, study = df$study, meta = df$meta)
+  re_data <- data.frame(effect = fishers_z_, se = se_, meta = df$meta)
+  re_data <- re_data[!is.na(fishers_z_), ] # Drop NA rows from log transformation
 
   if (nrow(re_data) == 0) {
     logger::log_debug(paste("No data to calculate Fisher's z for meta-analysis", meta))
     return(list(est = NA, t_value = NA))
   }
 
-  re_list <- re(df = re_data, effect = fishers_z_, se = se_)
+  re_list <- re(df = re_data)
 
   re_est <- re_list$est
   re_t_value <- re_list$t_value

@@ -52,6 +52,7 @@ locale:
   tz: "UTC" # Timezone
 
 options:
+  use_single_meta_analysis: false # Set to a single integer to use only one meta-analysis method
   clean_names: false # If TRUE, remove spaces and special characters from the study/meta column names
   log_to_console_only: false # If false, the log will be saved to a file
   log_file_name: "logger.log" # The name of the log file

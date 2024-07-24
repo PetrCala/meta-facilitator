@@ -59,6 +59,7 @@ chris_analyse <- function(...) {
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
   logger::log_info("Rows in the raw data frame: ", nrow(df))
+
   # df <- run_cached_function(
   #   f = clean_data,
   df <- clean_data(
@@ -67,6 +68,13 @@ chris_analyse <- function(...) {
     clean_names = METADATA$options$clean_names,
     fill_dof = FALSE # Do this only after subsetting
   )
+
+  meta_index <- METADATA$options$use_single_meta_analysis
+  if (is.numeric(meta_index)) {
+    meta_to_use <- unique(df$meta)[meta_index]
+    logger::log_info("Subsetting to data of only ", meta_to_use)
+    df <- df[df$meta == meta_to_use, ]
+  }
 
   # Run the PCC analysis - use pcc studies only
   pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
