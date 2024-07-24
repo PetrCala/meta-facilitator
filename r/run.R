@@ -76,7 +76,7 @@ box::use(
 
 # Setup logging first
 setup_logging(
-  log_to_console_only =  METADATA$options$log_to_console_only,
+  log_to_console_only = METADATA$options$log_to_console_only,
   logger_name = METADATA$options$log_file_name,
   log_level = METADATA$options$log_level
 )
