@@ -13,6 +13,7 @@ PACKAGES <- list(
     "logger" = NA,
     "magrittr" = NA, # The pipe module - part of dplyr
     "memoise" = "2.0.1",
+    "metafor" = NA,
     "optparse" = NA,
     "plm" = "2.6-4",
     "readr" = "2.1.5",
