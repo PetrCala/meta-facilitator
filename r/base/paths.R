@@ -46,6 +46,7 @@ PATHS <- list(
   DIR_DATA = file.path(PROJECT_ROOT, "data"),
   DIR_OUTPUT = file.path(PROJECT_ROOT, "output"),
   DIR_CACHE = file.path(PROJECT_ROOT, "_cache"),
+  DIR_LOGS = file.path(PROJECT_ROOT, "logs"),
 
   # R files
   R_RUN = file.path(DIR_R, "run"),
