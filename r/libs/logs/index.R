@@ -55,12 +55,13 @@ setup_logging <- function(
 
   logger::log_appender(logger::appender_console) # Console logger
 
+  # Set the file appender if logging to file is enabled
   if (!log_to_console_only && !is.null(logger_name)) {
     log_file <- get_logger_path(logger_name = logger_name)
-
     logger::log_appender(logger::appender_file(log_file, max_files = 1L), index = 2)
   }
-  if (METADATA$options$log_flush_on_run) {
+
+  if (METADATA$options$log_flush_on_setup) {
     flush_log_files(logger_name = logger_name)
   }
 }
