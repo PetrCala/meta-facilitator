@@ -84,7 +84,7 @@ clean_names <- function(df) {
 
 
 #' Clean a data frame for analysis
-#' 
+#'
 #' @param df [data.frame] The data frame to clean
 #' @param analysis_name [character] The name of the analysis
 #' @param clean_names [logical] Whether to clean the names of the studies and files. Defaults to TRUE

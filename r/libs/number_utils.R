@@ -32,4 +32,3 @@ generate_random_vector <- function(from, to, length.out, replace = TRUE) {
 
   sample(from:to, size = length.out, replace = replace)
 }
-

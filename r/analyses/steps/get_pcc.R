@@ -29,7 +29,7 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the full dataset)")
 
   # Fill missing degrees of freedom
-  df <- fill_dof_using_pcc(df=df)
+  df <- fill_dof_using_pcc(df = df)
 
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(
