@@ -58,7 +58,6 @@ chris_analyse <- function(...) {
 
   # Clean the data
   df <- read_analysis_data(analysis_name = analysis_name)
-  browser()
   # df <- run_cached_function(
   #   f = clean_data,
   df <- clean_data(
