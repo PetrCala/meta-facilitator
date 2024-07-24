@@ -71,7 +71,8 @@ box::use(
   # base / config[load_options],
   actions / index[ACTIONS, run_tests],
   actions / utils[validate_action, get_invocation_args],
-  libs / logs / index[setup_logging]
+  libs / logs / index[setup_logging],
+  libs / cache / index[run_cached_function],
 )
 
 # Setup logging first

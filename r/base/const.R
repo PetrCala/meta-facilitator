@@ -12,6 +12,7 @@ CONST <- list(
   ANALYSIS_RESULTS_FILE_NAME = "results.csv", # CSV file with analysis results
 
   # Map log input strings to log levels
+  LOG_PATTERN = "^(INFO|WARN|ERROR|DEBUG|FATAL)\\s+\\[[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}\\]",
   LOG_LEVEL_MAP = list(
     "DEBUG" = logger::DEBUG,
     "INFO"  = logger::INFO,

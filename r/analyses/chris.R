@@ -60,9 +60,8 @@ chris_analyse <- function(...) {
   df <- read_analysis_data(analysis_name = analysis_name)
   logger::log_info("Rows in the raw data frame: ", nrow(df))
 
-  # df <- run_cached_function(
-  #   f = clean_data,
-  df <- clean_data(
+  df <- run_cached_function(
+    f = clean_data,
     df = df,
     analysis_name = analysis_name,
     clean_names = METADATA$options$clean_names,
@@ -77,10 +76,17 @@ chris_analyse <- function(...) {
   }
 
   # Run the PCC analysis - use pcc studies only
-  pcc_df <- get_pcc_data(df = data.table::copy(df), analysis_name = analysis_name, ...)
+  pcc_df <- run_cached_function(
+    f = get_pcc_data,
+    df = data.table::copy(df),
+    analysis_name = analysis_name,
+    ...
+  )
   log_dataframe_info(df = pcc_df, colnames_to_analyse = c("study", "meta"))
 
-  pcc_list <- lapply(split(pcc_df, pcc_df$meta), get_chris_metaflavours)
+  get_flavours <- function() lapply(split(pcc_df, pcc_df$meta), get_chris_metaflavours)
+  # pcc_list <- run_cached_function(f=get_flavours) # Cached
+  pcc_list <- get_flavours() # Non-cached
   pcc_df_out <- do.call(rbind, pcc_list)
 
   # Add a row for the full data frame

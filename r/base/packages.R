@@ -19,6 +19,7 @@ PACKAGES <- list(
     "readr" = "2.1.5",
     "readxl" = "0.1.1",
     "rlang" = "1.1.3",
+    "stringr" = NA,
     "testthat" = "3.2.1",
     "tidyr" = NA,
     "yaml" = "2.3.8"

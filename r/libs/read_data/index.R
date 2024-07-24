@@ -98,9 +98,6 @@ read_analysis_data <- function(analysis_name) {
   sheet_name <- analysis_metadata$source_sheet
   df <- run_cached_function(
     f = readxl::read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
-    verbose_function = function(...) {
-      "Finished reading the data."
-    },
     df_path,
     sheet = sheet_name
   )
