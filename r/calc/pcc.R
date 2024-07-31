@@ -84,7 +84,7 @@ re <- function(df, effect = NULL, se = NULL) {
       re_se <- re_summary$coefficients[1, "Std. Error"]
     } else {
       suppressWarnings(
-        re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "REML") # Use "DL" for DerSimonian-Laird estimator
+        re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "DL") # Use "DL" for DerSimonian-Laird estimator
       )
       re_est <- re_$beta[1]
       re_se <- re_$se[1]
