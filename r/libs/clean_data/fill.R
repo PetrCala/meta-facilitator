@@ -4,6 +4,7 @@ box::use(
   stats[model.frame], # For dplyr
   libs / validation / index[is_char_vector_or_empty],
   libs / utils[validate],
+  dof_calc = calc / dof,
 )
 
 
@@ -87,7 +88,10 @@ fill_dof_using_pcc <- function(df) {
   if (sum(fillable_rows) == 0) {
     return(df)
   }
-  df[fillable_rows, "dof"] <- ((1 / pcc[fillable_rows]^2) - 1) / t_values[fillable_rows]^2
+  df[fillable_rows, "dof"] <- dof_calc$calculate_dof(
+    t_value = t_values[fillable_rows],
+    pcc = pcc[fillable_rows]
+  )
 
   unfilled_rowcount <- sum(is.na(df$dof))
   logger::log_info(paste("Filled", sum(fillable_rows), "missing degrees of freedom. Could not fill", unfilled_rowcount, "rows."))
