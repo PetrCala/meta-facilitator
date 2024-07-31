@@ -1,6 +1,7 @@
 box::use(
   stats[model.frame],
   libs / utils[validate_columns, validate],
+  base / metadata[METADATA],
 )
 
 #' Extract the DoF vector from a data frame. Where the DoF's are missing, use sample size minus 7.
@@ -70,14 +71,25 @@ re <- function(df, effect = NULL, se = NULL) {
       return(list(est = NA, t_value = NA))
     }
 
-    re_data_ <- data.frame(yi = effect, sei = se)
+    re_data_ <- data.frame(yi = effect, sei = se, study = df$study)
 
-    suppressWarnings(
-      re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "REML")
-    ) # Use "DL" for DerSimonian-Laird estimator
+    use_fast <- METADATA$methods$use_fast_re
 
-    re_est <- re_$beta[1]
-    re_se <- re_$se[1]
+    if (use_fast) {
+      suppressWarnings(
+        re_ <- plm::plm(yi ~ sei, data = re_data_, index = "study", model = "random")
+      )
+      re_summary <- summary(re_)
+      re_est <- re_summary$coefficients[1, "Estimate"]
+      re_se <- re_summary$coefficients[1, "Std. Error"]
+    } else {
+      suppressWarnings(
+        re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "REML") # Use "DL" for DerSimonian-Laird estimator
+      )
+      re_est <- re_$beta[1]
+      re_se <- re_$se[1]
+    }
+
     re_t_value <- re_est / re_se
     return(list(est = re_est, t_value = re_t_value))
   },
@@ -182,7 +194,7 @@ fishers_z <- function(df) {
   )
   se_ <- sqrt(dof_ - 1)
 
-  re_data <- data.frame(effect = fishers_z_, se = se_, meta = df$meta)
+  re_data <- data.frame(effect = fishers_z_, se = se_, meta = df$meta, study = df$study)
   re_data <- re_data[!is.na(fishers_z_), ] # Drop NA rows from log transformation
 
   if (nrow(re_data) == 0) {

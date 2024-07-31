@@ -3,6 +3,9 @@ run_args:
   - "analyse"
   - "chris"
 
+methods:
+  use_fast_re: true # Fast - plm, Slow - REML 
+
 analyses:
   chris:
     analysis_name: "chris"
@@ -44,6 +47,7 @@ analysed_df_cols:
   pss: "PSS"
   e_sig: "Excess significance"
   pcc_var: "Partial correlation corefficient variance"
+
 
 locale:
   csv_separators: ","
