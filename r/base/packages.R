@@ -22,7 +22,8 @@ PACKAGES <- list(
     "stringr" = NA,
     "testthat" = "3.2.1",
     "tidyr" = NA,
-    "yaml" = "2.3.8"
+    "yaml" = "2.3.8",
+    "writexl" = NA
   ),
   # A list of packages that are necessary for the environment preparation
   INITIAL = c(
