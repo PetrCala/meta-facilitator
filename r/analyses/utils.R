@@ -3,7 +3,8 @@ box::use(
   base / paths[PATHS],
   base / const[CONST],
   libs / file_utils[validate_folder_existence, write_txt_file],
-  libs / validation / index[is_char_vector_or_empty]
+  libs / validation / index[is_char_vector_or_empty],
+  libs / string / index[pluralize],
 )
 
 
@@ -33,8 +34,9 @@ log_dataframe_info <- function(df, colnames_to_analyse = NULL) {
   if (!is.null(colnames_to_analyse)) {
     is_char_vector_or_empty(colnames_to_analyse, throw_error = TRUE)
     for (colname in colnames_to_analyse) {
+      plural_colname <- pluralize(word = colname)
       n_ <- length(unique(df[[colname]]))
-      logger::log_info(paste0("'", colname, "' column: ", n_, " unique observations"))
+      logger::log_info(paste0("Unique ", plural_colname, ": ", n_))
     }
   }
 }
