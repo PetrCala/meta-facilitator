@@ -2,6 +2,15 @@
 
 This folder serves to validate the outcomes of several custom methods upon a set of controlled data - `base.xlsx`.
 
+## Table of contents
+
+- [Methods validation](#methods-validation)
+  - [Table of contents](#table-of-contents)
+  - [How to use](#how-to-use)
+  - [Modifying custom methods](#modifying-custom-methods)
+  - [Source data description](#source-data-description)
+  - [Notes](#notes)
+
 ## How to use
 
 1. In RStudio, change the working directory to the root of this folder.
