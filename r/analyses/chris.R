@@ -47,6 +47,10 @@ get_chris_metaflavours <- function(df) {
   sum_stats <- pcc_calc$pcc_sum_stats(df, log_results = FALSE)
 
   results <- c(results, sum_stats)
+
+  # Some elements might be numeric(0) here - replace with NA to allow for data frame conversion
+  results <- lapply(results, function(x) if (length(x) == 0) NA else x)
+
   return(as.data.frame(results))
 }
 
