@@ -23,7 +23,7 @@
 
 ### REML fails to converge
 
-- **Question**: The REML method when calculating Random-Effects sometimes fails to converge for seemingly valid data with the following errors message:
+- **Question**: The rma method when calculating Random-Effects with `method = "ML"` sometimes fails to converge for seemingly valid data with the following errors message:
 
   ```R
   Fisher scoring algorithm did not converge. See 'help(rma)' for possible remedies.

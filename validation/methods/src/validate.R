@@ -23,7 +23,7 @@ validate_method <- function(custom_results, expected_results) {
     message("Expected results:")
     message(paste("Estimate:", expected_results$est))
     message(paste("T-value:", expected_results$t_value))
-    message("\n")
+    message("") # Newline
   } else {
     message("Validation successful.\n")
   }

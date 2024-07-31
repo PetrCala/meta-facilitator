@@ -65,11 +65,15 @@ re <- function(df, effect = NULL, se = NULL, use_reml = TRUE) {
     re_data_ <- data.frame(yi = effect, sei = se, study = df$study)
 
     if (use_reml) {
-      re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "REML") # Use "DL" for DerSimonian-Laird estimator
+      suppressWarnings(
+        re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = "DL") # Use "ML" for the maximum likelihood estimator
+      )
       re_est <- re_$beta[1]
       re_se <- re_$se[1]
     } else {
-      re_ <- plm::plm(yi ~ sei, data = re_data_, index = "study", model = "random")
+      suppressWarnings(
+        re_ <- plm::plm(yi ~ sei, data = re_data_, index = "study", model = "random")
+      )
       re_summary <- summary(re_)
       re_est <- re_summary$coefficients[1, "Estimate"]
       re_se <- re_summary$coefficients[1, "Std. Error"]

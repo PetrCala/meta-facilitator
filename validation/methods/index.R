@@ -73,3 +73,5 @@ if (STATIC$validate$hsma) {
 
 # Recreate the expected results data frame
 save_data(results = expected_results, file_name = STATIC$expected_stats_file_name)
+
+message("Done.")
