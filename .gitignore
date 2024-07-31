@@ -1,6 +1,6 @@
 data/
 !data/README.md
-resources/
+resources/**
 _cache/
 cache/
 !R/libs/cache/

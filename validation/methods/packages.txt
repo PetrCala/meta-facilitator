@@ -1,7 +1,0 @@
-data.table
-plm
-metafor
-stats
-readxl
-writexl
-yaml
