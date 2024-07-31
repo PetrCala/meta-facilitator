@@ -148,8 +148,8 @@ uwls3 <- function(df) {
   t_ <- df$effect / df$se # Q: Here, the effect is PCC - ok?
   dof_ <- dof_or_sample_size(df)
 
-  pcc_ <- t_ / sqrt(t_^2 + dof_ + 1) # r_3 Q: +1?
-  pcc_var_ <- (1 - pcc_^2) / (dof_ + 3) # S_3^2 Q: +3?
+  pcc_ <- t_ / sqrt(t_^2 + dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
+  pcc_var_ <- (1 - pcc_^2) / (dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
   se_ <- sqrt(pcc_var_) # SEr_3
 
   uwls <- uwls(df, effect = pcc_var_, se = se_)
