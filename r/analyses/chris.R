@@ -14,6 +14,7 @@ box::use(
 #' Iterate with this function over a set of meta analyses to get the results
 #'
 #' @param df [data.frame] The single meta-analysis data frame
+#' @param idx [vector] A numeric vector to index the results
 #' @return [vector] A vector of the flavour results
 get_chris_metaflavours <- function(df) {
   # Get the name of the meta-analysis
@@ -101,7 +102,14 @@ chris_analyse <- function(...) {
   # Add a row for the full data frame
   pcc_df$meta <- "All meta-analyses" # The pcc_df object can be reused here
   pcc_full_df <- get_chris_metaflavours(pcc_df)
-  pcc_df_out <- do.call(rbind, list(pcc_df_out, pcc_full_df))
+  pcc_df_out <- rbind(pcc_df_out, pcc_full_df)
+
+  # Add an index
+  if (METADATA$analyses$chris$unique$add_idx_column) {
+    idx <- seq_len(nrow(pcc_df_out))
+    pcc_df_out <- cbind(idx, pcc_df_out)
+    colnames(pcc_df_out)[1] <- "idx"
+  }
 
   save_analysis_results(
     df = pcc_df_out,
