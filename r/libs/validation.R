@@ -78,6 +78,7 @@ validate_columns <- function(df, columns) {
 #'  condition is FALSE.
 #'
 #' @return NULL. The function is called for its side effects.
+#' @export
 assert <- function(condition_to_validate, error_message = NULL) {
   if (is.null(error_message)) {
     error_message <- paste("Assertion failed:", deparse(substitute(condition_to_validate)))

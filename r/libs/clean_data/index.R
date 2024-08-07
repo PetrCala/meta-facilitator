@@ -2,7 +2,7 @@ box::use(
   base / metadata[METADATA],
   analyses / utils[get_analysis_metadata],
   libs / utils[is_empty],
-  libs / validation[validate],
+  libs / validation[validate, assert, validate_columns],
   libs / clean_data / fill[fill_missing_values, fill_dof_using_pcc],
   libs / df_utils[get_number_of_studies, assign_na_col],
 )
@@ -78,8 +78,9 @@ drop_rows_with_missing_values <- function(df, cols = c("effect")) {
 #' Recalculate the t-value based on the effect and se columns
 recalculate_t_value <- function(df) {
   logger::log_debug("Recalculating t-values...")
-  # TODO modify the validate function to accept this form # validate(all("effect", "se") %in% colnames(df), "The input data frame must contain columns 'effect' and 'se'.")
-  # TODO Here, validate that no effect/se's are missing
+  validate_columns(df, c("effect", "se"))
+  assert(sum(is.na(df$effect)) == 0, "The 'effect' column contains missing values")
+  assert(sum(is.na(df$se)) == 0, "The 'se' column contains missing values")
   t_values <- df$effect / df$se
   t_values[is.infinite(t_values)] <- NA
   df$t_value <- t_values
