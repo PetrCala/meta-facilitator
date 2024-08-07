@@ -75,7 +75,6 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
 fill_dof_using_pcc <- function(df) {
   # validate(all("effect", "se", "t_value") %in% colnames(df), "The input data frame must contain columns 'effect', 'se', and 't_value'.")
   pcc <- df$effect
-  se <- df$se
   t_values <- df$t_value
   dof <- df$dof
 
@@ -89,7 +88,8 @@ fill_dof_using_pcc <- function(df) {
   )
 
   unfilled_rowcount <- sum(is.na(df$dof))
-  logger::log_info(paste("Filled", sum(fillable_rows), "missing degrees of freedom. Could not fill", unfilled_rowcount, "rows."))
+  logger::log_info(paste("Filled", sum(fillable_rows), "missing degrees of freedom. Could not fill", unfilled_rowcount, "rows. Dropping these rows..."))
+  df <- df[!is.na(df$dof), ]
 
   return(df)
 }

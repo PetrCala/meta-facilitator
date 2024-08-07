@@ -7,7 +7,7 @@ box::use(
 
 #' Run the PCC analysis step. Used in the Chris analysis.
 #' @export
-get_pcc_data <- function(df, analysis_name = "", ...) {
+get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
 
   # Subset to PCC studies only
@@ -30,8 +30,9 @@ get_pcc_data <- function(df, analysis_name = "", ...) {
   nrow_pcc <- nrow(df)
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the clean dataset)")
 
-  # Fill missing degrees of freedom
-  df <- fill_dof_using_pcc(df = df)
+  if (fill_dof) {
+    df <- fill_dof_using_pcc(df = df) # Interpolate missing degrees of freedom
+  }
 
   # Calculate the PCC variance
   df$pcc_var_1 <- pcc_calc$pcc_variance(

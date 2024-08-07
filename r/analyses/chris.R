@@ -69,8 +69,7 @@ chris_analyse <- function(...) {
     df = df,
     analysis_name = analysis_name,
     clean_names = METADATA$options$clean_names,
-    recalculate_t_value = METADATA$options$recalculate_t_value,
-    fill_dof = FALSE # Do this only after subsetting
+    recalculate_t_value = METADATA$options$recalculate_t_value
   )
 
   meta_index <- METADATA$options$use_single_meta_analysis
@@ -85,6 +84,7 @@ chris_analyse <- function(...) {
     f = get_pcc_data,
     df = data.table::copy(df),
     analysis_name = analysis_name,
+    fill_dof = METADATA$options$fill_dof,
     ...
   )
   log_dataframe_info(df = pcc_df, colnames_to_analyse = c("study", "meta"))
