@@ -1,6 +1,6 @@
 box::use(
   stats[model.frame],
-  libs / validation[validate_columns, validate],
+  libs / validation[validate_columns, validate, assert],
   base / metadata[METADATA],
 )
 
@@ -105,7 +105,7 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 uwls3 <- function(df) {
-  t_ <- df$effect / df$se # Q: Here, the effect is PCC - ok?
+  t_ <- df$effect / df$se
   dof_ <- df$dof
 
   pcc3 <- t_ / sqrt(t_^2 + dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
@@ -136,9 +136,11 @@ uwls3 <- function(df) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 hsma <- function(df) {
-  dof_ <- df$dof
+  dof_ <- df$dof # Should be sample size
+  # Drop missing sample sizes and debug log the dropping thereof
   r_avg <- sum(dof_ * df$effect) / sum(dof_)
   sd_sq <- sum(dof_ * ((df$effect - r_avg)^2)) / sum(dof_) # SD_r^2
+  assert(sd_sq >= 0, "Negative SD_r^2")
   se_r = sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
   t_value <- r_avg / se_r
   return(list(est = r_avg, t_value = t_value))
@@ -184,6 +186,7 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {
+    if (sum(is.na(df$sample_size)) == nrow(df)) return(NA) # No sample sizes
     return(
       sum(df$sample_size < lt, na.rm = TRUE) / k_
     )

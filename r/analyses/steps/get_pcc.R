@@ -1,4 +1,5 @@
 box::use(
+  base / metadata[METADATA],
   pcc_calc = calc / pcc,
   libs / utils[is_empty, to_perc],
   analyses / utils[get_analysis_metadata],
@@ -30,8 +31,15 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   nrow_pcc <- nrow(df)
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the clean dataset)")
 
-  if (fill_dof) {
-    df <- fill_dof_using_pcc(df = df) # Interpolate missing degrees of freedom
+  if (fill_dof) { # Interpolate missing degrees of freedom
+    fill_conditions <- METADATA$options$fill_dof_conditions
+    df <- fill_dof_using_pcc(
+      df = df,
+      replace_existing = fill_conditions$replace_existing,
+      drop_unfillable = fill_conditions$drop_unfillable,
+      drop_negative = fill_conditions$drop_negative,
+      drop_zero = fill_conditions$drop_zero
+    )
   }
 
   # Calculate the PCC variance
