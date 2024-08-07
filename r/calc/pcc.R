@@ -106,7 +106,7 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @export
 uwls3 <- function(df) {
   t_ <- df$effect / df$se
-  dof_ <- df$dof
+  dof_ <- df$dof # Q: here, use sample size or DoF?
 
   pcc3 <- t_ / sqrt(t_^2 + dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
 
@@ -136,10 +136,24 @@ uwls3 <- function(df) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 hsma <- function(df) {
-  dof_ <- df$dof # Should be sample size
-  # Drop missing sample sizes and debug log the dropping thereof
-  r_avg <- sum(dof_ * df$effect) / sum(dof_)
-  sd_sq <- sum(dof_ * ((df$effect - r_avg)^2)) / sum(dof_) # SD_r^2
+  meta <- unique(df$meta)
+  assert(sum(is.na(df$effect)) == 0, paste("Missing effect values in the PCC data frame for meta-analysis", meta))
+
+  missing_sample_sizes <- sum(is.na(df$sample_size))
+  if (missing_sample_sizes > 0) {
+    logger::log_debug(paste("Dropping", missing_sample_sizes, "missing sample sizes for meta-analysis", meta))
+    df <- df[!is.na(df$sample_size), ]
+  }
+
+  if (nrow(df) == 0) {
+    logger::log_debug(paste("No data to calculate HSMA for meta-analysis", meta))
+    return(list(est = NA, t_value = NA))
+  }
+
+  n_ <- df$sample_size
+  effect <- df$effect
+  r_avg <- sum(n_ * effect) / sum(n_)
+  sd_sq <- sum(n_ * ((effect - r_avg)^2)) / sum(n_) # SD_r^2
   assert(sd_sq >= 0, "Negative SD_r^2")
   se_r = sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
   t_value <- r_avg / se_r
@@ -152,13 +166,13 @@ hsma <- function(df) {
 #' @export
 fishers_z <- function(df, method = "ML") {
   meta <- unique(df$meta)
-  dof_ <- df$dof # Q: sample size here, not df?
+  n_ <- df$sample_size # Q: sample size here, not df?
 
   suppressWarnings( # Sometimes the log produces NaNs - handled below
     fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
   )
   suppressWarnings( # Sometimes the negative sqrt produces NaNs - handled below
-    se_ <- 1 / sqrt(dof_ - 3)
+    se_ <- 1 / sqrt(n_ - 3)
   )
 
   re_data <- data.frame(effect = fishers_z_, se = se_, meta = df$meta, study = df$study)
@@ -186,6 +200,7 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {
+    # Q: Should the sample sizes be dropped if they are missing?
     if (sum(is.na(df$sample_size)) == nrow(df)) return(NA) # No sample sizes
     return(
       sum(df$sample_size < lt, na.rm = TRUE) / k_
