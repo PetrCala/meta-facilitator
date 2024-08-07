@@ -7,7 +7,8 @@ dynamic_options:
     - "chris"
 
 options:
-  use_single_meta_analysis: null # Set to a substring of a meta-analysis' name to use only a selected meta-analysis; otherwise, NULL
+  # TODO - the following might be either a character, null, or a list of characters or numeric indexes
+  use_single_meta_analysis: "Does growth attract FDI" # Set to a substring of a meta-analysis' name to use only a selected meta-analysis; otherwise, NULL
   clean_names: false # If TRUE, remove spaces and special characters from the study/meta column names
   recalculate_t_value: true # If TRUE, replace the t-value column with effect/se
   fill_dof: true # If TRUE, calculate DoFs using t-value and pcc
