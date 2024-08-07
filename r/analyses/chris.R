@@ -69,6 +69,7 @@ chris_analyse <- function(...) {
     df = df,
     analysis_name = analysis_name,
     clean_names = METADATA$options$clean_names,
+    recalculate_t_value = METADATA$options$recalculate_t_value,
     fill_dof = FALSE # Do this only after subsetting
   )
 

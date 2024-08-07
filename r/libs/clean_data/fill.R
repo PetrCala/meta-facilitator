@@ -79,11 +79,6 @@ fill_dof_using_pcc <- function(df) {
   t_values <- df$t_value
   dof <- df$dof
 
-  calculated_t_values <- pcc / se # Might create inf
-
-  t_values[is.na(t_values)] <- calculated_t_values[is.na(t_values)]
-  t_values[is.infinite(t_values)] <- NA
-
   fillable_rows <- is.na(dof) & !is.na(t_values) & !is.na(pcc)
   if (sum(fillable_rows) == 0) {
     return(df)

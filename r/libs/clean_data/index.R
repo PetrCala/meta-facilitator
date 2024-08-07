@@ -1,7 +1,7 @@
 box::use(
   base / metadata[METADATA],
   analyses / utils[get_analysis_metadata],
-  libs / utils[is_empty],
+  libs / utils[is_empty, validate],
   libs / clean_data / fill[fill_missing_values, fill_dof_using_pcc],
   libs / df_utils[get_number_of_studies, assign_na_col],
 )
@@ -74,6 +74,17 @@ drop_rows_with_missing_values <- function(df, cols = c("effect")) {
   )
 }
 
+#' Recalculate the t-value based on the effect and se columns
+recalculate_t_value <- function(df) {
+  logger::log_debug("Recalculating t-values...")
+  # TODO modify the validate function to accept this form # validate(all("effect", "se") %in% colnames(df), "The input data frame must contain columns 'effect' and 'se'.")
+  # TODO Here, validate that no effect/se's are missing
+  t_values <- df$effect / df$se
+  t_values[is.infinite(t_values)] <- NA
+  df$t_value <- t_values
+  return(df)
+}
+
 #' Convert string columns to valid R names (remove special characters)
 clean_names <- function(df) {
   logger::log_debug("Cleaning names...")
@@ -88,12 +99,14 @@ clean_names <- function(df) {
 #' @param df [data.frame] The data frame to clean
 #' @param analysis_name [character] The name of the analysis
 #' @param clean_names [logical] Whether to clean the names of the studies and files. Defaults to TRUE
+#' @param recalculate_t_value [logical] Whether to recalculate the t-value based on the effect and se columns. Defaults to TRUE
 #' @param fill_dof [logical] Whether to fill missing degrees of freedom using the PCC method. Defaults to TRUE
 #' @export
 clean_data <- function(
   df,
   analysis_name,
   clean_names = TRUE,
+  recalculate_t_value = TRUE,
   fill_dof = TRUE
 ) {
   logger::log_debug("Cleaning data...")
@@ -128,6 +141,10 @@ clean_data <- function(
 
   if (clean_names) {
     df <- clean_names(df = df) # Clean names of studies and files
+  }
+
+  if (recalculate_t_value) {
+    df <- recalculate_t_value(df = df) # Recalculate t-values
   }
 
   if (fill_dof) {
