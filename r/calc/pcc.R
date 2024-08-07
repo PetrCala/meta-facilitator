@@ -150,17 +150,7 @@ hsma <- function(df) {
 #' @export
 fishers_z <- function(df, method = "ML") {
   meta <- unique(df$meta)
-  dof_ <- df$sample_size # Q: sample size here, not df?
-
-  # Sometimes the DoF - x yields NA -> remove these rows
-  # suppressWarnings(
-  #   na_rows <- is.na(sqrt(dof_ - 1))
-  # )
-  # if (sum(na_rows) > 0) {
-  #   logger::log_debug(paste("Identified", sum(na_rows), "missing DoF values when calculating Fisher's z for meta-analysis", meta))
-  #   df <- df[!na_rows, ]
-  #   dof_ <- dof_or_sample_size(df)
-  # }
+  dof_ <- df$dof # Q: sample size here, not df?
 
   suppressWarnings( # Sometimes the log produces NaNs - handled below
     fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
