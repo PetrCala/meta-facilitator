@@ -22,6 +22,10 @@ get_chris_metaflavours <- function(df) {
 
   logger::log_debug(paste("Calculating PCC statistics for", meta))
 
+  # Select the calculation methods
+  re_method <- METADATA$methods$re_method
+  re_method_fishers_z <- METADATA$methods$re_method_fishers_z
+
   # Get the standard errors - silence NaNs
   suppressWarnings(se1 <- sqrt(df[["pcc_var_1"]]))
   suppressWarnings(se2 <- sqrt(df[["pcc_var_2"]]))
@@ -29,13 +33,13 @@ get_chris_metaflavours <- function(df) {
   results <- list(meta = as.character(meta))
   # Define the various methods to calculate the PCC
   methods <- list(
-    re1 = pcc_calc$re(df, se = se1),
-    re2 = pcc_calc$re(df, se = se2),
+    re1 = pcc_calc$re(df, se = se1, method = re_method),
+    re2 = pcc_calc$re(df, se = se2, method = re_method),
     uwls1 = pcc_calc$uwls(df, se = se1),
     uwls2 = pcc_calc$uwls(df, se = se1),
     uwls3 = pcc_calc$uwls3(df),
     hsma = pcc_calc$hsma(df),
-    fishers_z = pcc_calc$fishers_z(df)
+    fishers_z = pcc_calc$fishers_z(df, method = re_method_fishers_z)
   )
 
   for (method in names(methods)) {

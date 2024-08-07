@@ -4,7 +4,8 @@ run_args:
   - "chris"
 
 methods:
-  use_fast_re: true # Fast - plm, Slow - REML 
+  re_method: "ML"          # One of "DL", "ML", "REML",...; only used if use_reml is true
+  re_method_fishers_z: "ML" # Same as re_method, but this one sets the flavor of the re mehthod used in Fisher's Z
 
 analyses:
   chris:
@@ -63,7 +64,7 @@ options:
   log_to_console_only: false # If false, the log will be saved to a file
   log_flush_on_setup: true # If true, the log file will be cleared on each run
   log_file_name: "logger.log" # The name of the log file
-  log_level: "DEBUG" # The level of logging
+  log_level: "INFO" # The level of logging
 
 cache_handling:
   # I recommend you use caches only after you are certain the functions run correctly
