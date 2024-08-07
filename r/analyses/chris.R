@@ -5,6 +5,7 @@ box::use(
   base / metadata[METADATA],
   analyses / steps / get_pcc[get_pcc_data],
   analyses / utils[get_analysis_metadata, save_analysis_results, log_dataframe_info],
+  libs / string / index[find_string_using_substring],
   libs / clean_data / index[clean_data],
   libs / read_data / index[read_analysis_data],
   libs / cache/ index[run_cached_function],
@@ -77,9 +78,9 @@ chris_analyse <- function(...) {
     recalculate_t_value = METADATA$options$recalculate_t_value
   )
 
-  meta_index <- METADATA$options$use_single_meta_analysis
-  if (is.numeric(meta_index)) {
-    meta_to_use <- unique(df$meta)[meta_index]
+  meta_substring <- METADATA$options$use_single_meta_analysis
+  if (is.character(meta_substring)) {
+    meta_to_use <- find_string_using_substring(unique(df$meta), meta_substring)
     logger::log_info("Subsetting to data of only ", meta_to_use)
     df <- df[df$meta == meta_to_use, ]
   }

@@ -1,5 +1,5 @@
 dynamic_options:
-  log_level: "INFO" # The level of logging
+  log_level: "DEBUG" # The level of logging
   use_cache: true # Store intermediate output in a cache in the /_cache/ folder.
   run_args: 
     # Define the list of invocation arguments as a list of strings
@@ -7,7 +7,7 @@ dynamic_options:
     - "chris"
 
 options:
-  use_single_meta_analysis: FALSE # Set to a single integer to use only one meta-analysis method
+  use_single_meta_analysis: null # Set to a substring of a meta-analysis' name to use only a selected meta-analysis; otherwise, NULL
   clean_names: false # If TRUE, remove spaces and special characters from the study/meta column names
   recalculate_t_value: true # If TRUE, replace the t-value column with effect/se
   fill_dof: true # If TRUE, calculate DoFs using t-value and pcc

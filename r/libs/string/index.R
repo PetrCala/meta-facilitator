@@ -1,11 +1,12 @@
 box::use(
-  libs / validation[validate]
+  libs / validation[validate, assert]
 )
 
 #' Pluralize a word
 #'
 #' @param word [character] The word to pluralize
 #' @return [character] The pluralized word
+#' @export
 pluralize <- function(word) {
   validate(is.character(word))
   if (grepl("[sxz]$", word) || grepl("[sc]h$", word)) {
@@ -15,4 +16,23 @@ pluralize <- function(word) {
   } else {
     return(paste0(word, "s"))
   }
+}
+
+#' Find a string in a vector of strings using a substring
+#'
+#' @param vector_of_strings [character] The vector of strings to search
+#' @param substring [character] The substring to search for
+#' @return [character] The string that contains the substring
+#' @export
+find_string_using_substring <- function(vector_of_strings, substring) {
+  assert(is.character(substring), "The substring must be a character")
+  assert(is.vector(vector_of_strings), "The vector of strings must be a character vector")
+  match_bool <- grepl(substring, vector_of_strings)
+  if (sum(match_bool) == 0) {
+    rlang::abort("Could not find the substring", substring, "in the vector of strings.")
+  }
+  if (sum(match_bool) > 1) {
+    rlang::abort("Found multiple matches for the substring", substring, "in the vector of strings.")
+  }
+  return(vector_of_strings[match_bool])
 }
