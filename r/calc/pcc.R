@@ -73,11 +73,13 @@ re <- function(df, effect = NULL, se = NULL, method = "DL") {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 uwls <- function(df, effect = NULL, se = NULL) {
+  if (is.null(effect))  effect <- df$effect
+  if (is.null(se)) se <- df$se
+  validate(length(effect) == nrow(df), length(se) == nrow(df))
+
   meta <- unique(df$meta)
   validate(length(meta) == 1)
 
-  if (is.null(effect))  effect <- df$effect
-  if (is.null(se)) se <- df$se
   df$t <- effect / se
   df$precision <- 1 / se
 
@@ -104,7 +106,7 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @export
 uwls3 <- function(df) {
   t_ <- df$effect / df$se # Q: Here, the effect is PCC - ok?
-  dof_ <- df$sample_size
+  dof_ <- df$dof
 
   pcc3 <- t_ / sqrt(t_^2 + dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
 
@@ -115,7 +117,16 @@ uwls3 <- function(df) {
   # Method 2 - in line with Stata
   # se3 <- df$se
 
-  uwls_ <- uwls(df, effect = pcc3, se = se3)
+  # Drop observations where either the PCC3 or SE3 are missing
+  uwls3_data <- data.frame(effect = pcc3, se = se3, meta = df$meta, study = df$study)
+  uwls3_data <- uwls3_data[!is.na(pcc3) & !is.na(se3), ] # Drop NA rows
+
+  if (nrow(uwls3_data) == 0) {
+    logger::log_debug(paste("No data to calculate UWLS+3 z for meta-analysis", meta))
+    return(list(est = NA, t_value = NA))
+  }
+
+  uwls_ <- uwls(df)
   return(uwls_)
 }
 
