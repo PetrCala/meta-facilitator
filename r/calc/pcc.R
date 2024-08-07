@@ -125,7 +125,7 @@ uwls3 <- function(df) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 hsma <- function(df) {
-  dof_ <- df$sample_size
+  dof_ <- df$dof
   r_avg <- sum(dof_ * df$effect) / sum(dof_)
   sd_sq <- sum(dof_ * ((df$effect - r_avg)^2)) / sum(dof_) # SD_r^2
   se_r = sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
