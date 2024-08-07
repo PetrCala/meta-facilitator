@@ -1,7 +1,8 @@
 box::use(
   base / metadata[METADATA],
   analyses / utils[get_analysis_metadata],
-  libs / utils[is_empty, validate],
+  libs / utils[is_empty],
+  libs / validation[validate],
   libs / clean_data / fill[fill_missing_values, fill_dof_using_pcc],
   libs / df_utils[get_number_of_studies, assign_na_col],
 )

@@ -2,8 +2,7 @@ box::use(
   rlang[sym],
   dplyr[`%>%`, across, all_of, mutate, select, lag, first, row_number],
   stats[model.frame], # For dplyr
-  libs / validation / index[is_char_vector_or_empty],
-  libs / utils[validate],
+  libs / validation[is_char_vector_or_empty, validate],
   dof_calc = calc / dof,
 )
 

@@ -1,5 +1,5 @@
 box::use(
-  libs / utils[validate]
+  libs / validation[validate]
 )
 
 #' Pluralize a word
