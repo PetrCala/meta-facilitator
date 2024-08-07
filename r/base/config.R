@@ -21,10 +21,10 @@ load_options <- function() {
 #   if (!is.logical(config$options$clean_names)) stop("clean_names should be a logical value")
 #   if (!is.logical(config$options$log_to_console_only)) stop("log_to_console_only should be a logical value")
 #   if (!is.character(config$options$log_file_name)) stop("log_file_name should be a character string")
-#   if (!is.character(config$options$log_level)) stop("log_level should be a character string")
+#   if (!is.character(config$dynamic_options$log_level)) stop("log_level should be a character string")
 
 #   if (!is.list(config$cache_handling)) stop("cache_handling should be a list")
-#   if (!is.logical(config$cache_handling$use_cache)) stop("use_cache should be a logical value")
+#   if (!is.logical(config$dynamic_options$use_cache)) stop("use_cache should be a logical value")
 #   if (!is.numeric(config$cache_handling$cache_age)) stop("cache_age should be a numeric value")
 
 #   return(config)

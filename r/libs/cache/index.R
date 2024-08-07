@@ -117,7 +117,7 @@ run_cached_function <- function(f, ...) {
   # Validate input
   validate(is.function(f))
   # Save the parameters for cleaner code
-  use_cache <- METADATA$cache_handling$use_cache
+  use_cache <- METADATA$dynamic_options$use_cache
   cache_folder <- PATHS$DIR_CACHE
   cache_age <- METADATA$cache_handling$cache_age
   if (!use_cache) {

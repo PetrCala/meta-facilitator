@@ -49,7 +49,7 @@ get_invocation_args <- function() {
 
   # Use an explicit if-else statement to avoid an ifelse bug
   if (interactive()) {
-    args <- METADATA$run_args
+    args <- METADATA$dynamic_options$run_args
   } else {
     args <- commandArgs(trailingOnly = TRUE)
   }
