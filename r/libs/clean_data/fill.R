@@ -70,12 +70,12 @@ fill_missing_values <- function(df, target_col, columns = c(), missing_value_pre
 #' @note Only use this function for interpolating missing degrees of freedom of PCC-type effects. The formula does not work for other effect types.
 #' @param df [data.frame] The input data frame.
 #' @param replace_existing [logical] Whether to replace existing degrees of freedom. The default is NULL.
-#' @param drop_unfillable [logical] Whether to drop rows with missing degrees of freedom. The default is NULL.
+#' @param drop_missing [logical] Whether to drop rows with missing degrees of freedom. The default is NULL.
 #' @param drop_negative [logical] Whether to drop rows with negative degrees of freedom. The default is NULL.
 #' @param drop_zero [logical] Whether to drop rows with zero degrees of freedom. The default is NULL.
 #' @return [data.frame] The modified data frame with updated degrees of freedom.
 #' @export
-fill_dof_using_pcc <- function(df, replace_existing = NULL, drop_unfillable = NULL, drop_negative = NULL, drop_zero = NULL) {
+fill_dof_using_pcc <- function(df, replace_existing = NULL, drop_missing = NULL, drop_negative = NULL, drop_zero = NULL) {
   # validate(all("effect", "se", "t_value") %in% colnames(df), "The input data frame must contain columns 'effect', 'se', and 't_value'.")
   pcc <- df$effect
   t_values <- df$t_value
@@ -106,8 +106,8 @@ fill_dof_using_pcc <- function(df, replace_existing = NULL, drop_unfillable = NU
     return(df)
   }
 
-  if (drop_unfillable) {
-    df <- drop_rows(is.na(df$dof), "rows with unfillable degrees of freedom.")
+  if (drop_missing) {
+    df <- drop_rows(is.na(df$dof), "rows with missing degrees of freedom.")
   }
 
   if (drop_negative) {

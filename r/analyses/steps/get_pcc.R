@@ -36,7 +36,7 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
     df <- fill_dof_using_pcc(
       df = df,
       replace_existing = fill_conditions$replace_existing,
-      drop_unfillable = fill_conditions$drop_unfillable,
+      drop_missing = fill_conditions$drop_missing,
       drop_negative = fill_conditions$drop_negative,
       drop_zero = fill_conditions$drop_zero
     )

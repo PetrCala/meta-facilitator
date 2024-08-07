@@ -16,7 +16,7 @@ options:
   fill_dof: true # If TRUE, calculate DoFs using t-value and pcc
   fill_dof_conditions: # Only used if fill_dof is TRUE
     replace_existing: true # If TRUE, replace existing DoFs
-    drop_unfillable: true # If TRUE, drop rows with unfillable DoFs
+    drop_missing: true # If TRUE, drop rows with missing DoFs
     drop_negative: true # If TRUE, drop rows with negative DoFs
     drop_zero: true # If TRUE, drop rows with zero DoFs
 
@@ -26,8 +26,8 @@ options:
   log_file_name: "logger.log" # The name of the log file
 
 methods:
-  re_method: "DL"          # One of "DL", "ML", "REML",...; only used if use_reml is true
-  re_method_fishers_z: "DL" # Same as re_method, but this one sets the flavor of the re mehthod used in Fisher's Z
+  re_method: "ML"          # One of "DL", "ML", "REML",...; only used if use_reml is true
+  re_method_fishers_z: "ML" # Same as re_method, but this one sets the flavor of the re mehthod used in Fisher's Z
 
 analyses:
   chris:
