@@ -71,6 +71,7 @@ locale:
 
 cache_handling:
   # I recommend you use caches only after you are certain the functions run correctly
+  add_fn_name_to_cache_keys: TRUE # If TRUE, the function name will be added to each cache key associated with that function call
   cache_age: 3600 # In seconds - an hour
 
 tests:

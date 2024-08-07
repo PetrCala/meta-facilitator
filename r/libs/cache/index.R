@@ -3,6 +3,7 @@ box::use(
   base / metadata[METADATA],
   base / const[CONST],
   libs / validation[validate],
+  libs / string / index[clean_string],
   libs/ cache / utils[create_cache_key],
 )
 
@@ -104,7 +105,8 @@ relog_a_message <- function(message) {
 #'
 #' Input the function call from cache_if_needed, specify the user parameters list, and run the function. All logs which are ran during the initial call to the function are cached together with the function, and then fetched/printed during the subsequent calls.
 #'
-#' @param fun [function] Cached (or bare) function that should be called.
+#' @param f [function] Cached (or bare) function that should be called.
+#' @param add_fn_name_to_cache_keys [logical] Should the function name be added to the cache keys as a prefix? The default value is determined from metadata.
 #' @inheritDotParams The parameters to pass to the function call
 #' @return The returned object from the function call.
 #' @example
@@ -113,7 +115,11 @@ relog_a_message <- function(message) {
 #'    sheet = sheet_name),
 #' )
 #' @export
-run_cached_function <- function(f, ...) {
+run_cached_function <- function(
+  f,
+  ...,
+  add_fn_name_to_cache_keys = METADATA$cache_handling$add_fn_name_to_cache_keys
+) {
   # Validate input
   validate(is.function(f))
   # Save the parameters for cleaner code
@@ -146,6 +152,11 @@ run_cached_function <- function(f, ...) {
   get_cache <- function(key) as.character(cache_disk$get(key))
 
   log_cache_key <- create_cache_key(list("log", fun_name, ...)) # Deterministic
+
+  if (add_fn_name_to_cache_keys) {
+    clean_fun_name <- clean_string(fun_name)
+    log_cache_key <- paste0(clean_fun_name, "_", log_cache_key)
+  }
 
   # Store the message if the function was not cached,
   # otherwise get the message from the cache (empty character if empty)

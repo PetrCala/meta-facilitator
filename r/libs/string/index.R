@@ -36,3 +36,23 @@ find_string_using_substring <- function(vector_of_strings, substring) {
   }
   return(vector_of_strings[match_bool])
 }
+
+
+#' Clean a string by removing special characters and converting to lowercase
+#'
+#' @param input_string [character] The string to clean
+#' @return [character] The cleaned string
+#' @export
+clean_string <- function(input_string) {
+  # Remove special characters
+  cleaned_string <- stringr::str_replace_all(input_string, "[^a-zA-Z0-9]", "_")
+
+  # Convert to lowercase
+  cleaned_string <- tolower(cleaned_string)
+
+  # Remove leading or trailing underscores
+  cleaned_string <- stringr::str_trim(cleaned_string, side = "both")
+  cleaned_string <- stringr::str_replace_all(cleaned_string, "^_+|_+$", "")
+
+  return(cleaned_string)
+}
