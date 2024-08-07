@@ -46,7 +46,7 @@ re <- function(df, effect = NULL, se = NULL, method = "DL") {
 
     re_data_ <- data.frame(yi = effect, sei = se, study = df$study)
 
-    suppressWarnings(
+    suppressWarnings( # Sometimes the variances are large
       re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = method)
     )
     re_est <- re_$beta[1]
@@ -151,8 +151,12 @@ fishers_z <- function(df, method = "ML") {
   #   dof_ <- dof_or_sample_size(df)
   # }
 
-  fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
-  se_ <- 1 / sqrt(dof_ - 3)
+  suppressWarnings( # Sometimes the log produces NaNs - handled below
+    fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
+  )
+  suppressWarnings( # Sometimes the negative sqrt produces NaNs - handled below
+    se_ <- 1 / sqrt(dof_ - 3)
+  )
 
   re_data <- data.frame(effect = fishers_z_, se = se_, meta = df$meta, study = df$study)
   re_data <- re_data[!is.na(fishers_z_) & !is.na(se_), ] # Drop NA rows
