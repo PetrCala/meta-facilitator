@@ -3,7 +3,7 @@ box::use(
   base / metadata[METADATA],
   base / const[CONST],
   libs / validation[validate],
-  libs / string / index[clean_string],
+  libs / string[clean_string],
   libs/ cache / utils[create_cache_key],
 )
 

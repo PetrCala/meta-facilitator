@@ -4,7 +4,7 @@ box::use(
   base / const[CONST],
   libs / file_utils[validate_folder_existence, write_txt_file],
   libs / validation[is_char_vector_or_empty],
-  libs / string / index[pluralize],
+  libs / string[pluralize],
 )
 
 

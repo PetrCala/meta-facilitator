@@ -5,7 +5,7 @@ box::use(
   base / metadata[METADATA],
   analyses / steps / get_pcc[get_pcc_data],
   analyses / utils[get_analysis_metadata, save_analysis_results, log_dataframe_info],
-  libs / string / index[find_string_using_substring],
+  libs / string[find_string_using_substring],
   libs / clean_data / index[clean_data],
   libs / read_data / index[read_analysis_data],
   libs / cache/ index[run_cached_function],
