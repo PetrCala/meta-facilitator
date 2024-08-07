@@ -174,20 +174,21 @@ fishers_z <- function(df, method = "ML") {
 #' Calculate various summary statistics associated with the PCC data frame
 #' @export
 pcc_sum_stats <- function(df, log_results = TRUE) {
+  browser()
   k_ <- nrow(df)
   quantiles = stats::quantile(df$sample_size, probs = c(0.25, 0.75), na.rm = TRUE)
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {
     return(
-      sum(df$sample_size < lt) / k_
+      sum(df$sample_size < lt, na.rm = TRUE) / k_
     )
   }
 
   res <- list(
     k_ = k_,
-    avg_n = mean(df$sample_size),
-    median_n = mean(df$sample_size),
+    avg_n = mean(df$sample_size, na.rm = TRUE),
+    median_n = mean(df$sample_size, na.rm = TRUE),
     quantile_1_n = as.numeric(quantiles[1]),
     quantile_3_n = as.numeric(quantiles[2]),
     ss_lt_50 = get_ss_lt(50),
