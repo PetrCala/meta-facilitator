@@ -174,7 +174,6 @@ fishers_z <- function(df, method = "ML") {
 #' Calculate various summary statistics associated with the PCC data frame
 #' @export
 pcc_sum_stats <- function(df, log_results = TRUE) {
-  browser()
   k_ <- nrow(df)
   quantiles = stats::quantile(df$sample_size, probs = c(0.25, 0.75), na.rm = TRUE)
 
