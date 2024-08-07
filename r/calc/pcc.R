@@ -35,6 +35,8 @@ pcc_variance <- function(df, offset) {
 re <- function(df, effect = NULL, se = NULL, method = "DL") {
   if (is.null(effect)) effect <- df$effect
   if (is.null(se)) se <- df$se
+  validate(length(effect) == nrow(df), length(se) == nrow(df))
+
   result <- tryCatch({
     meta <- unique(df$meta)
     if (length(meta) != 1) {
@@ -44,7 +46,9 @@ re <- function(df, effect = NULL, se = NULL, method = "DL") {
 
     re_data_ <- data.frame(yi = effect, sei = se, study = df$study)
 
-    re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = method)
+    suppressWarnings(
+      re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = method)
+    )
     re_est <- re_$beta[1]
     re_se <- re_$se[1]
 
@@ -158,7 +162,7 @@ fishers_z <- function(df, method = "ML") {
     return(list(est = NA, t_value = NA))
   }
 
-  re_list <- re(df = re_data, effect = fishers_z_, se = se_, method = method)
+  re_list <- re(df = re_data, method = method)
   re_est <- re_list$est
   re_t_value <- re_list$t_value
 
