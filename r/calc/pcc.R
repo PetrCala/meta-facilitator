@@ -4,33 +4,6 @@ box::use(
   base / metadata[METADATA],
 )
 
-#' Extract the DoF vector from a data frame. Where the DoF's are missing, use sample size minus 7.
-#'
-#' @param df [data.frame] The data frame to extract the information from
-#' @param offset [numeric] The number to offset the sample size by
-#' @return [vector] A vector of either DoF's, or adjusted sample sizes.
-dof_or_sample_size <- function(df, offset = NULL) {
-  validate_columns(df, c("dof", "sample_size"))
-
-  dof_ <- data.table::copy(df$dof) # Get DoF
-  missing_dof <- is.na(dof_) # boolean vector
-
-  # Replace DF with 'sample size - 7' when missing
-  dof_[missing_dof] <- df$sample_size[missing_dof] - 7
-
-  # Modify by the offset
-  if (!is.null(offset)) {
-    validate(is.numeric(offset))
-    dof_ <- dof_ - offset
-  }
-
-  # TEMP
-  dof_below_0 <- dof_ <= 0
-  dof_[dof_below_0] <- 1 # Q:
-
-  return(dof_)
-}
-
 
 #' Calculate the PCC variance.
 #'
@@ -41,6 +14,8 @@ dof_or_sample_size <- function(df, offset = NULL) {
 #' @export
 pcc_variance <- function(df, offset) {
   validate_columns(df, c("dof", "sample_size", "effect"))
+  validate(sum(is.na(df$dof)) == 0)
+  # validate(sum(is.na(df$dof)) == 0, "Missing DoF values in the PCC data frame")
   pcc_ <- df$effect
   numerator <- (1 - pcc_^2)^2
 

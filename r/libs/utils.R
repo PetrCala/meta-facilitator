@@ -106,6 +106,7 @@ validate <- function(...) {
 #' @return NULL Checks that the columns exist in the data frame
 #' @example
 #' validate_columns(df, c("effect", "se"))
+#' # TODO move this to utils/validate.R
 #' @export
 validate_columns <- function(df, columns) {
   if (!is.data.frame(df)) {
