@@ -66,7 +66,7 @@ read_data_custom <- function(source_path, separators = NA) {
   # Read data
   data_out <- readr::read_delim(
     source_path,
-    locale = locale(
+    locale = readr::locale(
       decimal_mark = OPTIONS$locale$decimal_mark,
       grouping_mark = OPTIONS$locale$grouping_mark,
       tz = OPTIONS$locale$tz
