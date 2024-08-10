@@ -43,14 +43,7 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   }
 
   # Calculate the PCC variance
-  df$pcc_var_1 <- pcc_calc$pcc_variance(
-    df = df,
-    offset = 1
-  )
-  df$pcc_var_2 <- pcc_calc$pcc_variance(
-    df = df,
-    offset = 2
-  )
+  df$pcc_var <- pcc_calc$pcc_variance(df = df, offset = 0)
 
   # Drop observations for which variance could not be calculated or is infinite
   n_rows_before <- nrow(df)
@@ -62,10 +55,10 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
     return(df_)
   }
 
-  na_rows <- is.na(df$pcc_var_1) | is.na(df$pcc_var_2)
+  na_rows <- is.na(df$pcc_var)
   df <- drop_pcc_rows(df, na_rows, "could not be calculated.")
 
-  inf_rows <- is.infinite((df$pcc_var_1)) | is.infinite(df$pcc_var_2)
+  inf_rows <- is.infinite(df$pcc_var)
   df <- drop_pcc_rows(df, inf_rows, "was infinite.")
 
   # Check that the rows were dropped correctly
@@ -78,7 +71,3 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
 
   return(df)
 }
-
-
-
-# a. RE1 & RE2: Calculate random-effects twice (report its both the estimate and t-value for each) using the SEs for equation (1) and (2). I know that R has standard routines for this.  You should probably use the REML (restricted max likelihood) flavor of RE.
