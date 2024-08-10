@@ -138,8 +138,8 @@ hsma <- function(df) {
 
   # Safety check
   missing_dof <- sum(is.na(df$dof))
-  if (missing_dofs > 0) {
-    logger::log_debug(paste("Dropping", missing_dofs, "missing degrees of freedom for meta-analysis", meta))
+  if (missing_dof > 0) {
+    logger::log_debug(paste("Dropping", missing_dof, "missing degrees of freedom for meta-analysis", meta))
     df <- df[!is.na(df$dof), ]
   }
 
@@ -193,22 +193,29 @@ fishers_z <- function(df, method = "ML") {
 #' Calculate various summary statistics associated with the PCC data frame
 #' @export
 pcc_sum_stats <- function(df, log_results = TRUE) {
+  meta <- unique(df$meta)
   k_ <- nrow(df)
-  quantiles = stats::quantile(df$sample_size, probs = c(0.25, 0.75), na.rm = TRUE)
+  n_ <- df$sample_size # The sample size to calculate the statistics from
+
+  missing_ss <- is.na(n_)
+  if (sum(missing_ss) > 0) {
+    logger::log_debug(paste("Missing sample sizes when calculating PCC summary statistics for meta-analysis", meta, "Filling these using degrees of freedom."))
+    n_[is.na(n_)] <- df$dof[is.na(n_)] # Replace NA with DoF
+  }
+  assert(sum(is.na(n_)) == 0, "Missing sample sizes in the PCC data frame")
+
+  quantiles = stats::quantile(n_, probs = c(0.25, 0.75), na.rm = FALSE)
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {
     # Q: Should the sample sizes be dropped if they are missing?
-    if (sum(is.na(df$sample_size)) == nrow(df)) return(NA) # No sample sizes
-    return(
-      sum(df$sample_size < lt, na.rm = TRUE) / k_
-    )
+    return(sum(n_ < lt, na.rm = TRUE) / k_)
   }
 
   res <- list(
     k_ = k_,
-    avg_n = mean(df$sample_size, na.rm = TRUE),
-    median_n = mean(df$sample_size, na.rm = TRUE),
+    avg_n = mean(n_, na.rm = FALSE),
+    median_n = mean(n_, na.rm = FALSE),
     quantile_1_n = as.numeric(quantiles[1]),
     quantile_3_n = as.numeric(quantiles[2]),
     ss_lt_50 = get_ss_lt(50),
