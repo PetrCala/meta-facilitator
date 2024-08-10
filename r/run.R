@@ -6,7 +6,7 @@
 #' Usage
 #' - From a command line, run `Rscript run <action> <args>`
 #'  or
-#' - Specify the desired action in metadata.json and run the script inside an R session.
+#' - Specify the desired action in options.json and run the script inside an R session.
 
 # Environment preparation
 rm(list = ls())
@@ -67,7 +67,7 @@ options(box.path = getwd())
 
 # Relative paths are sourced only after the WD is set correctly
 box::use(
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   # base / config[load_options],
   actions / index[ACTIONS, run_tests],
   actions / utils[validate_action, get_invocation_args],
@@ -77,9 +77,9 @@ box::use(
 
 # Setup logging first
 setup_logging(
-  log_to_console_only = METADATA$options$log_to_console_only,
-  logger_name = METADATA$options$log_file_name,
-  log_level = METADATA$dynamic_options$log_level
+  log_to_console_only = OPTIONS$general$log_to_console_only,
+  logger_name = OPTIONS$general$log_file_name,
+  log_level = OPTIONS$dynamic_options$log_level
 )
 # load_options()
 

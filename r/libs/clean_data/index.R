@@ -1,6 +1,6 @@
 box::use(
-  base / metadata[METADATA],
-  analyses / utils[get_analysis_metadata],
+  base / options[OPTIONS],
+  analyses / utils[get_analysis_options],
   libs / utils[is_empty],
   libs / validation[validate, assert, validate_columns],
   libs / clean_data / fill[fill_missing_values, fill_dof_using_pcc],
@@ -16,11 +16,11 @@ box::use(
 #' # list(effect = "Effect", se = "Standard Error", ...)
 #' @export
 get_analysis_cols_list <- function(analysis_name) {
-  analysis_metadata <- get_analysis_metadata(analysis_name)
-  cols <- analysis_metadata$cols
+  analysis_options <- get_analysis_options(analysis_name)
+  cols <- analysis_options$cols
   if (is_empty(cols)) {
     rlang::abort(
-      paste("The analysis metadata does not contain any columns for analysis", analysis_name),
+      paste("The analysis options does not contain any columns for analysis", analysis_name),
       class = "missing_columns_error"
     )
   }

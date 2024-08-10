@@ -1,24 +1,24 @@
 box::use(
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   pcc_calc = calc / pcc,
   libs / utils[is_empty, to_perc],
-  analyses / utils[get_analysis_metadata],
+  analyses / utils[get_analysis_options],
   libs / clean_data / fill[fill_dof_using_pcc],
 )
 
 #' Run the PCC analysis step. Used in the Chris analysis.
 #' @export
 get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
-  analysis_metadata <- get_analysis_metadata(analysis_name = analysis_name)
+  analysis_options <- get_analysis_options(analysis_name = analysis_name)
 
   # Subset to PCC studies only
-  pcc_identifier <- analysis_metadata$unique$pcc_identifier
+  pcc_identifier <- analysis_options$unique$pcc_identifier
   if (is_empty(pcc_identifier)) {
     rlang::abort(
       paste0(
         "Unknown PCC identified for analysis ",
         analysis_name,
-        ". Make sure to specify 'analyses$<name>$unique$pcc_identifier' in the metadata."
+        ". Make sure to specify 'analyses$<name>$unique$pcc_identifier' in the options."
       ),
       class = "unknown_pcc_identifier"
     )
@@ -32,7 +32,7 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the clean dataset)")
 
   if (fill_dof) { # Interpolate missing degrees of freedom
-    fill_conditions <- METADATA$options$fill_dof_conditions
+    fill_conditions <- OPTIONS$general$fill_dof_conditions
     df <- fill_dof_using_pcc(
       df = df,
       replace_existing = fill_conditions$replace_existing,

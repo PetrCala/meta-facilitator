@@ -1,7 +1,7 @@
 box::use(
   stats[model.frame],
   libs / validation[validate_columns, validate, assert],
-  base / metadata[METADATA],
+  base / options[OPTIONS],
 )
 
 

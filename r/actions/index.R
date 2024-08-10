@@ -1,6 +1,6 @@
 box::use(
   base / paths[PATHS],
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   analyses / index[ANALYSES],
   libs / test_utils[run_tests_recursively],
   reporters = testing / reporters,
@@ -55,7 +55,7 @@ run_tests <- function(...) {
   test_dir_path <- PATHS$DIR_TESTS
 
   reporter <- NULL
-  if (METADATA$tests$silent_reporter) {
+  if (OPTIONS$tests$silent_reporter) {
     reporter <- testthat::ProgressReporter$new(show_praise = FALSE)
   }
   # reporter <- reporters$dot_reporter$new() # use custom

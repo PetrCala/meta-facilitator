@@ -1,7 +1,7 @@
 box::use(
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   base / paths[PATHS],
-  analyses / utils[get_analysis_metadata],
+  analyses / utils[get_analysis_options],
   libs / cache / index[run_cached_function],
 )
 
@@ -14,7 +14,7 @@ box::use(
 #' @returns [character] Path of the data file for the given analysis.
 get_data_path <- function(analysis_name) {
   data_dir <- PATHS$DIR_DATA
-  source_df <- METADATA$analyses[[analysis_name]]$source_df
+  source_df <- OPTIONS$analyses[[analysis_name]]$source_df
   path <- file.path(data_dir, source_df)
   if (!(file.exists(path))) {
     logger::log_error(
@@ -67,9 +67,9 @@ read_data_custom <- function(source_path, separators = NA) {
   data_out <- readr::read_delim(
     source_path,
     locale = locale(
-      decimal_mark = METADATA$locale$decimal_mark,
-      grouping_mark = METADATA$locale$grouping_mark,
-      tz = METADATA$locale$tz
+      decimal_mark = OPTIONS$locale$decimal_mark,
+      grouping_mark = OPTIONS$locale$grouping_mark,
+      tz = OPTIONS$locale$tz
     ),
     show_col_types = FALSE # Quiet warnings
   )
@@ -78,7 +78,7 @@ read_data_custom <- function(source_path, separators = NA) {
     print(paste("Data loaded successfully from the following source:", source_path))
   } else {
     rlang::abort(
-      "Error in reading data. Try modifying your locale settings in the metadata.yaml file.",
+      "Error in reading data. Try modifying your locale settings in the options.yaml file.",
       class = "data_read_error"
     )
   }
@@ -94,8 +94,8 @@ read_data_custom <- function(source_path, separators = NA) {
 read_analysis_data <- function(analysis_name) {
   logger::log_debug("Reading the data for the analysis ", analysis_name)
   df_path <- get_data_path(analysis_name = analysis_name)
-  analysis_metadata <- get_analysis_metadata(analysis_name)
-  sheet_name <- analysis_metadata$source_sheet
+  analysis_options <- get_analysis_options(analysis_name)
+  sheet_name <- analysis_options$source_sheet
   df <- run_cached_function(
     f = readxl::read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
     df_path,

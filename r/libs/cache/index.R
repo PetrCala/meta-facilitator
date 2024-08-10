@@ -1,6 +1,6 @@
 box::use(
   base / paths[PATHS],
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   base / const[CONST],
   libs / validation[validate],
   libs / string[clean_string],
@@ -46,7 +46,7 @@ cache_if_needed <- function(
   f,
   is_cache_on,
   cache_path = PATHS$DIR_CACHE,
-  cache_age = METADATA$cache_handling$cache_age
+  cache_age = OPTIONS$cache_handling$cache_age
 ) {
   # Validate input
   validate(
@@ -68,7 +68,7 @@ cache_if_needed <- function(
 
 #' Process a log message and log it using the logger package
 #'
-#' @details This function serves to re-process a message which might be a log. In case it is, simply relogging it would cause the log metadata to be duplicated. This function parses the message, determines its severity, and logs it using the logger package.
+#' @details This function serves to re-process a message which might be a log. In case it is, simply relogging it would cause the log options to be duplicated. This function parses the message, determines its severity, and logs it using the logger package.
 #'
 #' @param message [character] The log message to process
 #' @export
@@ -106,7 +106,7 @@ relog_a_message <- function(message) {
 #' Input the function call from cache_if_needed, specify the user parameters list, and run the function. All logs which are ran during the initial call to the function are cached together with the function, and then fetched/printed during the subsequent calls.
 #'
 #' @param f [function] Cached (or bare) function that should be called.
-#' @param add_fn_name_to_cache_keys [logical] Should the function name be added to the cache keys as a prefix? The default value is determined from metadata.
+#' @param add_fn_name_to_cache_keys [logical] Should the function name be added to the cache keys as a prefix? The default value is determined from options.
 #' @inheritDotParams The parameters to pass to the function call
 #' @return The returned object from the function call.
 #' @example
@@ -118,14 +118,14 @@ relog_a_message <- function(message) {
 run_cached_function <- function(
   f,
   ...,
-  add_fn_name_to_cache_keys = METADATA$cache_handling$add_fn_name_to_cache_keys
+  add_fn_name_to_cache_keys = OPTIONS$cache_handling$add_fn_name_to_cache_keys
 ) {
   # Validate input
   validate(is.function(f))
   # Save the parameters for cleaner code
-  use_cache <- METADATA$dynamic_options$use_cache
+  use_cache <- OPTIONS$dynamic_options$use_cache
   cache_folder <- PATHS$DIR_CACHE
-  cache_age <- METADATA$cache_handling$cache_age
+  cache_age <- OPTIONS$cache_handling$cache_age
   if (!use_cache) {
     # Do not capture output if caching is turned off (e.g., when debugging)
     res <- f(...)

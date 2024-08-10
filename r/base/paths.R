@@ -50,9 +50,9 @@ PATHS <- list(
 
   # R files
   R_RUN = file.path(DIR_R, "run"),
-  R_METADATA_YAML = file.path(DIR_R, "metadata.yaml"),
+  R_OPTIONS_YAML = file.path(DIR_R, "options.yaml"),
   R_ACTIONS = file.path(DIR_R, "actions.R"),
-  R_METADATA = file.path(DIR_BASE, "metadata.R"),
+  R_OPTIONS = file.path(DIR_BASE, "options.R"),
   R_CONST = file.path(DIR_BASE, "const.R"),
   R_PATHS = file.path(DIR_BASE, "paths.R"),
 

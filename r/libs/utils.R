@@ -1,5 +1,5 @@
 box::use(
-  base / metadata[METADATA]
+  base / options[OPTIONS]
 )
 
 #' Check whether an object is a function call (created using 'call').

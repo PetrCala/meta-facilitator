@@ -1,12 +1,12 @@
 dynamic_options:
-  log_level: "DEBUG" # The level of logging
-  use_cache: false # Store intermediate output in a cache in the /_cache/ folder.
+  log_level: "INFO" # The level of logging
+  use_cache: true # Store intermediate output in a cache in the /_cache/ folder.
   run_args: 
     # Define the list of invocation arguments as a list of strings
     - "analyse"
     - "chris"
 
-options:
+general:
   # TODO - the following might be either a character, null, or a list of characters or numeric indexes
   use_single_meta_analysis: null # Set to a substring of a meta-analysis' name to use only a selected meta-analysis; otherwise, NULL
   clean_names: false # If TRUE, remove spaces and special characters from the study/meta column names

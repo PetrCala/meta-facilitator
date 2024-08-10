@@ -1,5 +1,5 @@
 box::use(
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   base / paths[PATHS],
   base / const[CONST],
   libs / file_utils[validate_folder_existence, write_txt_file],
@@ -8,18 +8,18 @@ box::use(
 )
 
 
-#' Based on an analysis name, get that analysis metadata
+#' Based on an analysis name, get that analysis options
 #'
-#' @return [list] The analysis metadata
+#' @return [list] The analysis options
 #' @export
-get_analysis_metadata <- function(analysis_name) {
-  if (!analysis_name %in% names(METADATA$analyses)) {
+get_analysis_options <- function(analysis_name) {
+  if (!analysis_name %in% names(OPTIONS$analyses)) {
     rlang::abort(
-      paste("The analysis name", analysis_name, "is not in the METADATA."),
+      paste("The analysis name", analysis_name, "is not in the OPTIONS."),
       class = "unknown_analysis"
     )
   }
-  return(METADATA$analyses[[analysis_name]])
+  return(OPTIONS$analyses[[analysis_name]])
 }
 
 #' Log various information about the data frame

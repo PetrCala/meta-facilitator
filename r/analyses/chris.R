@@ -2,9 +2,9 @@ box::use(
   dplyr[`%>%`],
   stats[model.frame], # For dplyr
   pcc_calc = calc / pcc,
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   analyses / steps / get_pcc[get_pcc_data],
-  analyses / utils[get_analysis_metadata, save_analysis_results, log_dataframe_info],
+  analyses / utils[get_analysis_options, save_analysis_results, log_dataframe_info],
   libs / string[find_string_using_substring],
   libs / clean_data / index[clean_data],
   libs / read_data / index[read_analysis_data],
@@ -25,8 +25,8 @@ get_chris_metaflavours <- function(df) {
   logger::log_debug(paste("Calculating PCC statistics for", meta))
 
   # Select the calculation methods
-  re_method <- METADATA$methods$re_method
-  re_method_fishers_z <- METADATA$methods$re_method_fishers_z
+  re_method <- OPTIONS$methods$re_method
+  re_method_fishers_z <- OPTIONS$methods$re_method_fishers_z
 
   # Get the standard errors - silence NaNs
   suppressWarnings(se1 <- sqrt(df[["pcc_var_1"]]))
@@ -63,7 +63,7 @@ get_chris_metaflavours <- function(df) {
 #' @export
 chris_analyse <- function(...) {
   logger::log_info("Running the chris analysis")
-  analysis <- METADATA$analyses$chris
+  analysis <- OPTIONS$analyses$chris
   analysis_name <- analysis$analysis_name
 
   # Clean the data
@@ -74,11 +74,11 @@ chris_analyse <- function(...) {
     f = clean_data,
     df = df,
     analysis_name = analysis_name,
-    clean_names = METADATA$options$clean_names,
-    recalculate_t_value = METADATA$options$recalculate_t_value
+    clean_names = OPTIONS$general$clean_names,
+    recalculate_t_value = OPTIONS$general$recalculate_t_value
   )
 
-  meta_substring <- METADATA$options$use_single_meta_analysis
+  meta_substring <- OPTIONS$general$use_single_meta_analysis
   if (is.character(meta_substring)) {
     meta_to_use <- find_string_using_substring(unique(df$meta), meta_substring)
     logger::log_info("Subsetting to data of only ", meta_to_use)
@@ -90,7 +90,7 @@ chris_analyse <- function(...) {
     f = get_pcc_data,
     df = data.table::copy(df),
     analysis_name = analysis_name,
-    fill_dof = METADATA$options$fill_dof,
+    fill_dof = OPTIONS$general$fill_dof,
     ...
   )
   log_dataframe_info(df = pcc_df, colnames_to_analyse = c("study", "meta"))
@@ -106,7 +106,7 @@ chris_analyse <- function(...) {
   pcc_df_out <- rbind(pcc_df_out, pcc_full_df)
 
   # Add an index
-  if (METADATA$analyses$chris$unique$add_idx_column) {
+  if (OPTIONS$analyses$chris$unique$add_idx_column) {
     idx <- seq_len(nrow(pcc_df_out))
     pcc_df_out <- cbind(idx, pcc_df_out)
     colnames(pcc_df_out)[1] <- "idx"

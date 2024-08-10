@@ -1,5 +1,5 @@
 box::use(
-  base / metadata[METADATA],
+  base / options[OPTIONS],
   base / paths[PATHS],
   base / const[CONST],
 )
@@ -61,7 +61,7 @@ setup_logging <- function(
     logger::log_appender(logger::appender_file(log_file, max_files = 1L), index = 2)
   }
 
-  if (METADATA$options$log_flush_on_setup) {
+  if (OPTIONS$general$log_flush_on_setup) {
     flush_log_files(logger_name = logger_name)
   }
 }

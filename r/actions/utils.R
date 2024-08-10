@@ -1,6 +1,6 @@
 box::use(
   actions / index[ACTIONS],
-  base / metadata[METADATA]
+  base / options[OPTIONS]
 )
 
 
@@ -25,18 +25,18 @@ validate_action <- function(action) {
   }
 }
 
-#' Retrieve an action from the metadata, and validate it
+#' Retrieve an action from the options, and validate it
 #'
 #' @return [character] The action to execute
 #' @export
 get_action <- function() {
-  action <- METADATA$run$action
+  action <- OPTIONS$run$action
   validate_action(action)
   return(action)
 }
 
 #' Determine the arguments with which the script was invoked
-#' In interactive mode, use the metadata run args
+#' In interactive mode, use the options run args
 #' In non-interactive mode, use the command line arguments
 #'
 #' @return [list] A list containing the action and run arguments
@@ -49,7 +49,7 @@ get_invocation_args <- function() {
 
   # Use an explicit if-else statement to avoid an ifelse bug
   if (interactive()) {
-    args <- METADATA$dynamic_options$run_args
+    args <- OPTIONS$dynamic_options$run_args
   } else {
     args <- commandArgs(trailingOnly = TRUE)
   }
