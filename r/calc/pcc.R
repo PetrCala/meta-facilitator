@@ -9,10 +9,10 @@ box::use(
 #'
 #' @param df [data.frame] The data frame upon which to calculate the PCC vairance. Should include the columns 'effect', 'sample_size', 'dof'
 #' @param offset [int] An offset value to subtract from the degrees of freedom
-#'  in case they are missing.
+#'  in case they are missing. Defaults to 0.
 #' @return [vector] A vector of PCC variances.
 #' @export
-pcc_variance <- function(df, offset) {
+pcc_variance <- function(df, offset = 0) {
   validate_columns(df, c("dof", "sample_size", "effect"))
   assert(sum(is.na(df$dof)) == 0, "Missing DoF values in the PCC data frame")
   pcc_ <- df$effect
