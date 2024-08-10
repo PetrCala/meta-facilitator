@@ -73,7 +73,7 @@ re <- function(df, effect = NULL, se = NULL, method = "DL") {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 uwls <- function(df, effect = NULL, se = NULL) {
-  if (is.null(effect))  effect <- df$effect
+  if (is.null(effect)) effect <- df$effect
   if (is.null(se)) se <- df$se
   validate(length(effect) == nrow(df), length(se) == nrow(df))
 
@@ -106,16 +106,12 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @export
 uwls3 <- function(df) {
   t_ <- df$effect / df$se
-  dof_ <- df$dof # Q: here, use sample size or DoF?
+  dof_ <- df$dof
 
-  pcc3 <- t_ / sqrt(t_^2 + dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
+  pcc3 <- t_ / sqrt(t_^2 + dof_ + 3)
 
-  # Method 1 - Q: Use this method, or the Stata approach?
-  pcc_var3 <- (1 - pcc3^2) / (dof_ + 3) # dof_ + 3 ~~ sample_size - 7 + 3
+  pcc_var3 <- (1 - pcc3^2) / (dof_ + 3)
   se3 <- sqrt(pcc_var3)
-
-  # Method 2 - in line with Stata
-  # se3 <- df$se
 
   # Drop observations where either the PCC3 or SE3 are missing
   uwls3_data <- data.frame(effect = pcc3, se = se3, meta = df$meta, study = df$study)
@@ -139,10 +135,12 @@ hsma <- function(df) {
   meta <- unique(df$meta)
   assert(sum(is.na(df$effect)) == 0, paste("Missing effect values in the PCC data frame for meta-analysis", meta))
 
-  missing_sample_sizes <- sum(is.na(df$sample_size))
-  if (missing_sample_sizes > 0) {
-    logger::log_debug(paste("Dropping", missing_sample_sizes, "missing sample sizes for meta-analysis", meta))
-    df <- df[!is.na(df$sample_size), ]
+
+  # Safety check
+  missing_dof <- sum(is.na(df$dof))
+  if (missing_dofs > 0) {
+    logger::log_debug(paste("Dropping", missing_dofs, "missing degrees of freedom for meta-analysis", meta))
+    df <- df[!is.na(df$dof), ]
   }
 
   if (nrow(df) == 0) {
@@ -150,7 +148,7 @@ hsma <- function(df) {
     return(list(est = NA, t_value = NA))
   }
 
-  n_ <- df$sample_size
+  n_ <- df$dof
   effect <- df$effect
   r_avg <- sum(n_ * effect) / sum(n_)
   sd_sq <- sum(n_ * ((effect - r_avg)^2)) / sum(n_) # SD_r^2
@@ -166,7 +164,7 @@ hsma <- function(df) {
 #' @export
 fishers_z <- function(df, method = "ML") {
   meta <- unique(df$meta)
-  n_ <- df$sample_size # Q: sample size here, not df?
+  n_ <- df$dof
 
   suppressWarnings( # Sometimes the log produces NaNs - handled below
     fishers_z_ <- 0.5 * log((1 + df$effect) / (1 - df$effect))
