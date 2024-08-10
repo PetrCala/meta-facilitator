@@ -14,8 +14,7 @@ box::use(
 #' @export
 pcc_variance <- function(df, offset) {
   validate_columns(df, c("dof", "sample_size", "effect"))
-  validate(sum(is.na(df$dof)) == 0)
-  # validate(sum(is.na(df$dof)) == 0, "Missing DoF values in the PCC data frame")
+  assert(sum(is.na(df$dof)) == 0, "Missing DoF values in the PCC data frame")
   pcc_ <- df$effect
 
   numerator <- (1 - pcc_^2)^2
@@ -210,7 +209,6 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {
-    # Q: Should the sample sizes be dropped if they are missing?
     return(sum(n_ < lt, na.rm = TRUE) / k_)
   }
 
