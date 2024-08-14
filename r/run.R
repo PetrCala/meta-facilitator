@@ -68,10 +68,9 @@ options(box.path = getwd())
 # Relative paths are sourced only after the WD is set correctly
 box::use(
   base / options[load_options],
+  libs / logs / index[setup_logging],
   actions / index[ACTIONS, run_tests],
   actions / utils[validate_action, get_invocation_args],
-  libs / logs / index[setup_logging],
-  libs / cache / index[run_cached_function],
 )
 
 # Load custom options into the namespace
