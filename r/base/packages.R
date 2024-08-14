@@ -27,10 +27,11 @@ PACKAGES <- list(
   ),
   # A list of packages that are used for development
   DEV = list(
-    "precommit" = NA,
+    "precommit" = NA
   ),
   # A list of packages that are necessary for the environment preparation
   INITIAL = c(
+    "languageserver",
     "box",
     "rstudioapi",
     "devtools",
