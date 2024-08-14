@@ -5,6 +5,7 @@
 #' \dontrun{
 #' dir <- get_script_directory()
 #' }
+#' @export
 get_script_directory <- function() {
   # Check all calls in the call stack
   calls <- sys.calls()
@@ -50,11 +51,13 @@ PATHS <- list(
 
   # R files
   R_RUN = file.path(DIR_R, "run"),
-  R_OPTIONS_YAML = file.path(DIR_R, "options.yaml"),
   R_ACTIONS = file.path(DIR_R, "actions.R"),
-  R_OPTIONS = file.path(DIR_BASE, "options.R"),
+  R_SET_OPTIONS = file.path(DIR_BASE, "set_options.R"),
   R_CONST = file.path(DIR_BASE, "const.R"),
   R_PATHS = file.path(DIR_BASE, "paths.R"),
+
+  # Config files
+  R_CONFIG_YAML = file.path(DIR_R, "config.yaml"),
 
   # Test files
   DIR_TESTS = file.path(PROJECT_ROOT, "tests", "testthat")

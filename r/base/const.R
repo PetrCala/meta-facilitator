@@ -5,7 +5,8 @@
 #' This scripts should not be handling any non-script like imports/export through box, as it is used when setting up the initial environment. To avoid this, one would have to define the initial packages outside this script.
 #' @export
 CONST <- list(
-  PROJECT_NAME = "meta-facilitator",
+  PROJECT_NAME = "Meta Facilitator",
+  PACKAGE_NAME = "metafacilitator",
   DATE_FORMAT = "%Y-%m-%d %H:%M:%S",
   DATE_ONLY_FORMAT = "%Y-%m-%d",
   ANALYSIS_INFO_FILE_NAME = "info.txt", # Text file with analysis results
