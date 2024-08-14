@@ -1,0 +1,19 @@
+name: Lint Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up permissions
+        run: chmod +x ./run.sh
+
+      - name: Run lint script
+        run: ./run.sh lint
