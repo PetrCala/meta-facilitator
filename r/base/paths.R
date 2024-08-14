@@ -52,7 +52,7 @@ PATHS <- list(
   # R files
   R_RUN = file.path(DIR_R, "run"),
   R_ACTIONS = file.path(DIR_R, "actions.R"),
-  R_SET_OPTIONS = file.path(DIR_BASE, "set_options.R"),
+  R_OPTIONS = file.path(DIR_BASE, "options.R"),
   R_CONST = file.path(DIR_BASE, "const.R"),
   R_PATHS = file.path(DIR_BASE, "paths.R"),
 

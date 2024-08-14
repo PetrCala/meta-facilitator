@@ -2,9 +2,9 @@ box::use(
   yaml,
   base / paths[PATHS],
   base / const[CONST],
-  libs / validation[assert, validate]
+  libs / validation[assert, validate],
+  static / options[OPTIONS_ENUM]
 )
-
 
 #' Count Unique Names in a Nested List
 #'
@@ -19,7 +19,6 @@ box::use(
 #' count_unique_names(list(a = 1, b = list(c = 2, d = 3))) # Returns 3
 #' count_unique_names(list(a = 1, b = list(c = 2, d = 3), e = list(f = 4, g = 5))) # Returns 5
 #' count_unique_names(list(a = list(x = 1, y = 2), b = list(c = 3, d = 4))) # Returns 4
-#' @export
 count_unique_names <- function(lst, skip_null = FALSE) {
   count <- 0
   if (!is.list(lst)) {
@@ -89,10 +88,76 @@ set_options <- function(options_to_set, prefix) {
   )
 }
 
-#' @title Options
-#' @description
-#' This object contains the options that are used in the project.
-#' @export
-OPTIONS <- yaml::read_yaml(PATHS$R_CONFIG_YAML)
+#' Validate the options list against the options enumeration
+#'
+#' @param option_list [list] The list of options to validate
+#' @param prefix [character] The prefix to use for the options
+#' @param verbose [logical] Whether to print verbose output. Default is FALSE.
+#' @return NULL
+validate_options <- function(option_list, prefix, verbose = FALSE) {
+  for (path in names(OPTIONS_ENUM)) {
+    # Split the path into components to traverse the list
+    path_components <- unlist(strsplit(path, "\\."))
 
-set_options(options_to_set = OPTIONS, prefix = CONST$PACKAGE_NAME)
+    # Traverse the list to get the value
+    value <- option_list
+    for (component in path_components) {
+      if (!is.list(value) || !component %in% names(value)) {
+        rlang::abort(paste("option_listuration error: path", path, "is missing in the option_listuration"))
+      }
+      value <- value[[component]]
+    }
+
+    option_info <- OPTIONS_ENUM[[path]]
+
+    # Infer the type from allowed_values if type is not specified
+    if (is.null(option_info$type) && !is.null(option_info$allowed_values)) {
+      inferred_types <- unique(sapply(option_info$allowed_values, class))
+      if (length(inferred_types) > 1) {
+        rlang::abort("Multiple types detected in allowed_values. Please specify the type explicitly.")
+      }
+      option_info$type <- inferred_types
+    }
+
+    # Check if the value matches the required type
+    if (!is.null(option_info$type) && class(value) != option_info$type) {
+      rlang::abort(paste("Invalid type for", path, ". Expected:", option_info$type))
+    }
+
+    # Check if the value is in the allowed values (if specified)
+    if (!is.null(option_info$allowed_values) && !value %in% option_info$allowed_values) {
+      rlang::abort(paste("Invalid value for", path, ". Allowed values are:", paste(option_info$allowed_values, collapse = ", ")))
+    }
+  }
+
+  if (verbose) {
+    cat("All option values are valid.\n")
+  }
+}
+
+#' Load options from the configuration YAML file and set them to the global options namespace
+#'
+#' @usage Call this function once at the beginning of the invocation script.
+#' @return NULL
+#' @export
+load_options <- function() {
+  options <- yaml::read_yaml(PATHS$R_CONFIG_YAML)
+  validate_options(option_list = options, prefix = CONST$PACKAGE_NAME)
+  set_options(options_to_set = options, prefix = CONST$PACKAGE_NAME)
+}
+
+#' Get an option value by name
+#'
+#' @param name [character] The name of the option to get
+#' @return The value of the option
+#' @example
+#' get_option("dynamic_options.log_level") # "INFO"
+#' @export
+get_option <- function(name) {
+  if (!name %in% names(OPTIONS_ENUM)) {
+    stop(paste("Unknown option:", name))
+  }
+  option_name <- paste0(CONST$PACKAGE_NAME, ".", name)
+  option <- R.utils::getOption(option_name)
+  return(option)
+}

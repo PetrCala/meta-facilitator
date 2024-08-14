@@ -12,6 +12,7 @@
   - [Using the `run.sh` sript](#using-the-runsh-sript)
     - [Creating an alias](#creating-an-alias)
 - [Importing modules](#importing-modules)
+- [Using options](#using-options)
 - [Validating Conditions](#validating-conditions)
   - [How to Use the `validate` Function](#how-to-use-the-validate-function)
   - [Examples](#examples)
@@ -150,6 +151,31 @@ Here is a list of all currently available analyses is:
 # Importing modules
 
 For any imports within the project, we use [the **box** package](https://klmr.me/box/articles/box.html). This emulates Python-like module imports, allowing us to maintain a complex, yet transparent structure of the project. Here, each script behaves as a standalone module, and only the necessary functions are imported from it. This keeps the workspace clean, as it does the source of all functions used across the project. To read more on how to use box, see [the official documentation](https://klmr.me/box/articles/box.html).
+
+# Using options
+
+- All options are defined in the `config.yaml` file in the root of the R folder. Upon each script run, these options are loaded into R, validated, and assigned to the global options namespace.
+
+- The options are parsed from the yaml file, and stored so that the levels of the yaml hierarchy create the name under which the option is stored. Further, each option is prefixed by the name of the package. For example:
+
+  ```yaml
+  # In `config.yaml`
+  general:
+    specific:
+      option1: "value1"
+  ```
+
+  This option would end up being parsed in to `artma.general.specific.option1`. Notice the package name at the front. This is to ensure that the options do not mix with other packages, or R base options.
+
+- Accessing this option in R would then be done as follows:
+
+  ```R
+  box::use(base / options[get_option])
+
+  option_value <- get_option("general.specific.option1") # Stores 'value1'
+  ```
+
+  Notice that the **package prefix is not needed when accessing the options**.
 
 # Validating Conditions
 
