@@ -25,7 +25,7 @@ quiet_packages <- function(expr) {
 }
 
 #' Function to install a package if it is not a part of the library yet
-install_and_check <- function(pkg, version, verbose = TRUE) {
+install_and_check <- function(pkg, version = NA, verbose = TRUE) {
   if (verbose) {
     version_info <- ifelse(is.na(version), "", paste0(" (", version, ")"))
     message <- paste0("Processing package: ", pkg, version_info)
