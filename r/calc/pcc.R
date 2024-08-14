@@ -104,22 +104,21 @@ uwls <- function(df, effect = NULL, se = NULL) {
 #' @return [list] A list with properties "est", "t_value".
 #' @export
 uwls3 <- function(df) {
-  t_ <- df$effect / df$se
+  meta <- unique(df$meta)
   dof_ <- df$dof
+  effect_ <- df$effect
+  se_ <- df$se
+  t_ <- effect_ / se_
+
+  validate(
+    sum(is.na(dof_)) == 0,
+    sum(is.na(effect_)) == 0,
+    sum(is.na(se_)) == 0
+  )
 
   pcc3 <- t_ / sqrt(t_^2 + dof_ + 3)
-  se3 <- df$se
 
-  # Drop observations where either the PCC3 or SE3 are missing
-  uwls3_data <- data.frame(effect = pcc3, se = se3, meta = df$meta, study = df$study)
-  uwls3_data <- uwls3_data[!is.na(pcc3) & !is.na(se3), ] # Drop NA rows
-
-  if (nrow(uwls3_data) == 0) {
-    logger::log_debug(paste("No data to calculate UWLS+3 z for meta-analysis", meta))
-    return(list(est = NA, t_value = NA))
-  }
-
-  uwls_ <- uwls(df)
+  uwls_ <- uwls(df, effect = pcc3, se = se_)
   return(uwls_)
 }
 
