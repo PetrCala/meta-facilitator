@@ -191,7 +191,7 @@ fishers_z <- function(df, method = "ML") {
 pcc_sum_stats <- function(df, log_results = TRUE) {
   meta <- unique(df$meta)
   obs_ <- nrow(df)
-  n_ <- df$sample_size # The sample size to calculate the statistics from
+  ss_ <- df$sample_size # The sample size to calculate the statistics from
 
   missing_ss <- is.na(ss_)
   if (sum(missing_ss) > 0) {
