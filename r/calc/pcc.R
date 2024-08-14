@@ -190,29 +190,30 @@ fishers_z <- function(df, method = "ML") {
 #' @export
 pcc_sum_stats <- function(df, log_results = TRUE) {
   meta <- unique(df$meta)
-  k_ <- nrow(df)
+  obs_ <- nrow(df)
   n_ <- df$sample_size # The sample size to calculate the statistics from
 
-  missing_ss <- is.na(n_)
+  missing_ss <- is.na(ss_)
   if (sum(missing_ss) > 0) {
     logger::log_debug(paste("Missing sample sizes when calculating PCC summary statistics for meta-analysis", meta, "Filling these using degrees of freedom."))
-    n_[is.na(n_)] <- df$dof[is.na(n_)] # Replace NA with DoF
+    ss_[is.na(ss_)] <- df$dof[is.na(ss_)] # Replace NA with DoF
   }
-  assert(sum(is.na(n_)) == 0, "Missing sample sizes in the PCC data frame")
+  assert(sum(is.na(ss_)) == 0, "Missing sample sizes in the PCC data frame")
 
-  quantiles = stats::quantile(n_, probs = c(0.25, 0.75), na.rm = FALSE)
+  quantiles = stats::quantile(ss_, probs = c(0.25, 0.75), na.rm = FALSE)
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {
-    return(sum(n_ < lt, na.rm = TRUE) / k_)
+    return(sum(ss_ < lt, na.rm = FALSE) / obs_)
   }
 
   res <- list(
-    k_ = k_,
-    avg_n = mean(n_, na.rm = FALSE),
-    median_n = median(n_, na.rm = FALSE),
-    quantile_1_n = as.numeric(quantiles[1]),
-    quantile_3_n = as.numeric(quantiles[2]),
+    observations_ = obs_,
+    avg_effect = mean(df$effect, na.rm = FALSE),
+    avg_ss = mean(ss_, na.rm = FALSE),
+    median_ss = median(ss_, na.rm = FALSE),
+    quantile_1_ss = as.numeric(quantiles[1]),
+    quantile_3_ss = as.numeric(quantiles[2]),
     ss_lt_50 = get_ss_lt(50),
     ss_lt_100 = get_ss_lt(100),
     ss_lt_200 = get_ss_lt(200),
