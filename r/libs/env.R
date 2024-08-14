@@ -103,6 +103,7 @@ load_packages <- function(package_list, verbose = TRUE) {
 
 
 #' Setup the R environment
+#' @export
 setup_env <- function() {
   tryCatch(
     {
