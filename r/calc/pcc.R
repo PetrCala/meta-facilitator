@@ -210,7 +210,7 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
   res <- list(
     k_ = k_,
     avg_n = mean(n_, na.rm = FALSE),
-    median_n = mean(n_, na.rm = FALSE),
+    median_n = median(n_, na.rm = FALSE),
     quantile_1_n = as.numeric(quantiles[1]),
     quantile_3_n = as.numeric(quantiles[2]),
     ss_lt_50 = get_ss_lt(50),
