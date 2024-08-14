@@ -209,9 +209,9 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
 
   res <- list(
     observations_ = obs_,
-    avg_effect = mean(df$effect, na.rm = FALSE),
-    avg_ss = mean(ss_, na.rm = FALSE),
-    median_ss = median(ss_, na.rm = FALSE),
+    avg_effect = base::mean(df$effect, na.rm = FALSE),
+    avg_ss = base::mean(ss_, na.rm = FALSE),
+    median_ss = stats::median(ss_, na.rm = FALSE),
     quantile_1_ss = as.numeric(quantiles[1]),
     quantile_3_ss = as.numeric(quantiles[2]),
     ss_lt_50 = get_ss_lt(50),
