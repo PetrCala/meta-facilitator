@@ -73,15 +73,8 @@ box::use(
   actions / utils[validate_action, get_invocation_args],
 )
 
-# Load custom options into the namespace
-load_options()
-
-# Setup logging first
-setup_logging(
-  log_to_console_only = OPTIONS$general$log_to_console_only,
-  logger_name = OPTIONS$general$log_file_name,
-  log_level = OPTIONS$dynamic_options$log_level
-)
+load_options() # Load custom options into the namespace
+setup_logging() # Requires options to be loaded
 
 args <- get_invocation_args()
 

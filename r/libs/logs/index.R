@@ -1,7 +1,7 @@
 box::use(
-  base / options[OPTIONS],
   base / paths[PATHS],
   base / const[CONST],
+  base / options[read_option],
 )
 
 #' Get the path to the logger file
@@ -37,15 +37,12 @@ flush_log_files <- function(logger_name = NULL) {
 
 #' Setup logging for the project
 #'
-#' @param log_to_console_only [logical] Whether to log to console only. Defaults to FALSE
-#' @param logger_name [character] The name of the logger to use.
-#' @param log_level [character] The log level to use. Choose from 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'.
 #' @export
-setup_logging <- function(
-  log_to_console_only = FALSE,
-  logger_name = NULL,
-  log_level = "DEBUG"
-) {
+setup_logging <- function() {
+  log_to_console_only <- read_option("general.log_to_console_only")
+  logger_name <- read_option("general.log_file_name")
+  log_level <- read_option("dynamic_options.log_level")
+
   # Set the logging threshold based on the input string
   if (log_level %in% names(CONST$LOG_LEVEL_MAP)) {
     logger::log_threshold(CONST$LOG_LEVEL_MAP[[log_level]])
@@ -61,7 +58,7 @@ setup_logging <- function(
     logger::log_appender(logger::appender_file(log_file, max_files = 1L), index = 2)
   }
 
-  if (OPTIONS$general$log_flush_on_setup) {
+  if (read_option("general.log_flush_on_setup")) {
     flush_log_files(logger_name = logger_name)
   }
 }

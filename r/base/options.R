@@ -3,7 +3,7 @@ box::use(
   base / paths[PATHS],
   base / const[CONST],
   libs / validation[assert, validate],
-  static / options[OPTIONS_ENUM]
+  static / options_enum[OPTIONS_ENUM]
 )
 
 #' Count Unique Names in a Nested List
@@ -37,14 +37,14 @@ count_unique_names <- function(lst, skip_null = FALSE) {
   return(count)
 }
 
-#' Recursively parse the YAML structure and set options to the global options namespace. Prepend each option with a custom prefix, separated by a period.
+#' Recursively parse the YAML structure and set options_enum to the global options_enum namespace. Prepend each option with a custom prefix, separated by a period.
 #'
-#' @param options_list A list of options
-#' @param prefix A prefix to use for the options
+#' @param options_list A list of option_enums
+#' @param prefix A prefix to use for the option_enums
 #' @return NULL
 #' @example
 #' set_prefixed_options(list(a = 1, b = list(c = 2, d = 3)), "prefix")
-#' # Sets the following options:
+#' # Sets the following options_enum:
 #' # prefix.a = 1
 #' # prefix.b.c = 2
 #' # prefix.b.d = 3
@@ -62,14 +62,14 @@ set_prefixed_options <- function(options_list, prefix) {
   }
 }
 
-#' Set all options defined in the configuration YAML file into the global options
+#' Set all options_enum defined in the configuration YAML file into the global option_enums
 #'
-#' @param options_to_set [list] A list of options to set to the global options namespace
-#' @param prefix [character] A prefix to use for the options
+#' @param options_to_set [list] A list of options_enum to set to the global options_enum namespace
+#' @param prefix [character] A prefix to use for the option_enums
 #' @return NULL
 #' @example
 #' set_options(list(a = 1, b = list(c = 2, d = 3)), "prefix")
-#' # Sets the following options:
+#' # Sets the following options_enum:
 #' # prefix.a = 1
 #' # prefix.b.c = 2
 #' # prefix.b.d = 3
@@ -80,18 +80,18 @@ set_options <- function(options_to_set, prefix) {
   set_prefixed_options(options_to_set, prefix)
 
   expected_option_count <- count_unique_names(options_to_set, skip_null = TRUE)
-  options_set <- options()[grep(paste0("^", prefix), names(options()))]
+  options_set <- options_enum()[grep(paste0("^", prefix), names(options_enum()))]
 
   assert(
     length(options_set) == expected_option_count,
-    paste0("Failed to set custom options. Detected ", expected_option_count, " options, but set ", length(options_set), ".")
+    paste0("Failed to set custom options. Detected ", expected_option_count, " options_enum, but set ", length(options_set), ".")
   )
 }
 
-#' Validate the options list against the options enumeration
+#' Validate the options_enum list against the options_enum enumeration
 #'
-#' @param option_list [list] The list of options to validate
-#' @param prefix [character] The prefix to use for the options
+#' @param option_list [list] The list of options_enum to validate
+#' @param prefix [character] The prefix to use for the option_enums
 #' @param verbose [logical] Whether to print verbose output. Default is FALSE.
 #' @return NULL
 validate_options <- function(option_list, prefix, verbose = FALSE) {
@@ -135,15 +135,15 @@ validate_options <- function(option_list, prefix, verbose = FALSE) {
   }
 }
 
-#' Load options from the configuration YAML file and set them to the global options namespace
+#' Load options_enum from the configuration YAML file and set them to the global options_enum namespace
 #'
 #' @usage Call this function once at the beginning of the invocation script.
 #' @return NULL
 #' @export
 load_options <- function() {
-  options <- yaml::read_yaml(PATHS$R_CONFIG_YAML)
-  validate_options(option_list = options, prefix = CONST$PACKAGE_NAME)
-  set_options(options_to_set = options, prefix = CONST$PACKAGE_NAME)
+  options_enum <- yaml::read_yaml(PATHS$R_CONFIG_YAML)
+  validate_options(option_list = options_enum, prefix = CONST$PACKAGE_NAME)
+  set_options(options_to_set = options_enum, prefix = CONST$PACKAGE_NAME)
 }
 
 #' Get an option value by name
