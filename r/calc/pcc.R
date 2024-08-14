@@ -108,11 +108,7 @@ uwls3 <- function(df) {
   dof_ <- df$dof
 
   pcc3 <- t_ / sqrt(t_^2 + dof_ + 3)
-
   se3 <- df$se
-  # deprecated
-  # pcc_var3 <- (1 - pcc3^2) / (dof_ + 3)
-  # se3 <- sqrt(pcc_var3)
 
   # Drop observations where either the PCC3 or SE3 are missing
   uwls3_data <- data.frame(effect = pcc3, se = se3, meta = df$meta, study = df$study)
