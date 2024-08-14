@@ -208,7 +208,7 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
   }
 
   res <- list(
-    observations_ = obs_,
+    n_observations = obs_,
     avg_effect = base::mean(df$effect, na.rm = FALSE),
     avg_ss = base::mean(ss_, na.rm = FALSE),
     median_ss = stats::median(ss_, na.rm = FALSE),
