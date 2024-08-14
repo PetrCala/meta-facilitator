@@ -61,14 +61,15 @@ cd meta-facilitator
 3. Set up the local environment by executing
 
 ```bash
+echo "alias artma='./run.sh'" >>~/.zshrc
 chmod +x run.sh
-./run.sh setup
+artma setup
 ```
 
 4. See the list of available commands by running
 
 ```bash
-./run.sh help
+artma help
 ```
 
 <!-- 5. Choose an action to run out of the [Available Actions section](#available-actions). Run it using:
@@ -111,7 +112,7 @@ You can streamline the invocation of actions even further by creating a terminal
 
 ```bash
 # In your terminal profile file
-alias run='./run.sh' # Or specify the full path to make this even more reliable
+alias artma='./run.sh' # Or specify the full path to make this even more reliable
 ```
 
 Then run
@@ -123,8 +124,8 @@ source .bashrc # or .zshrc or .bash-profile
 to make these changes take effect. Now, you can run the action commands using
 
 ```bash
-run test
-run lint
+artma test
+artma lint
 # etc.
 ```
 

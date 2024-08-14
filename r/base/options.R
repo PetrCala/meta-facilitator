@@ -3,7 +3,6 @@ box::use(
   base / paths[PATHS],
   base / const[CONST],
   libs / validation[assert, validate],
-  static / options_enum[OPTIONS_ENUM]
 )
 
 #' Count Unique Names in a Nested List

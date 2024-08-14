@@ -6,6 +6,7 @@ show_help() {
   echo
   echo "Commands:"
   echo "  R               Invoke the R run script"
+  echo "  config           Configurate the project"
   echo "  clear-cache     Clear the cache"
   echo "  lint            Lint all files in the R folder"
   echo "  merge           Merge the currently checked out git branch with another one, and push the changes to the remote repository"
@@ -25,6 +26,10 @@ case "$1" in
 R)
   shift
   sh scripts/runR.sh "$@"
+  ;;
+config)
+  shift
+  sh scripts/config.sh "$@"
   ;;
 clear-cache)
   shift
