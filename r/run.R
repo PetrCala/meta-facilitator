@@ -70,12 +70,14 @@ box::use(
   base / options[load_options],
   libs / logs / index[setup_logging],
   actions / index[ACTIONS, run_tests],
-  actions / utils[validate_action, get_invocation_args],
+  actions / utils[validate_action, get_invocation_args]
 )
 
 load_options() # Load custom options into the namespace
 setup_logging() # Requires options to be loaded
 
-args <- get_invocation_args()
+logger::log_info("Done")
 
-do.call(ACTIONS[[args$action]], args$run_args)
+# args <- get_invocation_args()
+
+# do.call(ACTIONS[[args$action]], args$run_args)

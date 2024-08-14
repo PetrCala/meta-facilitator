@@ -1,10 +1,10 @@
 box::use(
   base / paths[PATHS],
-  base / options[OPTIONS],
+  base / options[get_option],
   base / const[CONST],
   libs / validation[validate],
   libs / string[clean_string],
-  libs/ cache / utils[create_cache_key],
+  libs / cache / utils[create_cache_key],
 )
 
 #' Capture the output and logs of an expression:
@@ -43,11 +43,10 @@ capture_output_and_logs <- function(expr) {
 #' @return Function. Memoised or not, based on the is_cache_on parameter.
 #' @export
 cache_if_needed <- function(
-  f,
-  is_cache_on,
-  cache_path = PATHS$DIR_CACHE,
-  cache_age = OPTIONS$cache_handling$cache_age
-) {
+    f,
+    is_cache_on,
+    cache_path = PATHS$DIR_CACHE,
+    cache_age = get_option("cache_handling.cache_age")) {
   # Validate input
   validate(
     is.function(f),
@@ -85,8 +84,7 @@ relog_a_message <- function(message) {
     log_content <- trimws(log_content)
 
     # Log the message using the logger package based on the severity level
-    switch(
-      log_level,
+    switch(log_level,
       "DEBUG" = logger::log_debug(log_content),
       "INFO" = logger::log_info(log_content),
       "WARN" = logger::log_warn(log_content),
@@ -116,16 +114,15 @@ relog_a_message <- function(message) {
 #' )
 #' @export
 run_cached_function <- function(
-  f,
-  ...,
-  add_fn_name_to_cache_keys = OPTIONS$cache_handling$add_fn_name_to_cache_keys
-) {
+    f,
+    ...,
+    add_fn_name_to_cache_keys = get_option("cache_handling.add_fn_name_to_cache_keys")) {
   # Validate input
   validate(is.function(f))
   # Save the parameters for cleaner code
-  use_cache <- OPTIONS$dynamic_options$use_cache
+  use_cache <- get_option("dynamic_options.use_cache")
   cache_folder <- PATHS$DIR_CACHE
-  cache_age <- OPTIONS$cache_handling$cache_age
+  cache_age <- get_option("cache_handling.cache_age")
   if (!use_cache) {
     # Do not capture output if caching is turned off (e.g., when debugging)
     res <- f(...)
@@ -145,7 +142,7 @@ run_cached_function <- function(
   # Use a disk just for logs
   cache_disk <- cachem::cache_disk(
     dir = PATHS$DIR_CACHE, # NULL == temporary cache
-    max_size = 1024 * 1024^2  # 1 GB
+    max_size = 1024 * 1024^2 # 1 GB
   )
 
   # Retrieve from the log disk

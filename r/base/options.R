@@ -80,7 +80,7 @@ set_options <- function(options_to_set, prefix) {
   set_prefixed_options(options_to_set, prefix)
 
   expected_option_count <- count_unique_names(options_to_set, skip_null = TRUE)
-  options_set <- options_enum()[grep(paste0("^", prefix), names(options_enum()))]
+  options_set <- options()[grep(paste0("^", prefix), names(options()))]
 
   assert(
     length(options_set) == expected_option_count,
@@ -142,7 +142,7 @@ validate_options <- function(option_list, prefix, verbose = FALSE) {
 #' @export
 load_options <- function() {
   options_enum <- yaml::read_yaml(PATHS$R_CONFIG_YAML)
-  validate_options(option_list = options_enum, prefix = CONST$PACKAGE_NAME)
+  # validate_options(option_list = options_enum, prefix = CONST$PACKAGE_NAME)
   set_options(options_to_set = options_enum, prefix = CONST$PACKAGE_NAME)
 }
 
@@ -155,7 +155,7 @@ load_options <- function() {
 #' @export
 get_option <- function(name) {
   if (!name %in% names(OPTIONS_ENUM)) {
-    stop(paste("Unknown option:", name))
+    rlang::abort(paste("Unknown option:", name))
   }
   option_name <- paste0(CONST$PACKAGE_NAME, ".", name)
   option <- R.utils::getOption(option_name)

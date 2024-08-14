@@ -1,6 +1,6 @@
 box::use(
   actions / index[ACTIONS],
-  base / options[OPTIONS]
+  base / options[get_option]
 )
 
 
@@ -30,7 +30,7 @@ validate_action <- function(action) {
 #' @return [character] The action to execute
 #' @export
 get_action <- function() {
-  action <- OPTIONS$run$action
+  action <- get_option("run.action")
   validate_action(action)
   return(action)
 }
@@ -46,10 +46,9 @@ get_action <- function() {
 #' print(args$run_args) # list('arg1', 'arg2')
 #' @export
 get_invocation_args <- function() {
-
   # Use an explicit if-else statement to avoid an ifelse bug
   if (interactive()) {
-    args <- OPTIONS$dynamic_options$run_args
+    args <- get_option("dynamic_options.run_args")
   } else {
     args <- commandArgs(trailingOnly = TRUE)
   }

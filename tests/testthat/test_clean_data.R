@@ -3,7 +3,6 @@ box::use(
 )
 
 test_that("tests run correctly", {
-
   expect_silent({
     x <- 1
     y <- 2
@@ -11,9 +10,12 @@ test_that("tests run correctly", {
     expect_equal(sum, 3)
   })
 
-  expect_error({
-    stop("This is an error")
-  }, "This is an error")
+  expect_error(
+    {
+      stop("This is an error")
+    },
+    "This is an error"
+  )
 })
 
 # test_that("checkForMissingCols handles missing columns correctly", {

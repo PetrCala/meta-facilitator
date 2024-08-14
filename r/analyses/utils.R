@@ -1,5 +1,5 @@
 box::use(
-  base / options[OPTIONS],
+  base / options[get_option],
   base / paths[PATHS],
   base / const[CONST],
   libs / file_utils[validate_folder_existence, write_txt_file],
@@ -13,13 +13,13 @@ box::use(
 #' @return [list] The analysis options
 #' @export
 get_analysis_options <- function(analysis_name) {
-  if (!analysis_name %in% names(OPTIONS$analyses)) {
+  if (!analysis_name %in% names(get_option("analyses"))) {
     rlang::abort(
       paste("The analysis name", analysis_name, "is not in the OPTIONS."),
       class = "unknown_analysis"
     )
   }
-  return(OPTIONS$analyses[[analysis_name]])
+  return(get_option("analyses")[[analysis_name]])
 }
 
 #' Log various information about the data frame
@@ -28,7 +28,6 @@ get_analysis_options <- function(analysis_name) {
 #' @param colnames_to_analyse [character] The column names to analyse
 #' @export
 log_dataframe_info <- function(df, colnames_to_analyse = NULL) {
-
   logger::log_info(paste("The data frame has", nrow(df), "rows and", ncol(df), "columns"))
 
   if (!is.null(colnames_to_analyse)) {

@@ -1,5 +1,5 @@
 box::use(
-  base / options[OPTIONS],
+  base / options[get_option],
   analyses / utils[get_analysis_options],
   libs / utils[is_empty],
   libs / validation[validate, assert, validate_columns],
@@ -17,7 +17,7 @@ box::use(
 #' @export
 get_analysis_cols_list <- function(analysis_name) {
   analysis_options <- get_analysis_options(analysis_name)
-  cols <- analysis_options$cols
+  cols <- analysis_get_option("cols")
   if (is_empty(cols)) {
     rlang::abort(
       paste("The analysis options does not contain any columns for analysis", analysis_name),
@@ -105,12 +105,11 @@ clean_names <- function(df) {
 #' @param fill_dof [logical] Whether to fill missing degrees of freedom using the PCC method. Defaults to TRUE
 #' @export
 clean_data <- function(
-  df,
-  analysis_name,
-  clean_names = TRUE,
-  recalculate_t_value = TRUE,
-  fill_dof = TRUE
-) {
+    df,
+    analysis_name,
+    clean_names = TRUE,
+    recalculate_t_value = TRUE,
+    fill_dof = TRUE) {
   logger::log_debug("Cleaning data...")
   source_cols <- get_analysis_cols_list(analysis_name)
 

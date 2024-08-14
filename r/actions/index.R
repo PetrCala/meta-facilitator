@@ -1,6 +1,6 @@
 box::use(
   base / paths[PATHS],
-  base / options[OPTIONS],
+  base / options[get_option],
   analyses / index[ANALYSES],
   libs / test_utils[run_tests_recursively],
   reporters = testing / reporters,
@@ -22,7 +22,6 @@ add <- function(x, y) {
 
 #' @export
 run_analysis <- function(analysis_name, ...) {
-
   if (!length(analysis_name)) {
     rlang::abort("Please provide an analysis name")
   }
@@ -55,7 +54,7 @@ run_tests <- function(...) {
   test_dir_path <- PATHS$DIR_TESTS
 
   reporter <- NULL
-  if (OPTIONS$tests$silent_reporter) {
+  if (get_option("tests.silent_reporter")) {
     reporter <- testthat::ProgressReporter$new(show_praise = FALSE)
   }
   # reporter <- reporters$dot_reporter$new() # use custom

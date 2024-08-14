@@ -1,7 +1,6 @@
 box::use(
   stats[model.frame],
   libs / validation[validate_columns, validate, assert],
-  base / options[OPTIONS],
 )
 
 
@@ -36,28 +35,30 @@ re <- function(df, effect = NULL, se = NULL, method = "DL") {
   if (is.null(se)) se <- df$se
   validate(length(effect) == nrow(df), length(se) == nrow(df))
 
-  result <- tryCatch({
-    meta <- unique(df$meta)
-    if (length(meta) != 1) {
-      message("Could not calculate RE for multiple meta-analyses")
+  result <- tryCatch(
+    {
+      meta <- unique(df$meta)
+      if (length(meta) != 1) {
+        message("Could not calculate RE for multiple meta-analyses")
+        return(list(est = NA, t_value = NA))
+      }
+
+      re_data_ <- data.frame(yi = effect, sei = se, study = df$study)
+
+      suppressWarnings( # Sometimes the variances are large
+        re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = method)
+      )
+      re_est <- re_$beta[1]
+      re_se <- re_$se[1]
+
+      re_t_value <- re_est / re_se
+      return(list(est = re_est, t_value = re_t_value))
+    },
+    error = function(e) {
+      logger::log_debug(paste("Could not fit the RE model for meta-analysis", meta, ": ", e))
       return(list(est = NA, t_value = NA))
     }
-
-    re_data_ <- data.frame(yi = effect, sei = se, study = df$study)
-
-    suppressWarnings( # Sometimes the variances are large
-      re_ <- metafor::rma(yi = yi, sei = sei, data = re_data_, method = method)
-    )
-    re_est <- re_$beta[1]
-    re_se <- re_$se[1]
-
-    re_t_value <- re_est / re_se
-    return(list(est = re_est, t_value = re_t_value))
-  },
-  error = function(e) {
-    logger::log_debug(paste("Could not fit the RE model for meta-analysis", meta, ": ", e))
-    return(list(est = NA, t_value = NA))
-  })
+  )
 
   return(result)
 }
@@ -82,17 +83,19 @@ uwls <- function(df, effect = NULL, se = NULL) {
   t <- effect / se
   precision <- 1 / se
 
-  result <- tryCatch({
-    uwls_regression <- stats::lm(t ~ precision - 1)
-    summary_uwls <- summary(uwls_regression)
-    est <- summary_uwls$coefficients[1, "Estimate"]
-    t_value <- summary_uwls$coefficients[1, "t value"]
-    return(list(est = est, t_value = t_value))
-  },
-  error = function(e) {
-    logger::log_debug(paste("Could not fit the UWLS model for meta-analysis", meta, ": ", e))
-    return(list(est = NA, t_value = NA))
-  })
+  result <- tryCatch(
+    {
+      uwls_regression <- stats::lm(t ~ precision - 1)
+      summary_uwls <- summary(uwls_regression)
+      est <- summary_uwls$coefficients[1, "Estimate"]
+      t_value <- summary_uwls$coefficients[1, "t value"]
+      return(list(est = est, t_value = t_value))
+    },
+    error = function(e) {
+      logger::log_debug(paste("Could not fit the UWLS model for meta-analysis", meta, ": ", e))
+      return(list(est = NA, t_value = NA))
+    }
+  )
 
   return(result)
 }
@@ -149,7 +152,7 @@ hsma <- function(df) {
   r_avg <- sum(n_ * effect) / sum(n_)
   sd_sq <- sum(n_ * ((effect - r_avg)^2)) / sum(n_) # SD_r^2
   assert(sd_sq >= 0, "Negative SD_r^2")
-  se_r = sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
+  se_r <- sqrt(sd_sq) / sqrt(nrow(df)) # SE_r
   t_value <- r_avg / se_r
   return(list(est = r_avg, t_value = t_value))
 }
@@ -200,7 +203,7 @@ pcc_sum_stats <- function(df, log_results = TRUE) {
   }
   assert(sum(is.na(ss_)) == 0, "Missing sample sizes in the PCC data frame")
 
-  quantiles = stats::quantile(ss_, probs = c(0.25, 0.75), na.rm = FALSE)
+  quantiles <- stats::quantile(ss_, probs = c(0.25, 0.75), na.rm = FALSE)
 
   # ss_lt ~ sample sizes less than
   get_ss_lt <- function(lt) {

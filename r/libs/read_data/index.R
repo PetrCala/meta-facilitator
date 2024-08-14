@@ -1,5 +1,5 @@
 box::use(
-  base / options[OPTIONS],
+  base / options[get_option],
   base / paths[PATHS],
   analyses / utils[get_analysis_options],
   libs / cache / index[run_cached_function],
@@ -14,7 +14,7 @@ box::use(
 #' @returns [character] Path of the data file for the given analysis.
 get_data_path <- function(analysis_name) {
   data_dir <- PATHS$DIR_DATA
-  source_df <- OPTIONS$analyses[[analysis_name]]$source_df
+  source_df <- get_option("analyses")[[analysis_name]]$source_df
   path <- file.path(data_dir, source_df)
   if (!(file.exists(path))) {
     logger::log_error(
@@ -67,9 +67,9 @@ read_data_custom <- function(source_path, separators = NA) {
   data_out <- readr::read_delim(
     source_path,
     locale = readr::locale(
-      decimal_mark = OPTIONS$locale$decimal_mark,
-      grouping_mark = OPTIONS$locale$grouping_mark,
-      tz = OPTIONS$locale$tz
+      decimal_mark = get_option("locale.decimal_mark"),
+      grouping_mark = get_option("locale.grouping_mark"),
+      tz = get_option("locale.tz")
     ),
     show_col_types = FALSE # Quiet warnings
   )
@@ -95,7 +95,7 @@ read_analysis_data <- function(analysis_name) {
   logger::log_debug("Reading the data for the analysis ", analysis_name)
   df_path <- get_data_path(analysis_name = analysis_name)
   analysis_options <- get_analysis_options(analysis_name)
-  sheet_name <- analysis_options$source_sheet
+  sheet_name <- analysis_get_option("source_sheet")
   df <- run_cached_function(
     f = readxl::read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
     df_path,

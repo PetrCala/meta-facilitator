@@ -1,5 +1,5 @@
 box::use(
-  base / options[OPTIONS],
+  base / options[get_option],
   pcc_calc = calc / pcc,
   libs / utils[is_empty, to_perc],
   analyses / utils[get_analysis_options],
@@ -12,7 +12,7 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   analysis_options <- get_analysis_options(analysis_name = analysis_name)
 
   # Subset to PCC studies only
-  pcc_identifier <- analysis_options$unique$pcc_identifier
+  pcc_identifier <- analysis_get_option("unique.pcc_identifier")
   if (is_empty(pcc_identifier)) {
     rlang::abort(
       paste0(
@@ -32,7 +32,7 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   logger::log_info("Loaded ", nrow_pcc, " PCC studies out of ", nrow_full, " rows. (", to_perc(nrow_pcc / nrow_full), " of the clean dataset)")
 
   if (fill_dof) { # Interpolate missing degrees of freedom
-    fill_conditions <- OPTIONS$general$fill_dof_conditions
+    fill_conditions <- get_option("general.fill_dof_conditions")
     df <- fill_dof_using_pcc(
       df = df,
       replace_existing = fill_conditions$replace_existing,
@@ -65,8 +65,7 @@ get_pcc_data <- function(df, analysis_name = "", fill_dof = TRUE, ...) {
   n_rows_after <- nrow(df)
   should_have_dropped <- sum(na_rows) + sum(inf_rows)
   if (n_rows_after + should_have_dropped != n_rows_before) {
-    rlang::abort(paste0("Something went wrong when dropping missing PCC variance rows.", "\nNrows before: ", n_rows_before, "\nNrows after: ", n_rows_after, "\nShould have dropped: ", should_have_dropped)
-    )
+    rlang::abort(paste0("Something went wrong when dropping missing PCC variance rows.", "\nNrows before: ", n_rows_before, "\nNrows after: ", n_rows_after, "\nShould have dropped: ", should_have_dropped))
   }
 
   return(df)
