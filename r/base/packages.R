@@ -1,7 +1,7 @@
 #' @title Packages
 #' @description
 #' This objects contains lists of packages that are used in the project.
-#' Contents: CORE, INITIAL, NON_ATTACHED
+#' Contents: CORE, DEV, INITIAL, NON_ATTACHED
 #' @export
 PACKAGES <- list(
   # A list of packages used in the project
@@ -24,6 +24,10 @@ PACKAGES <- list(
     "tidyr" = NA,
     "yaml" = "2.3.8",
     "writexl" = NA
+  ),
+  # A list of packages that are used for development
+  DEV = list(
+    "precommit" = NA,
   ),
   # A list of packages that are necessary for the environment preparation
   INITIAL = c(
