@@ -161,3 +161,22 @@ get_option <- function(name) {
   option <- R.utils::getOption(option_name)
   return(option)
 }
+
+
+#' Get a list of all options from an option group. If the group does not exist, an empty list is returned.
+#'
+#' @param group_name [character] The name of the option group
+#' @return [list] A list of options from the group
+#' @usage
+#' get_options("dynamic_options") # list(log_level = "INFO", use_cache = TRUE, cache_dir = "/tmp")
+#' @export
+get_options <- function(group_name) {
+  relevant_options <- grep(paste0("^", group_name), names(OPTIONS_ENUM), value = TRUE)
+  if (length(relevant_options) == 0) {
+    return(list())
+  }
+  options_values <- sapply(relevant_options, get_option)
+  options_names <- gsub(paste0("^", group_name, "\\."), "", relevant_options)
+  options_list <- setNames(options_values, options_names)
+  return(options_list)
+}
