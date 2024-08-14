@@ -34,8 +34,8 @@ get_chris_metaflavours <- function(df) {
   results <- list(meta = as.character(meta))
   # Define the various methods to calculate the PCC
   methods <- list(
-    re = pcc_calc$re(df, se = se_, method = re_method),
-    uwls = pcc_calc$uwls(df, se = se_),
+    re = pcc_calc$re(df, method = re_method),
+    uwls = pcc_calc$uwls(df),
     uwls3 = pcc_calc$uwls3(df),
     hsma = pcc_calc$hsma(df),
     fishers_z = pcc_calc$fishers_z(df, method = re_method_fishers_z)
