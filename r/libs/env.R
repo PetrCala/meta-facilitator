@@ -25,7 +25,7 @@ quiet_packages <- function(expr) {
 }
 
 #' Function to install a package if it is not a part of the library yet
-install_and_check <- function(pkg, version, verbose = TRUE) {
+install_and_check <- function(pkg, version = NA, verbose = TRUE) {
   if (verbose) {
     version_info <- ifelse(is.na(version), "", paste0(" (", version, ")"))
     message <- paste0("Processing package: ", pkg, version_info)
@@ -58,30 +58,18 @@ install_and_check <- function(pkg, version, verbose = TRUE) {
 }
 
 
-#' Load packages required for environment preparation
-load_initial_packages <- function(verbose = TRUE) {
-  # Load several packages necessary for the environment preparation
-  if (verbose) {
-    cat("Loading initial packages...\n")
-  }
-  install_initial_package <- function(x) suppressPackageStartupMessages(install_and_check(x, NA, verbose))
-  invisible(lapply(PACKAGES$INITIAL, install_initial_package))
-}
-
 #' Load and install a list of R packages
 #'
-#' This function checks if the specified packages are installed, installs any missing
-#' packages, and then loads all of them. If an error occurs during the installation
-#' or loading process, the function stops execution and displays an error message.
+#' This function checks if the specified packages are installed, installs any missing packages, and then loads all of them. If an error occurs during the installation or loading process, the function stops execution and displays an error message.
 #'
 #' Include a progress bar to track the loading process.
 #'
 #' @param package_list [character] A character vector of package names.
-#' @param verbose [bool] If TRUE, print out verbose output about the package loading.
+#' @param msg [character] An optional message to display before loading the packages.
 #'
 #' @return A message indicating that all packages were loaded successfully or an error message if the process fails.
-load_packages <- function(package_list, verbose = TRUE) {
-  load_initial_packages(verbose)
+load_packages <- function(package_list, msg = NULL) {
+  verbose <- !is.null(msg)
 
   # Convert package_list to a named list with NULL versions if necessary
   if (!is.list(package_list) || is.null(names(package_list))) {
@@ -90,19 +78,19 @@ load_packages <- function(package_list, verbose = TRUE) {
 
   # Loading packages
   if (verbose) {
-    cat("Loading packages...\n")
+    cat(paste0(msg, "\n"))
   }
 
   # Applying the function to each package with a progress bar
   pbapply::pblapply(names(package_list), function(pkg) install_and_check(pkg, package_list[[pkg]], verbose))
 
   if (verbose) {
-    cat("\rAll packages loaded successfully\n")
+    cat("\rAll packages loaded successfully\n") # Clear the progress bar
   }
 }
 
-
 #' Setup the R environment
+#' @export
 setup_env <- function() {
   tryCatch(
     {
@@ -116,7 +104,9 @@ setup_env <- function() {
 
   tryCatch(
     {
-      load_packages(PACKAGES$CORE, verbose = TRUE) # Defined in static
+      load_packages(PACKAGES$INITIAL, msg = "Loading initial packages...")
+      load_packages(PACKAGES$CORE, msg = "Loading core packages...")
+      load_packages(PACKAGES$DEV, msg = "Loading development packages...")
     },
     error = function(e) {
       message("Error loading the packages:")
