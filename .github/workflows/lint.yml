@@ -12,6 +12,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install R packages
+        run: |
+          Rscript -e "install.packages('lintr', repos='http://cran.rstudio.com/')"
+
       - name: Set up permissions
         run: chmod +x ./run.sh
 
