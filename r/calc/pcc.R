@@ -79,12 +79,12 @@ uwls <- function(df, effect = NULL, se = NULL) {
   meta <- unique(df$meta)
   validate(length(meta) == 1)
 
-  df$t <- effect / se
-  df$precision <- 1 / se
+  t <- effect / se
+  precision <- 1 / se
 
   result <- tryCatch({
-    uwls <- stats::lm(t ~ precision - 1, data = df)
-    summary_uwls <- summary(uwls)
+    uwls_regression <- stats::lm(t ~ precision - 1)
+    summary_uwls <- summary(uwls_regression)
     est <- summary_uwls$coefficients[1, "Estimate"]
     t_value <- summary_uwls$coefficients[1, "t value"]
     return(list(est = est, t_value = t_value))
