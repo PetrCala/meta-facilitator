@@ -66,9 +66,9 @@ install_and_check <- function(pkg, version = NA, verbose = TRUE) {
 #'
 #' @param package_list [character] A character vector of package names.
 #' @param msg [character] An optional message to display before loading the packages.
-#' @param initial [logical] A flag indicating whether the packages are initial packages.
+#' @param native [logical] A flag indicating whether to install the packages in an R-native way. This approach is less transparent, but requires no external packages.
 #' @return A message indicating that all packages were loaded successfully or an error message if the process fails.
-load_packages <- function(package_list, msg = NULL, initial=FALSE) {
+load_packages <- function(package_list, msg = NULL, native=FALSE) {
   verbose <- !is.null(msg)
 
   # Convert package_list to a named list with NULL versions if necessary
@@ -81,8 +81,8 @@ load_packages <- function(package_list, msg = NULL, initial=FALSE) {
     cat(paste0(msg, "\n"))
   }
 
-  if (initial) {
-    # The other custom package installation method relies on these initial packages, so choose a straightforward approach
+  if (native) {
+    # Native installation that does not require any external packages
     install_intial_pkg <- function(pkg){
       if (!pkg %in% rownames(installed.packages())) install.packages(pkg)
     }
@@ -112,7 +112,7 @@ setup_env <- function() {
 
   tryCatch(
     {
-      load_packages(PACKAGES$INITIAL, msg = "Loading initial packages...", initial=TRUE)
+      load_packages(PACKAGES$INITIAL, msg = "Loading initial packages...", native=TRUE)
       load_packages(PACKAGES$CORE, msg = "Loading core packages...")
       load_packages(PACKAGES$DEV, msg = "Loading development packages...")
     },
