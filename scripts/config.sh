@@ -50,6 +50,18 @@ load_config_file() {
   eval "$(parse_yaml "$CONFIG_FILE_PATH" "CUSTOM_CONFIG")"
 }
 
+# Validate the configuration file based on its name
+validate_config_file() {
+  local CONFIG_NAME="$1"
+  if [[ "$CONFIG_NAME" == "current" ]]; then
+    CONFIG_NAME="$(get_current_config_file)"
+  fi
+  local CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_NAME.yaml"
+  config_file_exists "$CONFIG_NAME"
+  # TODO
+  success "Configuration file '$CONFIG_NAME.yaml' is valid"
+}
+
 # Function to get the name of the configuration file currently in use
 # The name is expected to contain the .yaml suffix
 get_current_config_file_name() {
@@ -93,6 +105,7 @@ remove_config_file() {
 apply_config_file() {
   local CONFIG_NAME="$1"
   config_file_exists "$CONFIG_NAME"
+  validate_config_file "$CONFIG_NAME"
 
   SOURCE_FILE_NAME="$CONFIG_NAME.yaml"
 
@@ -102,18 +115,9 @@ apply_config_file() {
   # Add the name of the source file to the configuration file headers
   yq -i e ".headers.source_file = \"$SOURCE_FILE_NAME\"" "$CONFIG_FILE_PATH"
 
-  # Load the applied configuration file
-  eval "$(parse_yaml "$CONFIG_FILE_PATH" "APPLIED_CONFIG")"
+  NEW_CONFIG_NAME="$(yq '.headers.name' "$CONFIG_FILE_PATH")"
 
-  # TODO Validate the file here, which will substitute the code below
-  # if [[ -z "$CUSTOM_CONFIG__headers__name" ]]; then
-  #   error_exit "Missing configuration name in the configuration file '$CONFIG_NAME.yaml'"
-  # fi
-
-  NEW_CONFIG_FILE_NAME="$APPLIED_CONFIG__headers__source_file"
-  NEW_CONFIG_NAME="$APPLIED_CONFIG__headers__name"
-
-  success "'$NEW_CONFIG_NAME' configuration applied (source: $NEW_CONFIG_FILE_NAME)"
+  success "'$NEW_CONFIG_NAME' configuration applied (source: $SOURCE_FILE_NAME)"
 }
 
 # Function to copy a configuration file
@@ -152,19 +156,22 @@ print_yaml_node() {
   fi
 }
 
-# Function to show the contents of a configuration file
-show_config_file() {
-  local CONFIG_NAME="$1"
-  config_file_exists "$CONFIG_NAME"
-
-  print_yaml_node "headers" "$CONFIG_DIR/$CONFIG_NAME.yaml"
-}
-
 show_current_config_file() {
   if [[ -f "$CONFIG_FILE_PATH" ]]; then
     print_yaml_node "headers" "$CONFIG_FILE_PATH"
   else
     info "No configuration file is currently in use"
+  fi
+}
+
+# Function to show the contents of a configuration file
+show_config_file() {
+  local CONFIG_NAME="$1"
+  if [[ "$CONFIG_NAME" == "current" ]]; then
+    show_current_config_file
+  else
+    config_file_exists "$CONFIG_NAME"
+    print_yaml_node "headers" "$CONFIG_DIR/$CONFIG_NAME.yaml"
   fi
 }
 
@@ -189,7 +196,7 @@ current)
 validate)
   shift
   [[ -z "$1" ]] && error_exit "Please provide the name of the configuration file to validate"
-  # Implement the validate logic here
+  validate_config_file "$1"
   ;;
 apply)
   shift
@@ -204,12 +211,7 @@ remove)
 show)
   shift
   [[ -z "$1" ]] && error_exit "No configuration file provided"
-
-  if [[ "$1" == "current" ]]; then
-    show_current_config_file
-  else
-    show_config_file "$1"
-  fi
+  show_config_file "$1"
   ;;
 list)
   list_config_files
