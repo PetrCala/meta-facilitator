@@ -9,6 +9,7 @@ metadata.json
 output/*
 config/*
 logs/*
+R/config.yaml
 
 # R files
 .Rproj.user/

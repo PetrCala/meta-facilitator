@@ -15,27 +15,26 @@ set -e
 
 #' Choose a configuration file to use for the application. Each time the application is run, the configuration file will be loaded.
 use() {
-  CONFIG_FILE=$1
+  CHOSEN_CONFIG_FILE=$1
 
-  if [[ -z $CONFIG_FILE ]]; then
+  if [[ -z $CHOSEN_CONFIG_FILE ]]; then
     error "No configuration file provided"
     error "Usage: $0 use <config_file_name>"
     exit 1
   fi
 
-  CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_FILE"
+  CHOSEN_CONFIG_FILE_PATH="$CONFIG_DIR/$CHOSEN_CONFIG_FILE"
 
-  if [[ ! -f $CONFIG_FILE_PATH ]]; then
-    error "Configuration file not found: '$CONFIG_FILE'."
+  if [[ ! -f $CHOSEN_CONFIG_FILE_PATH ]]; then
+    error "Configuration file not found: '$CHOSEN_CONFIG_FILE'."
     error "Make sure this file exists in the $CONFIG_DIR directory."
     exit 1
   fi
 
-  info "Using a configuration file '$CONFIG_FILE'"
+  cp $CHOSEN_CONFIG_FILE_PATH $CONFIG_FILE_PATH
+  # perl -p -i -e "s/configuration_file: .*/configuration_file: \"$CONFIG_FILE\"/" $METADATA_FILE_PATH
 
-  # TODO
-  sed -i '' -e 's/configuration_file: .*/configuration_file \"$CONFIG_FILE\"/' $METADATA_FILE_PATH
-
+  info "Configuration file '$CHOSEN_CONFIG_FILE' is now in use"
 }
 
 # Function to display help
