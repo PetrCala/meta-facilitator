@@ -62,6 +62,7 @@ validate_config_file() {
   # success "Configuration file '$CONFIG_NAME.yaml' is valid"
 }
 
+# Run the config setup prompt sequence and return the name of the new configuration file.
 run_config_setup() {
   NAME="new_config" # Name of the new configuration file
   touch "$CONFIG_DIR/$NAME.yaml"
