@@ -125,6 +125,23 @@ apply_config_file() {
   success "'$NEW_CONFIG_NAME' configuration applied (source: $NEW_CONFIG_FILE_NAME)"
 }
 
+# Function to copy a configuration file
+copy_config_file() {
+  local CONFIG_NAME="$1"
+  local NEW_CONFIG_NAME="$2"
+  config_file_exists "$CONFIG_NAME"
+
+  local CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_NAME.yaml"
+  local NEW_CONFIG_FILE_PATH="$CONFIG_DIR/$NEW_CONFIG_NAME.yaml"
+
+  if [[ -f "$NEW_CONFIG_FILE_PATH" ]]; then
+    error_exit "Configuration file '$NEW_CONFIG_NAME.yaml' already exists"
+  fi
+
+  cp "$CONFIG_FILE_PATH" "$NEW_CONFIG_FILE_PATH"
+  success "Configuration file '$CONFIG_NAME.yaml' copied to '$NEW_CONFIG_NAME.yaml'"
+}
+
 # Function to list all configuration files
 list_config_files() {
   echo "Available configuration files:"
@@ -159,8 +176,9 @@ setup)
   # Implement the setup logic here
   ;;
 copy)
+  shift
   [[ -z "$1" ]] && error_exit "Please provide the name of the configuration file to copy"
-  # Implement the copy logic here
+  copy_config_file "$1" "$2"
   ;;
 current)
   print_current_config_file_name
