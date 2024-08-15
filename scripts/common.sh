@@ -11,6 +11,7 @@ CACHE_DIR_NAME="_cache"
 R_DIR_NAME="R"
 OUTPUT_DIR_NAME="output"
 CONFIG_DIR_NAME="config"
+CONFIG_SRC_DIR_NAME="$R_DIR_NAME/libs/config"
 LINT_DIR_NAME="R" # Name of the directory to lint
 TEST_DIR_NAME="tests/testthat"
 
@@ -18,6 +19,7 @@ TEST_DIR_NAME="tests/testthat"
 RUN_FILE_NAME="run.R"
 METADATA_FILE_NAME="metadata.yaml" # Metadata in the R directory
 CONFIG_FILE_NAME="config.yaml"
+CONFIG_SRC_FILE_NAME="config_src.yaml" # Config template
 SENTINEL_FILE_NAME="last_poetry_install.txt"
 SETUP_ENV_FILE_NAME="base/setup_env.R"
 
@@ -35,3 +37,4 @@ METADATA_FILE_PATH="$R_DIR/$METADATA_FILE_NAME"
 SETUP_ENV_FILE_PATH="$R_DIR/$SETUP_ENV_FILE_NAME"
 RUN_FILE_PATH="$R_DIR/$RUN_FILE_NAME"
 CONFIG_FILE_PATH="$R_DIR/$CONFIG_FILE_NAME"
+CONFIG_SRC_FILE_PATH="$CONFIG_SRC_DIR/$CONFIG_SRC_FILE_NAME"

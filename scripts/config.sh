@@ -59,7 +59,16 @@ validate_config_file() {
   local CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_NAME.yaml"
   config_file_exists "$CONFIG_NAME"
   # TODO
-  success "Configuration file '$CONFIG_NAME.yaml' is valid"
+  # success "Configuration file '$CONFIG_NAME.yaml' is valid"
+}
+
+# Setup a new configuration file
+setup_config_file() {
+  if [[ ! -d "$CONFIG_DIR" ]]; then
+    info "Creating configuration directory: $CONFIG_DIR"
+    mkdir -p "$CONFIG_DIR"
+  fi
+
 }
 
 # Function to get the name of the configuration file currently in use
