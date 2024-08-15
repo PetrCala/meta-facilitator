@@ -36,41 +36,41 @@ To run the analysis, you must have several applications installed on your device
 
 - R: [install here](https://cran.r-project.org)
 
-To verify the installation was successful, run the following commands in your terminal:
+  To verify the installation was successful, run the following commands in your terminal:
 
-```bash
-R --version
-```
+  ```bash
+  R --version
+  ```
 
-All of these should print out the version of the relevant executable. If not, refer to the installation guides.
+  This command should print out the version of the relevant executable. If not, refer to the R installation guides.
 
 # How to run
 
 1. Clone the repository using
 
-```bash
-git clone https://github.com/PetrCala/meta-facilitator.git
-```
+   ```bash
+   git clone https://github.com/PetrCala/meta-facilitator.git
+   ```
 
-2. Navigate to the project root
+1. Navigate to the project root
 
-```bash
-cd meta-facilitator
-```
+   ```bash
+   cd meta-facilitator
+   ```
 
-3. Set up the local environment by executing
+1. Set up the local environment by executing
 
-```bash
-echo "alias artma='./run.sh'" >>~/.zshrc
-chmod +x run.sh
-artma setup
-```
+   ```bash
+   echo "alias artma='./run.sh'" >>~/.zshrc
+   chmod +x run.sh
+   artma setup
+   ```
 
-4. See the list of available commands by running
+1. See the list of available commands by running
 
-```bash
-artma help
-```
+   ```bash
+   artma help
+   ```
 
 <!-- 5. Choose an action to run out of the [Available Actions section](#available-actions). Run it using:
 
