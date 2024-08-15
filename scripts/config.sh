@@ -13,9 +13,23 @@ set -e
 
 . "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
+#' Remove a configuration file
+remove_config_file() {
+  local CONFIG_NAME=$1
+  CHOSEN_CONFIG_FILE="$CONFIG_NAME.yaml"
+  CHOSEN_CONFIG_FILE_PATH="$CONFIG_DIR/$CHOSEN_CONFIG_FILE"
+
+  if [[ -f $CHOSEN_CONFIG_FILE_PATH ]]; then
+    rm $CHOSEN_CONFIG_FILE_PATH
+    success "Configuration file '$CHOSEN_CONFIG_FILE' was deleted"
+  else
+    info "Configuration file '$CHOSEN_CONFIG_FILE' does not exist"
+  fi
+}
+
 #' Choose a configuration file to use for the application. Each time the application is run, the configuration file will be loaded.
-use() {
-  CONFIG_NAME=$1
+use_config_file() {
+  local CONFIG_NAME=$1
 
   CHOSEN_CONFIG_FILE="$CONFIG_NAME.yaml"
 
@@ -28,8 +42,8 @@ use() {
   CHOSEN_CONFIG_FILE_PATH="$CONFIG_DIR/$CHOSEN_CONFIG_FILE"
 
   if [[ ! -f $CHOSEN_CONFIG_FILE_PATH ]]; then
-    error "Configuration file not found: '$CHOSEN_CONFIG_FILE'."
-    error "Make sure this file exists in the $CONFIG_DIR directory."
+    error "Configuration file not found: '$CHOSEN_CONFIG_FILE'"
+    error "Make sure this file exists in the $CONFIG_DIR directory"
     exit 1
   fi
 
@@ -43,7 +57,7 @@ use() {
     exit 1
   fi
 
-  info "Configuration '$CUSTOM_CONFIG_name' is now in use (source: $CHOSEN_CONFIG_FILE)"
+  success "Configuration '$CUSTOM_CONFIG_name' is now in use (source: $CHOSEN_CONFIG_FILE)"
 }
 
 # Function to display help
@@ -51,6 +65,7 @@ show_help() {
   echo "Usage: $0 <command> [args]"
   echo
   echo "Commands:"
+  echo "  remove          Delete a configuration file"
   echo "  use             Choose a configuration file to use for the application"
   echo "  help            Display this help message"
 }
@@ -63,9 +78,13 @@ fi
 
 # Main switch-case to handle commands
 case "$1" in
+remove)
+  shift
+  remove_config_file "$@"
+  ;;
 use)
   shift
-  use "$@"
+  use_config_file "$@"
   ;;
 help)
   show_help
