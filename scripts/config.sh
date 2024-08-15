@@ -62,6 +62,12 @@ validate_config_file() {
   # success "Configuration file '$CONFIG_NAME.yaml' is valid"
 }
 
+run_config_setup() {
+  NAME="new_config" # Name of the new configuration file
+  touch "$CONFIG_DIR/$NAME.yaml"
+  echo "$NAME"
+}
+
 # Setup a new configuration file
 setup_config_file() {
   if [[ ! -d "$CONFIG_DIR" ]]; then
@@ -69,6 +75,9 @@ setup_config_file() {
     mkdir -p "$CONFIG_DIR"
   fi
 
+  local CONFIG_NAME="$(run_config_setup)"
+  validate_config_file "$CONFIG_NAME"
+  success "Configuration file '$CONFIG_NAME.yaml' created"
 }
 
 # Function to get the name of the configuration file currently in use
@@ -192,7 +201,7 @@ fi
 # Main switch-case to handle commands
 case "$1" in
 setup)
-  # Implement the setup logic here
+  setup_config_file
   ;;
 copy)
   shift
