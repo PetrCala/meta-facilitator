@@ -18,19 +18,20 @@ use() {
   CONFIG_FILE=$1
 
   if [[ -z $CONFIG_FILE ]]; then
-    echo "Error: No configuration file provided"
-    echo "Usage: $0 use <config_file>"
+    error "No configuration file provided"
+    error "Usage: $0 use <config_file_name>"
     exit 1
   fi
 
   CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_FILE"
 
   if [[ ! -f $CONFIG_FILE_PATH ]]; then
-    echo "Error: Configuration file not found: $CONFIG_FILE. Make sure to place the configuration file in the $CONFIG_DIR directory."
+    error "Configuration file not found: '$CONFIG_FILE'."
+    error "Make sure this file exists in the $CONFIG_DIR directory."
     exit 1
   fi
 
-  echo "Use a configuration file '$CONFIG_FILE'"
+  info "Using a configuration file '$CONFIG_FILE'"
 
   # TODO
   sed -i '' -e 's/configuration_file: .*/configuration_file \"$CONFIG_FILE\"/' $METADATA_FILE_PATH
