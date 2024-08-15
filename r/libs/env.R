@@ -37,7 +37,7 @@ install_and_check <- function(pkg, version = NA, verbose = TRUE) {
       {
         # Install specific version if provided, else install the latest version
         if (!is.na(version)) {
-          devtools::install_version(pkg, version = version)
+          remotes::install_version(pkg, version = version)
         } else {
           install.packages(pkg)
         }
