@@ -79,15 +79,6 @@ print_current_config_file_name() {
   info "Current configuration file: '$CURRENT_CONFIG'"
 }
 
-# Function to print configuration information based on the full path to a configuration file
-print_config_info() {
-  local CONFIG_NAME="$1"
-  load_config_file "$CONFIG_NAME"
-
-  CONFIG_HEADERS=$(compgen -v | grep -E "^CUSTOM_CONFIG__headers")
-  echo $CONFIG_HEADERS
-}
-
 # Function to remove a configuration file
 remove_config_file() {
   local CONFIG_NAME="$1"
@@ -109,7 +100,7 @@ apply_config_file() {
   cp "$CONFIG_DIR/$SOURCE_FILE_NAME" "$CONFIG_FILE_PATH"
 
   # Add the name of the source file to the configuration file headers
-  perl -i -pe 's/^headers:.*/headers:\n  source_file: '\"$SOURCE_FILE_NAME\"'/' "$CONFIG_FILE_PATH"
+  yq -i e ".headers.source_file = \"$SOURCE_FILE_NAME\"" "$CONFIG_FILE_PATH"
 
   # Load the applied configuration file
   eval "$(parse_yaml "$CONFIG_FILE_PATH" "APPLIED_CONFIG")"
@@ -148,18 +139,30 @@ list_config_files() {
   ls "$CONFIG_DIR"/*.yaml | xargs -n 1 basename
 }
 
+# Function to print a YAML node
+print_yaml_node() {
+  local NODE_NAME="$1"
+  local YAML_FILE="$2"
+
+  echo "$YAML_FILE"
+  if yq e ".$NODE_NAME" "$YAML_FILE" &>/dev/null; then
+    yq e ".$NODE_NAME" "$YAML_FILE"
+  else
+    error "'$NODE_NAME' node does not exist in $YAML_FILE."
+  fi
+}
+
 # Function to show the contents of a configuration file
 show_config_file() {
   local CONFIG_NAME="$1"
   config_file_exists "$CONFIG_NAME"
 
-  cat "$CONFIG_DIR/$CONFIG_NAME.yaml"
+  print_yaml_node "headers" "$CONFIG_DIR/$CONFIG_NAME.yaml"
 }
 
 show_current_config_file() {
   if [[ -f "$CONFIG_FILE_PATH" ]]; then
-    CURRENT_CONFIG_FILE="$(get_current_config_file)"
-    show_config_file "$CURRENT_CONFIG_FILE"
+    print_yaml_node "headers" "$CONFIG_FILE_PATH"
   else
     info "No configuration file is currently in use"
   fi
