@@ -14,10 +14,10 @@ show_help() {
   echo
   echo "Commands:"
   echo "  setup           Create a new configuration file from a template"
+  echo "  apply           Choose a configuration file to use for the application"
   echo "  copy            Copy an existing configuration file"
   echo "  current         Print information about the current configuration file"
   echo "  validate        Validate a configuration file"
-  echo "  use             Choose a configuration file to use for the application"
   echo "  remove          Delete a configuration file"
   echo "  show            Show the contents of a configuration file"
   echo "  list            List all configuration files"
@@ -99,18 +99,30 @@ remove_config_file() {
 }
 
 # Function to choose a configuration file to use
-use_config_file() {
+apply_config_file() {
   local CONFIG_NAME="$1"
   config_file_exists "$CONFIG_NAME"
 
-  cp "$CONFIG_DIR/$CONFIG_NAME.yaml" "$CONFIG_FILE_PATH"
-  load_config_file "$CONFIG_NAME"
+  SOURCE_FILE_NAME="$CONFIG_NAME.yaml"
 
-  if [[ -z "$CUSTOM_CONFIG__headers__name" ]]; then
-    error_exit "Missing configuration name in the configuration file '$CONFIG_NAME.yaml'"
-  fi
+  # Apply the configuration file
+  cp "$CONFIG_DIR/$SOURCE_FILE_NAME" "$CONFIG_FILE_PATH"
 
-  success "Configuration '$CUSTOM_CONFIG__headers__name' is now in use (source: $CONFIG_NAME.yaml)"
+  # Add the name of the source file to the configuration file headers
+  perl -i -pe 's/^headers:.*/headers:\n  source_file: '\"$SOURCE_FILE_NAME\"'/' "$CONFIG_FILE_PATH"
+
+  # Load the applied configuration file
+  eval "$(parse_yaml "$CONFIG_FILE_PATH" "APPLIED_CONFIG")"
+
+  # TODO Validate the file here, which will substitute the code below
+  # if [[ -z "$CUSTOM_CONFIG__headers__name" ]]; then
+  #   error_exit "Missing configuration name in the configuration file '$CONFIG_NAME.yaml'"
+  # fi
+
+  NEW_CONFIG_FILE_NAME="$APPLIED_CONFIG__headers__source_file"
+  NEW_CONFIG_NAME="$APPLIED_CONFIG__headers__name"
+
+  success "'$NEW_CONFIG_NAME' configuration applied (source: $NEW_CONFIG_FILE_NAME)"
 }
 
 # Function to list all configuration files
@@ -158,10 +170,10 @@ validate)
   [[ -z "$1" ]] && error_exit "Please provide the name of the configuration file to validate"
   # Implement the validate logic here
   ;;
-use)
+apply)
   shift
   [[ -z "$1" ]] && error_exit "Please provide the name of the configuration file to use"
-  use_config_file "$1"
+  apply_config_file "$1"
   ;;
 remove)
   shift
