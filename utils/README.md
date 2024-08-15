@@ -37,9 +37,9 @@ Now, go to `keybindings.json`, and add the following:
 
 ```json
 {
-  "key": "cmd+shift+r", // Or any shortcut of your choice.
-  "command": "extension.multiCommand.execute",
-  "args": { "command": "multiCommand.runRSource" }
+	"key": "cmd+shift+r", // Or any shortcut of your choice.
+	"command": "extension.multiCommand.execute",
+	"args": { "command": "multiCommand.runRSource" }
 }
 ```
 
@@ -51,26 +51,26 @@ In the `.vscode` folder, create a file called `tasks.json` with the following co
 
 ```json
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Run Default R Script Interactively",
-      "type": "shell",
-      "command": "R",
-      "args": ["-e", "\"source('${workspaceFolder}/R/run.R')\""],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "presentation": {
-        "echo": true,
-        "reveal": "always",
-        "focus": false,
-        "panel": "shared"
-      },
-      "problemMatcher": []
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Default R Script Interactively",
+			"type": "shell",
+			"command": "R",
+			"args": ["-e", "\"source('${workspaceFolder}/R/run.R')\""],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			},
+			"problemMatcher": []
+		}
+	]
 }
 ```
 
@@ -78,9 +78,9 @@ Then, in `keybindings.json`, add the following keybinding.
 
 ```json
 {
-  "key": "ctrl+shift+r", // or the key binding of your choice
-  "command": "workbench.action.tasks.runTask",
-  "args": "Run Default R Script Interactively"
+	"key": "ctrl+shift+r", // or the key binding of your choice
+	"command": "workbench.action.tasks.runTask",
+	"args": "Run Default R Script Interactively"
 }
 ```
 
@@ -93,16 +93,25 @@ To close an interactive R terminal, such as when browsing during debugging, you 
 ```json
 // keybindings.json
 {
-  "key": "cmd+shift+e",
-  "command": "workbench.action.terminal.sendSequence",
-  "args": {
-    "text": "Q\nq()\n"
-  },
-  "description": "Quit R Debugger and Console",
-  "note": "Run only when the active open terminal is an R terminal"
+	"key": "cmd+shift+e",
+	"command": "workbench.action.terminal.sendSequence",
+	"args": {
+		"text": "Q\nq()\n"
+	},
+	"description": "Quit R Debugger and Console",
+	"note": "Run only when the active open terminal is an R terminal"
 }
 ```
 
 Pressing `cmd+shift+e` will now send a sequence to the R interactive terminal that will cause it to close. This is useful, for example, when you want to quickly restart the current session when making changes to the code.
 
 _Note: You may even chain the closing/opening of the terminal to create a fully automated reset functionality._
+
+## Aliases
+
+Here are a bunch of useful aliases for faster script/R invocations:
+
+```bash
+alias artma="./run.sh"
+alias R="$(/usr/bin/which R) --no-save --no-init-file"
+```
