@@ -15,7 +15,9 @@ set -e
 
 #' Choose a configuration file to use for the application. Each time the application is run, the configuration file will be loaded.
 use() {
-  CHOSEN_CONFIG_FILE=$1
+  CONFIG_NAME=$1
+
+  CHOSEN_CONFIG_FILE="$CONFIG_NAME.yaml"
 
   if [[ -z $CHOSEN_CONFIG_FILE ]]; then
     error "No configuration file provided"
@@ -32,9 +34,16 @@ use() {
   fi
 
   cp $CHOSEN_CONFIG_FILE_PATH $CONFIG_FILE_PATH
-  # perl -p -i -e "s/configuration_file: .*/configuration_file: \"$CONFIG_FILE\"/" $METADATA_FILE_PATH
 
-  info "Configuration file '$CHOSEN_CONFIG_FILE' is now in use"
+  # Load the configuration variables into memory
+  eval $(parse_yaml $CHOSEN_CONFIG_FILE_PATH "CUSTOM_CONFIG_")
+
+  if [[ -z "$CUSTOM_CONFIG_name" ]]; then
+    error "Missing configuration name in the configuration file '$CHOSEN_CONFIG_FILE'"
+    exit 1
+  fi
+
+  info "Configuration '$CUSTOM_CONFIG_name' is now in use (source: $CHOSEN_CONFIG_FILE)"
 }
 
 # Function to display help

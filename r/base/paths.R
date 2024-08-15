@@ -30,7 +30,7 @@ get_script_directory <- function() {
 DIR_R <- getwd() # Assume this points to meta-facilitator/R folder
 PROJECT_ROOT <- dirname(DIR_R)
 DIR_BASE <- file.path(DIR_R, "base")
-DIR_CONFIG <- file.path(DIR_R, "config")
+DIR_CONFIG <- file.path(DIR_R, "libs", "config")
 
 #' A list of paths used in the project
 #'
