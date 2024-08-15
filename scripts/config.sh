@@ -17,8 +17,8 @@ show_help() {
   echo "  copy            Copy an existing configuration file"
   echo "  current         Print information about the current configuration file"
   echo "  validate        Validate a configuration file"
-  echo "  use             Choose a configuration file to use for the application" # DONE
-  echo "  remove          Delete a configuration file"                            # DONE
+  echo "  use             Choose a configuration file to use for the application"
+  echo "  remove          Delete a configuration file"
   echo "  show            Show the contents of a configuration file"
   echo "  list            List all configuration files"
   echo "  help            Display this help message"
