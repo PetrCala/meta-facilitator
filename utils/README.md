@@ -139,3 +139,25 @@ Here are a bunch of useful aliases for faster script/R invocations:
 alias artma="./run.sh"
 alias R="$(/usr/bin/which R) --no-save --no-init-file"
 ```
+
+## Rprofile
+
+The following .Rprofile setting may help you get around with package installation and loading:
+
+```.Rprofile
+options(repos=c(CRAN="https://cran.r-project.org"))
+options(pkgType = "source")
+
+suppressWarnings(suppressMessages({
+    # Silence a warning in the data.table that causes single-thread processing on Mac
+    library(data.table)
+    library(rlang)
+    # Silence other commonly used packages
+    library(utils)
+    library(stats)
+    library(graphics)
+    library(grDevices)
+    library(methods)
+    library(base)
+}))
+```
