@@ -23,7 +23,7 @@ fi
 
 # Main switch-case to handle commands
 case "$1" in
-R)
+[Rr])
   shift
   sh scripts/runR.sh "$@"
   ;;
