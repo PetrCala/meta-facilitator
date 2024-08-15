@@ -1,3 +1,9 @@
+headers:
+  description: "Metadata for the configuration file"
+  name:
+    type: "character"
+    description: "The name of the configuration file"
+
 dynamic_options:
   description: "Frequently changed options"
   log_level: 

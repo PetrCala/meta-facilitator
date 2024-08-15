@@ -53,12 +53,12 @@ use_config_file() {
   # Load the configuration variables into memory
   eval $(parse_yaml $CHOSEN_CONFIG_FILE_PATH "CUSTOM_CONFIG_")
 
-  if [[ -z "$CUSTOM_CONFIG_name" ]]; then
+  if [[ -z "$CUSTOM_CONFIG_headers_name" ]]; then
     error "Missing configuration name in the configuration file '$CHOSEN_CONFIG_FILE'"
     exit 1
   fi
 
-  success "Configuration '$CUSTOM_CONFIG_name' is now in use (source: $CHOSEN_CONFIG_FILE)"
+  success "Configuration '$CUSTOM_CONFIG_headers_name' is now in use (source: $CHOSEN_CONFIG_FILE)"
 }
 
 # Function to display help
