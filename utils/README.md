@@ -107,6 +107,30 @@ Pressing `cmd+shift+e` will now send a sequence to the R interactive terminal th
 
 _Note: You may even chain the closing/opening of the terminal to create a fully automated reset functionality._
 
+### Useful settings
+
+Here is a list of settings I use in VSCode for better R handling:
+
+```json
+// In settings.json
+{
+	"r.lsp.enabled": true,
+	"r.lsp.diagnostics": true,
+	"r.lsp.debug": true,
+	"r.helpPanel.enableHoverLinks": true,
+	"r.plot.defaults.colorTheme": "vscode",
+	"r.rterm.option": ["--no-save", "--no-restore"],
+	"r.rterm.mac": "/opt/homebrew/bin/R",
+	"r.alwaysUseActiveTerminal": true,
+	"[r]": {
+		"editor.wordWrap": "wordWrapColumn",
+		"editor.snippetSuggestions": "top",
+		"editor.defaultFormatter": "REditorSupport.r",
+		"editor.formatOnSave": true
+	}
+}
+```
+
 ## Aliases
 
 Here are a bunch of useful aliases for faster script/R invocations:
