@@ -1,5 +1,15 @@
 # Utils
 
+## Installing R
+
+- On MacOS, the best way to install R is through the following command:
+
+  ```bash
+  brew install --cask r
+  ```
+
+  It is quite vital that the _cask_ flag is used, as this will allow R to later install packages through binaries, instead of from source with compilation.
+
 ## VSCode
 
 There are many utilities in VScode that allow a quick execution of the files in the project. Here are but several of them.
@@ -37,9 +47,9 @@ Now, go to `keybindings.json`, and add the following:
 
 ```json
 {
-	"key": "cmd+shift+r", // Or any shortcut of your choice.
-	"command": "extension.multiCommand.execute",
-	"args": { "command": "multiCommand.runRSource" }
+  "key": "cmd+shift+r", // Or any shortcut of your choice.
+  "command": "extension.multiCommand.execute",
+  "args": { "command": "multiCommand.runRSource" }
 }
 ```
 
@@ -51,26 +61,26 @@ In the `.vscode` folder, create a file called `tasks.json` with the following co
 
 ```json
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"label": "Run Default R Script Interactively",
-			"type": "shell",
-			"command": "R",
-			"args": ["-e", "\"source('${workspaceFolder}/R/run.R')\""],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
-			"presentation": {
-				"echo": true,
-				"reveal": "always",
-				"focus": false,
-				"panel": "shared"
-			},
-			"problemMatcher": []
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Default R Script Interactively",
+      "type": "shell",
+      "command": "R",
+      "args": ["-e", "\"source('${workspaceFolder}/R/run.R')\""],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
 }
 ```
 
@@ -78,9 +88,9 @@ Then, in `keybindings.json`, add the following keybinding.
 
 ```json
 {
-	"key": "ctrl+shift+r", // or the key binding of your choice
-	"command": "workbench.action.tasks.runTask",
-	"args": "Run Default R Script Interactively"
+  "key": "ctrl+shift+r", // or the key binding of your choice
+  "command": "workbench.action.tasks.runTask",
+  "args": "Run Default R Script Interactively"
 }
 ```
 
@@ -93,13 +103,13 @@ To close an interactive R terminal, such as when browsing during debugging, you 
 ```json
 // keybindings.json
 {
-	"key": "cmd+shift+e",
-	"command": "workbench.action.terminal.sendSequence",
-	"args": {
-		"text": "Q\nq()\n"
-	},
-	"description": "Quit R Debugger and Console",
-	"note": "Run only when the active open terminal is an R terminal"
+  "key": "cmd+shift+e",
+  "command": "workbench.action.terminal.sendSequence",
+  "args": {
+    "text": "Q\nq()\n"
+  },
+  "description": "Quit R Debugger and Console",
+  "note": "Run only when the active open terminal is an R terminal"
 }
 ```
 
@@ -114,20 +124,20 @@ Here is a list of settings I use in VSCode for better R handling:
 ```json
 // In settings.json
 {
-	"r.lsp.enabled": true,
-	"r.lsp.diagnostics": true,
-	"r.lsp.debug": true,
-	"r.helpPanel.enableHoverLinks": true,
-	"r.plot.defaults.colorTheme": "vscode",
-	"r.rterm.option": ["--no-save", "--no-restore"],
-	"r.rterm.mac": "/opt/homebrew/bin/R",
-	"r.alwaysUseActiveTerminal": true,
-	"[r]": {
-		"editor.wordWrap": "wordWrapColumn",
-		"editor.snippetSuggestions": "top",
-		"editor.defaultFormatter": "REditorSupport.r",
-		"editor.formatOnSave": true
-	}
+  "r.lsp.enabled": true,
+  "r.lsp.diagnostics": true,
+  "r.lsp.debug": true,
+  "r.helpPanel.enableHoverLinks": true,
+  "r.plot.defaults.colorTheme": "vscode",
+  "r.rterm.option": ["--no-save", "--no-restore"],
+  "r.rterm.mac": "/opt/homebrew/bin/R",
+  "r.alwaysUseActiveTerminal": true,
+  "[r]": {
+    "editor.wordWrap": "wordWrapColumn",
+    "editor.snippetSuggestions": "top",
+    "editor.defaultFormatter": "REditorSupport.r",
+    "editor.formatOnSave": true
+  }
 }
 ```
 
