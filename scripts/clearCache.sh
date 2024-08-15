@@ -4,19 +4,11 @@
 
 set -e
 
-CACHE_DIR_NAME="_cache"
+. "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
-SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
-source "$SCRIPTS_DIR/shellUtils.sh"
-
-PROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
-PROJECT_ROOT=$(get_abs_path "$PROJECT_ROOT_REL")
-
-CACHE_FOLDER_PATH="$PROJECT_ROOT/$CACHE_DIR_NAME"
-
-if [ -d "$CACHE_FOLDER_PATH" ]; then
+if [ -d "$CACHE_DIR" ]; then
   info "Clearing cache..."
-  rm -rf "$CACHE_FOLDER_PATH"
+  rm -rf "$CACHE_DIR"
   success "Cache cleared!"
 else
   info "No cache found."

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Source: Expensify (under MIT license)
-# Link: https://github.com/Expensify/App/blob/main/scripts/shellUtils.sh
-
 # Check if GREEN has already been defined
 if [ -z "${GREEN+x}" ]; then
     declare -r GREEN=$'\e[1;32m'

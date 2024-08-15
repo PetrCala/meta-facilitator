@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
-source "$SCRIPTS_DIR/shellUtils.sh"
-
 if [[ $(git status --porcelain) ]]; then
     error "There are unsaved changes. Please commit or stash your changes before running this script."
     exit 1

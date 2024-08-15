@@ -11,15 +11,7 @@
 
 set -e
 
-SCRIPTS_DIR=$(dirname "${BASH_SOURCE[0]}")
-source "$SCRIPTS_DIR/shellUtils.sh"
-
-ROJECT_ROOT_REL=$(dirname "$SCRIPTS_DIR")
-PROJECT_ROOT=$(get_abs_path "$ROJECT_ROOT_REL")
-R_DIR="$PROJECT_ROOT/R"
-CONFIG_DIR="$PROJECT_ROOT/config"
-
-METADATA_FILE="$R_DIR/metadata.yaml"
+. "$(dirname "${BASH_SOURCE[0]}")/common.sh"
 
 #' Choose a configuration file to use for the application. Each time the application is run, the configuration file will be loaded.
 use() {
@@ -41,7 +33,7 @@ use() {
   echo "Use a configuration file '$CONFIG_FILE'"
 
   # TODO
-  sed -i '' -e 's/configuration_file: .*/configuration_file \"$CONFIG_FILE\"/' $METADATA_FILE
+  sed -i '' -e 's/configuration_file: .*/configuration_file \"$CONFIG_FILE\"/' $METADATA_FILE_PATH
 
 }
 
