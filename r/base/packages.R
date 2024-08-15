@@ -8,7 +8,6 @@ PACKAGES <- list(
   CORE = list(
     "cachem" = "1.0.8",
     "data.table" = "1.15.4",
-    "devtools" = "2.4.5",
     "dplyr" = NA,
     "logger" = NA,
     "magrittr" = NA, # The pipe module - part of dplyr
@@ -34,7 +33,7 @@ PACKAGES <- list(
     "languageserver",
     "box",
     "rstudioapi",
-    "devtools",
+    "remotes",
     "pbapply"
   ),
   # A list of packages that are not attached to the search path
