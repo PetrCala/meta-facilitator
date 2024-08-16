@@ -148,8 +148,14 @@ copy_config_file() {
 
 # Function to list all configuration files
 list_config_files() {
+  local FILES="$(ls "$CONFIG_DIR"/*.yaml)"
+
   echo "Available configuration files:"
-  ls "$CONFIG_DIR"/*.yaml | xargs -n 1 basename
+  for file in $FILES; do
+    is_in_use=false
+    [[ "$(basename $file)" == "$(get_current_config_file_name)" ]] && is_in_use=true
+    extract_yaml_metadata "$file" "$is_in_use"
+  done
 }
 
 # Function to print a YAML node

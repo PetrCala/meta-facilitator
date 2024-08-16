@@ -141,3 +141,26 @@ function parse_yaml {
       }
    }'
 }
+
+# Function to extract and print metadata from a YAML file
+extract_yaml_metadata() {
+    local file="$1"
+    local is_in_use="$2"
+
+    if [[ ! -f "$file" ]]; then
+        error "File not found: $file"
+        return
+    fi
+
+    # Extract basic metadata
+    local filename=$(basename "$file")
+    local created=$(date -r "$file" "+%Y-%m-%d %H:%M:%S")
+    local filesize=$(wc -c "$file" | awk '{print $1}')
+
+    # Print the metadata in a single line
+    local base_stats="File: $filename | Created: $created | File size: $filesize bytes"
+
+    "$is_in_use" = true ]] && base_stats="$base_stats | In use"
+
+    echo $base_stats
+}
