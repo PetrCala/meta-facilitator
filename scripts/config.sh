@@ -41,15 +41,6 @@ config_file_exists() {
   fi
 }
 
-# Function to load a configuration file
-load_config_file() {
-  local CONFIG_NAME="$1"
-  local CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_NAME.yaml"
-  config_file_exists "$CONFIG_NAME"
-
-  eval "$(parse_yaml "$CONFIG_FILE_PATH" "CUSTOM_CONFIG")"
-}
-
 # Validate the configuration file based on its name
 validate_config_file() {
   local CONFIG_NAME="$1"
