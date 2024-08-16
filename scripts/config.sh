@@ -50,7 +50,7 @@ validate_config_file() {
   local CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_NAME.yaml"
   config_file_exists "$CONFIG_NAME"
   # TODO
-  success "Configuration file '$CONFIG_NAME.yaml' is valid"
+  # success "Configuration file '$CONFIG_NAME.yaml' is valid"
 }
 
 # Run the config setup prompt sequence and return the name of the new configuration file.
@@ -114,7 +114,9 @@ remove_config_file() {
 apply_config_file() {
   local CONFIG_NAME="$1"
   config_file_exists "$CONFIG_NAME"
-  validate_config_file "$CONFIG_NAME"
+
+  VALIDATION_OUTCOME=$(validate_config_file "$CONFIG_NAME")
+  [[ ! -z $VALIDATION_OUTCOME ]] && error_exit "$VALIDATION_OUTCOME"
 
   SOURCE_FILE_NAME="$CONFIG_NAME.yaml"
 
