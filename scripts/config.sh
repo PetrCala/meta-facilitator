@@ -85,8 +85,7 @@ setup_config_file() {
 # The name is expected to contain the .yaml suffix
 get_current_config_file_name() {
   if [[ -f "$CONFIG_FILE_PATH" ]]; then
-    eval "$(parse_yaml "$CONFIG_FILE_PATH" "CONFIG_IN_USE")"
-    SOURCE_FILE_NAME="$CONFIG_IN_USE__headers__source_file"
+    SOURCE_FILE_NAME="$(yq '.headers.source_file' "$CONFIG_FILE_PATH")"
 
     if [[ -z $SOURCE_FILE_NAME ]]; then
       error_exit "Could not determine the source file of the current configuration. Try running 'config use' again"
