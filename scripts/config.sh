@@ -44,13 +44,13 @@ config_file_exists() {
 # Validate the configuration file based on its name
 validate_config_file() {
   local CONFIG_NAME="$1"
-  if [[ "$CONFIG_NAME" == "current" ]]; then
+  if [[ "$CONFIG_NAME" == "current" ]] || [[ -z $CONFIG_NAME ]]; then
     CONFIG_NAME="$(get_current_config_file)"
   fi
   local CONFIG_FILE_PATH="$CONFIG_DIR/$CONFIG_NAME.yaml"
   config_file_exists "$CONFIG_NAME"
   # TODO
-  # success "Configuration file '$CONFIG_NAME.yaml' is valid"
+  success "Configuration file '$CONFIG_NAME.yaml' is valid"
 }
 
 # Run the config setup prompt sequence and return the name of the new configuration file.
@@ -210,7 +210,6 @@ current)
   ;;
 validate)
   shift
-  [[ -z "$1" ]] && error_exit "Please provide the name of the configuration file to validate"
   validate_config_file "$1"
   ;;
 apply)
