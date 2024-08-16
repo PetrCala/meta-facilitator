@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Function to display help
 show_help() {
@@ -14,6 +14,13 @@ show_help() {
   echo "  test            Run all tests"
   echo "  help            Display this help message"
 }
+
+# Check if yq is installed
+
+if ! command -v yq &>/dev/null; then
+  echo "yq is not installed. Please install yq to use this script."
+  exit 1
+fi
 
 # Check if no arguments were provided
 if [ $# -eq 0 ]; then
