@@ -68,16 +68,16 @@ options(box.path = getwd())
 # Relative paths are sourced only after the WD is set correctly
 box::use(
   base / options[load_options],
-  libs / logs / index[setup_logging],
+  # libs / logs / index[setup_logging],
   actions / index[ACTIONS, run_tests],
   actions / utils[validate_action, get_invocation_args]
 )
 
-load_options() # Load custom options into the namespace
-setup_logging() # Requires options to be loaded
+# load_options() # Load custom options into the namespace
+# setup_logging() # Requires options to be loaded
 
-logger::log_info("Done")
+# logger::log_info("Done")
 
-# args <- get_invocation_args()
+args <- get_invocation_args()
 
-# do.call(ACTIONS[[args$action]], args$run_args)
+do.call(ACTIONS[[args$action]], args$run_args)

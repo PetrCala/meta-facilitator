@@ -1,9 +1,6 @@
-box::use(
-  libs / base / const[CONST],
-  libs / base / paths[PATHS],
-  libs / validation[validate, assert],
-  libs / utils[nullable_apply]
-)
+source("base/paths.R")
+source("base/const.R")
+source("libs/utils.R")
 
 is_special_key <- function(node_name) node_name %in% CONST$CONFIG_SPECIAL_KEYS
 

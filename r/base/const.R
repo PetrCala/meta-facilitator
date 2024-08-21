@@ -23,5 +23,5 @@ CONST <- list(
   ),
 
   # Config
-  CONFIG_SPECIAL_KEYS <- c("description", "details", "type", "optional", "default", "values")
+  CONFIG_SPECIAL_KEYS = c("description", "details", "type", "optional", "default", "values")
 )

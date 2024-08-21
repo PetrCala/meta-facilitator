@@ -1,7 +1,3 @@
-box::use(
-  base / options[get_option]
-)
-
 #' Check whether an object is a function call (created using 'call').
 #' Return a boolean to indicate this.
 #'
@@ -67,13 +63,11 @@ to_perc <- function(x) {
 #' @return A list
 #' @export
 nullable_lapply <- function(x, FUN) {
-  stopifnot(is.function(FUN))
+  if (!is.function(FUN)) rlang::abort("FUN must be a function")
   out <- list()
   names <- names(x)
   argcount <- length(formals(FUN)) # Number of arguments
-  if (!argcount %in% c(1, 2)) {
-    stop("Your function must contain either one or two arguments.")
-  }
+  if (!argcount %in% c(1, 2)) rlang::abort("Your function must contain either one or two arguments.")
   for (i in seq_along(x)) {
     name <- names[[i]]
     fun_ <- if (argcount == 2) "FUN(i, x[[name]])" else "FUN(x[[name]])"

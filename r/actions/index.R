@@ -2,6 +2,7 @@ box::use(
   base / paths[PATHS],
   base / options[get_option],
   analyses / index[ANALYSES],
+  libs / config / parse_config[create_new_setup_file],
   libs / test_utils[run_tests_recursively],
   reporters = testing / reporters,
 )
@@ -67,5 +68,6 @@ run_tests <- function(...) {
 ACTIONS <- list(
   add = add,
   analyse = run_analysis,
-  test = run_tests
+  test = run_tests,
+  setup = create_new_setup_file
 )

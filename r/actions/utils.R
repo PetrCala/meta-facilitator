@@ -15,6 +15,7 @@ validate_action <- function(action) {
 
   # Check if the action is valid
   if (!(action %in% names(ACTIONS))) {
+    action <- if (is.na(action)) "" else action # Better verbosity
     stop_msg <- rlang::abort(
       paste(
         "Unknown action:", action,

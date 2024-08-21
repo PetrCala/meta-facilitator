@@ -6,7 +6,6 @@ headers:
   source_file:
     type: "character"
     description: "The source file for the configuration"
-    optional: true
 
 dynamic_options:
   description: "Frequently changed options"
@@ -128,36 +127,36 @@ tests:
     default: true
     description: "Whether to use the silent test reporter. If false, praise messages will be displayed during testing"
 
-analyses:
-  description: "Analysis options"
-  chris:
-    description: "Chris' meta-analysis"
-    analysis_name: 
-      type: "character"
-      default: "chris"
-      description: "The name of the analysis"
-    source_df: 
-      type: "character"
-      default: "chris_data.xlsx"
-      description: "The name of the source data file"
-    source_sheet: 
-      type: "character"
-      default: "Main"
-      description: "The name of the source sheet"
-    cols:
-      study: "Title"
-      effect_type: "Effect type"
-      effect: "Effect size"
-      se: "Standard error"
-      t_value: "t-stat"
-      sample_size: "Sample size"
-      dof: null
-      meta: "Filename"
-      author1: "Author 1"
-      year: "Year published"
-    unique:
-      pcc_identifier: "correlation" # How PCC studies are denoted
-      add_idx_column: true # If TRUE, prepend the data with an index column
+# analyses:
+#   description: "Analysis options"
+#   chris:
+#     description: "Chris' meta-analysis"
+#     analysis_name: 
+#       type: "character"
+#       default: "chris"
+#       description: "The name of the analysis"
+#     source_df: 
+#       type: "character"
+#       default: "chris_data.xlsx"
+#       description: "The name of the source data file"
+#     source_sheet: 
+#       type: "character"
+#       default: "Main"
+#       description: "The name of the source sheet"
+#     cols:
+#       study: "Title"
+#       effect_type: "Effect type"
+#       effect: "Effect size"
+#       se: "Standard error"
+#       t_value: "t-stat"
+#       sample_size: "Sample size"
+#       dof: null
+#       meta: "Filename"
+#       author1: "Author 1"
+#       year: "Year published"
+#     unique:
+#       pcc_identifier: "correlation" # How PCC studies are denoted
+#       add_idx_column: true # If TRUE, prepend the data with an index column
 
 # f_cols:
 #   study: "Study name/ID"

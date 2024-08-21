@@ -67,9 +67,26 @@ setup_config_file() {
     mkdir -p "$CONFIG_DIR"
   fi
 
-  local CONFIG_NAME="$(run_config_setup)"
-  validate_config_file "$CONFIG_NAME"
-  success "Configuration file '$CONFIG_NAME.yaml' created"
+  # cd $R_DIR
+
+  # local CONFIG_NAME="$(
+  #   R --interactive --no-save --quiet <<EOT
+  #     source("base/config.R")
+  #     create_new_setup_file()
+  # EOT
+  # )"
+  # local CONFIG_NAME="$(Rscript -e "source(\"base/config.R\")" -e "create_new_setup_file()")"
+
+  # run_r_script_interactively "$RUN_FILE_PATH"
+  # echo "Config name: $CONFIG_NAME"
+
+  # local CONFIG_NAME="$(run_config_setup)"
+  # local PARSE_SCRIPT_PATH="$CONFIG_SRC_DIR/parse_config.R"
+  # local CONFIG_NAME="$(Rscript "libs/config/parse_config.R")"
+
+  # Rscript "$RUN_FILE_PATH" "$@"
+  # validate_config_file "$CONFIG_NAME"
+  # success "Configuration file '$CONFIG_NAME.yaml' created"
 }
 
 # Function to get the name of the configuration file currently in use
