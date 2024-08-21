@@ -9,8 +9,8 @@ is_special_key <- function(node_name) node_name %in% CONST$CONFIG_SPECIAL_KEYS
 
 #' Extract special keys from anode
 #'
-#' @param node A list to extract special keys from
-#' @return A list with two elements: keys and node. The node element is the original node with the special keys removed. The keys element is a list with the special keys.
+#' @param node [list] A list to extract special keys from
+#' @return [list] A list with two elements: keys and node. The node element is the original node with the special keys removed. The keys element is a list with the special keys.
 extract_special_keys <- function(node) {
   stopifnot(is.list(node))
   keys_ <- list()
@@ -32,9 +32,9 @@ extract_special_keys <- function(node) {
 
 #' Parse a single node of the source config file
 #'
-#' @param node The node to parse
-#' @param node_name The name of the node
-#' @return The parsed node
+#' @param node [list] The node to parse
+#' @param node_name [character] The name of the node
+#' @return [list] The parsed node
 parse_node <- function(node, node_name) {
   if (!is.list(node)) rlang::abort(paste(node_name, "must be a list"))
   paste("Parsing node", node_name)
@@ -68,7 +68,7 @@ parse_node <- function(node, node_name) {
 
 #' Parse a source config file and return it as a list
 #'
-#' @return A list with the parsed source config
+#' @return [list] A list with the parsed source config
 parse_src_config <- function() {
   src_config_path <- PATHS$R_CONFIG_SRC
   print(paste("Parsing source config", src_config_path))
@@ -79,10 +79,13 @@ parse_src_config <- function() {
 #' Create a new setup file
 #' @description
 #' This function reads the source config file and creates a new setup file based on the source config file.
+#'
+#' @return [character] The name of the new setup file
 #' @export
 create_new_setup_file <- function() {
   parsed_src_config <- parse_src_config()
   new_file_name <- parsed_src_config$headers$source_file
   print(paste("Writing", new_file_name))
   yaml::write_yaml(parsed_src_config, file = new_file_name)
+  return(new_file_name)
 }
