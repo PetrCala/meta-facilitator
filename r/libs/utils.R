@@ -58,3 +58,26 @@ is_empty <- function(obj) {
 to_perc <- function(x) {
   return(paste0(round(x * 100, 2), "%"))
 }
+
+
+#' @title Nullable lapply
+#' @description A version of lapply that disassigns items from a list in case their value is NULL. In case the result is empty, return NULL.
+#' @param x A list
+#' @param FUN A function
+#' @return A list
+#' @export
+nullable_lapply <- function(x, FUN) {
+  stopifnot(is.function(FUN))
+  out <- list()
+  names <- names(x)
+  argcount <- length(formals(FUN)) # Number of arguments
+  if (!argcount %in% c(1, 2)) {
+    stop("Your function must contain either one or two arguments.")
+  }
+  for (i in seq_along(x)) {
+    name <- names[[i]]
+    fun_ <- if (argcount == 2) "FUN(i, x[[name]])" else "FUN(x[[name]])"
+    out[[name]] <- eval(parse(text = fun_)) # Assigns nothing if the return is NULL
+  }
+  if (length(out) == 0) NULL else out
+}

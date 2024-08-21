@@ -20,5 +20,8 @@ CONST <- list(
     "WARN"  = logger::WARN,
     "ERROR" = logger::ERROR,
     "FATAL" = logger::FATAL
-  )
+  ),
+
+  # Config
+  CONFIG_SPECIAL_KEYS <- c("description", "details", "type", "optional", "default", "values")
 )
