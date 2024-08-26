@@ -211,7 +211,7 @@ show_current_config_file() {
 # Function to show the contents of a configuration file
 show_config_file() {
   local CONFIG_NAME="$1"
-  if [[ "$CONFIG_NAME" == "current" ]]; then
+  if [[ "$CONFIG_NAME" == "current" ]] || [[ -z $CONFIG_NAME ]]; then
     show_current_config_file
   else
     config_file_exists "$CONFIG_NAME"
@@ -253,7 +253,6 @@ remove)
   ;;
 show)
   shift
-  [[ -z "$1" ]] && error_exit "No configuration file provided"
   show_config_file "$1"
   ;;
 list)
