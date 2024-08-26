@@ -67,6 +67,16 @@ setup_config_file() {
     mkdir -p "$CONFIG_DIR"
   fi
 
+  # "text": "setwd('/Users/jf41513/code/meta/meta-facilitator')\nsource('R/run.R')\u000D"
+  # Rscript "scripts/test.R"
+  R --interactive --no-save --no-init-file -e "readline('Hello, world!')"
+  # -e "source('scripts/test.R')"
+  #   <<EOT
+  #   source("scripts/test.R")
+  # EOT
+
+  # "scripts/test.R"
+
   # cd $R_DIR
 
   # local CONFIG_NAME="$(
