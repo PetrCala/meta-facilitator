@@ -67,9 +67,32 @@ setup_config_file() {
     mkdir -p "$CONFIG_DIR"
   fi
 
+  # Extract node paths without "default" or "optional: true"
+  node_paths="$(yq eval '... | select(
+    has("type") and (
+      (has("optional") and .optional == true) or (has("default"))
+    ) | not
+  ) | path | join(".")' "$CONFIG_SRC_FILE_PATH")"
+
+  # Iterate over the paths
+  for path in $node_paths; do
+    echo "Processing node: $path"
+    description=$(yq eval ".$path.description" $CONFIG_SRC_FILE_PATH)
+    echo "Description: $description"
+    # Add more processing logic here
+  done
+
+  # VALUES_TO_ASK="$(yq -e "filter(. < 3)" "$CONFIG_SRC_FILE_PATH")"
+
+  # # default ==
+  # echo $CONFIG_DIR
+
+  # VALUES_TO_ASK="done"
+  # echo $VALUES_TO_ASK
+
   # "text": "setwd('/Users/jf41513/code/meta/meta-facilitator')\nsource('R/run.R')\u000D"
   # Rscript "scripts/test.R"
-  R --interactive --no-save --no-init-file -e "readline('Hello, world!')"
+  # R --interactive --no-save --no-init-file -e "readline('Hello, world!')"
   # -e "source('scripts/test.R')"
   #   <<EOT
   #   source("scripts/test.R")

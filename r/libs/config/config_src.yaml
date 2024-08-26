@@ -6,6 +6,7 @@ headers:
   source_file:
     type: "character"
     description: "The source file for the configuration"
+    optional: true
 
 dynamic_options:
   description: "Frequently changed options"
