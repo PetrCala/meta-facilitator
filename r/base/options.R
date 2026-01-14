@@ -48,16 +48,23 @@ count_unique_names <- function(lst, skip_null = FALSE) {
 #' # prefix.b.c = 2
 #' # prefix.b.d = 3
 set_prefixed_options <- function(options_list, prefix) {
+  # Process children first to ensure nested structures are complete
   for (name in names(options_list)) {
     value <- options_list[[name]]
     if (is.list(value)) {
-      # If the value is a list, recursively process it
+      # If the value is a list, recursively process it first
       set_prefixed_options(value, paste(prefix, name, sep = "."))
     } else {
       # Set the option with the full prefixed name
       option_name <- paste(prefix, name, sep = ".")
       R.utils::setOption(option_name, value)
     }
+  }
+
+  # After processing children, set the current list as an option (if it's not empty and not the root)
+  # This allows get_option() to retrieve the entire list structure
+  if (nchar(prefix) > 0 && length(options_list) > 0) {
+    R.utils::setOption(prefix, options_list)
   }
 }
 
@@ -77,14 +84,6 @@ set_options <- function(options_to_set, prefix) {
   assert(is.character(prefix), "prefix must be a character.")
 
   set_prefixed_options(options_to_set, prefix)
-
-  expected_option_count <- count_unique_names(options_to_set, skip_null = TRUE)
-  options_set <- options()[grep(paste0("^", prefix), names(options()))]
-
-  assert(
-    length(options_set) == expected_option_count,
-    paste0("Failed to set custom options. Detected ", expected_option_count, " options_enum, but set ", length(options_set), ".")
-  )
 }
 
 #' Validate the options_enum list against the options_enum enumeration
@@ -140,7 +139,7 @@ validate_options <- function(option_list, prefix, verbose = FALSE) {
 #' @return NULL
 #' @export
 load_options <- function() {
-  options_enum <- yaml::read_yaml(PATHS$R_CONFIG_YAML)
+  options_enum <- yaml::read_yaml(PATHS$R_CONFIG)
   # validate_options(option_list = options_enum, prefix = CONST$PACKAGE_NAME)
   set_options(options_to_set = options_enum, prefix = CONST$PACKAGE_NAME)
 }
@@ -153,11 +152,11 @@ load_options <- function() {
 #' get_option("dynamic_options.log_level") # "INFO"
 #' @export
 get_option <- function(name) {
-  if (!name %in% names(OPTIONS_ENUM)) {
-    rlang::abort(paste("Unknown option:", name))
-  }
   option_name <- paste0(CONST$PACKAGE_NAME, ".", name)
   option <- R.utils::getOption(option_name)
+  if (is.null(option)) {
+    rlang::abort(paste("Unknown option:", name))
+  }
   return(option)
 }
 
@@ -170,12 +169,16 @@ get_option <- function(name) {
 #' get_options("dynamic_options") # list(log_level = "INFO", use_cache = TRUE, cache_dir = "/tmp")
 #' @export
 get_options <- function(group_name) {
-  relevant_options <- grep(paste0("^", group_name), names(OPTIONS_ENUM), value = TRUE)
-  if (length(relevant_options) == 0) {
+  prefix <- paste0(CONST$PACKAGE_NAME, ".", group_name, ".")
+  all_options <- options()
+  relevant_option_names <- grep(paste0("^", prefix), names(all_options), value = TRUE)
+  if (length(relevant_option_names) == 0) {
     return(list())
   }
-  options_values <- sapply(relevant_options, get_option)
-  options_names <- gsub(paste0("^", group_name, "\\."), "", relevant_options)
+  options_values <- sapply(relevant_option_names, function(opt_name) {
+    R.utils::getOption(opt_name)
+  })
+  options_names <- gsub(paste0("^", prefix), "", relevant_option_names)
   options_list <- setNames(options_values, options_names)
   return(options_list)
 }

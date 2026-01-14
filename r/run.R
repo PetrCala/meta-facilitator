@@ -73,7 +73,7 @@ box::use(
   actions / utils[validate_action, get_invocation_args]
 )
 
-# load_options() # Load custom options into the namespace
+load_options() # Load custom options into the namespace
 # setup_logging() # Requires options to be loaded
 
 # logger::log_info("Done")

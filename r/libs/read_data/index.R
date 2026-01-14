@@ -95,7 +95,7 @@ read_analysis_data <- function(analysis_name) {
   logger::log_debug("Reading the data for the analysis ", analysis_name)
   df_path <- get_data_path(analysis_name = analysis_name)
   analysis_options <- get_analysis_options(analysis_name)
-  sheet_name <- analysis_get_option("source_sheet")
+  sheet_name <- analysis_options$source_sheet
   df <- run_cached_function(
     f = readxl::read_excel, # Possibly generalize in the future (use .csv, .txt., ...)
     df_path,
